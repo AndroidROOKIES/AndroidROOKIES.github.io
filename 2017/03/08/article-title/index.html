@@ -5,19 +5,16 @@
   
   <title>Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="欢迎来到我的博客这是我的第一篇个人博客 希望大家能够多多的支持我，你们的支持是我最大的前进动力。
-###标题一###">
+  <meta name="description" content="Activity的组成结构 　　Activity代表一个窗口，事实上，这里的“窗口”是由Activity的成员变量mWindow来表示的，mWindow本质上是一个PhoneWindow对象，PhoneWindow继承自Window抽象类，负责窗口的管理。但是，PhoneWindow并不用来呈现界面效果，呈现界面由PhoneWindow管理的DecorView对象来完成，DecorView类是Fr">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Hexo">
 <meta property="og:url" content="http://yoursite.com/2017/03/08/article-title/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="欢迎来到我的博客这是我的第一篇个人博客 希望大家能够多多的支持我，你们的支持是我最大的前进动力。
-###标题一###">
-<meta property="og:updated_time" content="2017-03-08T01:49:18.942Z">
+<meta property="og:description" content="Activity的组成结构 　　Activity代表一个窗口，事实上，这里的“窗口”是由Activity的成员变量mWindow来表示的，mWindow本质上是一个PhoneWindow对象，PhoneWindow继承自Window抽象类，负责窗口的管理。但是，PhoneWindow并不用来呈现界面效果，呈现界面由PhoneWindow管理的DecorView对象来完成，DecorView类是Fr">
+<meta property="og:updated_time" content="2017-03-10T06:14:33.851Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hexo">
-<meta name="twitter:description" content="欢迎来到我的博客这是我的第一篇个人博客 希望大家能够多多的支持我，你们的支持是我最大的前进动力。
-###标题一###">
+<meta name="twitter:description" content="Activity的组成结构 　　Activity代表一个窗口，事实上，这里的“窗口”是由Activity的成员变量mWindow来表示的，mWindow本质上是一个PhoneWindow对象，PhoneWindow继承自Window抽象类，负责窗口的管理。但是，PhoneWindow并不用来呈现界面效果，呈现界面由PhoneWindow管理的DecorView对象来完成，DecorView类是Fr">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -78,8 +75,38 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="欢迎来到我的博客"><a href="#欢迎来到我的博客" class="headerlink" title="欢迎来到我的博客"></a>欢迎来到我的博客</h2><p><strong>这是我的第一篇个人博客</strong> 希望大家能够多多的支持我，你们的支持是我最大的前进动力。</p>
-<p>###标题一###</p>
+        <h2 id="Activity的组成结构"><a href="#Activity的组成结构" class="headerlink" title="Activity的组成结构"></a>Activity的组成结构</h2><p> 　　<strong>Activity</strong>代表一个窗口，事实上，这里的“窗口”是由Activity的成员变量mWindow来表示的，mWindow本质上是一个PhoneWindow对象，PhoneWindow继承自Window抽象类，负责窗口的管理。但是，PhoneWindow并不用来呈现界面效果，呈现界面由PhoneWindow管理的DecorView对象来完成，DecorView类是FrameLayout的子类，也是整个View树的“根”。DecorView包含三部分内容：通知栏，标题栏，内容显示栏。从源码的 screen_title.xml（该布局文件是常见的窗口风格定义文件）的布局文件中来看一下：</p>
+<pre><code>&lt;LinearLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    android:orientation=&quot;vertical&quot;
+    android:fitsSystemWindows=&quot;true&quot;&gt;
+    &lt;!-- Popout bar for action modes --&gt;
+    &lt;ViewStub android:id=&quot;@+id/action_mode_bar_stub&quot;
+              android:inflatedId=&quot;@+id/action_mode_bar&quot;
+              android:layout=&quot;@layout/action_mode_bar&quot;
+              android:layout_width=&quot;match_parent&quot;
+              android:layout_height=&quot;wrap_content&quot;
+              android:theme=&quot;?attr/actionBarTheme&quot; /&gt;
+    &lt;FrameLayout
+        android:layout_width=&quot;match_parent&quot; 
+        android:layout_height=&quot;?android:attr/windowTitleSize&quot;
+        style=&quot;?android:attr/windowTitleBackgroundStyle&quot;&gt;
+        &lt;TextView android:id=&quot;@android:id/title&quot; 
+            style=&quot;?android:attr/windowTitleStyle&quot;
+            android:background=&quot;@null&quot;
+            android:fadingEdge=&quot;horizontal&quot;
+            android:gravity=&quot;center_vertical&quot;
+            android:layout_width=&quot;match_parent&quot;
+            android:layout_height=&quot;match_parent&quot; /&gt;
+    &lt;/FrameLayout&gt;
+    &lt;FrameLayout android:id=&quot;@android:id/content&quot;
+        android:layout_width=&quot;match_parent&quot; 
+        android:layout_height=&quot;0dip&quot;
+        android:layout_weight=&quot;1&quot;
+        android:foregroundGravity=&quot;fill_horizontal|top&quot;
+        android:foreground=&quot;?android:attr/windowContentOverlay&quot; /&gt;
+&lt;/LinearLayout&gt;
+</code></pre><p>　　从代码中可以看出，ActionBar 由 ViewStub 标签定义，内容区包含了两个 FrameLayout 标签，分别代表标题栏和正文区，id为@android:id/content的FrameLayout被inflate成名为mContentParent的 FrameLayout 对象，在 Activity 的 onCreate()方法中调用 　　setContentView()方法加载的布局内容终将成为 mContentParent 的子 View。</p>
+<p>　　需要说明的是，PhoneWindow 类还关联了一个名为 mWindowManager 的 WindowManager<br>对象，WindowManager 会创建一个 ViewRootImpl 对象来和 WindowManagerService 进行沟通，<br>WindowManagerService 能获取触摸事件、键盘事件或轨迹球事件，并通过 ViewRootImpl 将事件<br>分发给各个 Actitivty；另外，ViewRootImpl 还负责 Activity 整个 GUI 的绘制。</p>
 
       
     </div>
