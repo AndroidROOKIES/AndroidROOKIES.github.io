@@ -663,6 +663,114 @@ void main(){
     }
     system(&quot;pause&quot;);
 }
+</code></pre><p>##关于c中数组的定义</p>
+<p>c中定义数组，例如：int ids[] = { 78, 90, 23, 65, 19 };</p>
+<p>java中定义数组有两种方式：int ids[] = { 78, 90, 23, 65, 19 }，或者int[] ids = { 78, 90, 23, 65, 19 };</p>
+<h1 id="指针"><a href="#指针" class="headerlink" title="指针"></a>指针</h1><pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;Windows.h&gt;
+#include &lt;math.h&gt;
+#include &lt;time.h&gt;
+
+//1.指针为什么要有类型？
+//指针有类型，地址没有类型
+//地址只是开始的位置，类型表示读取到什么位置结束
+/*
+void main(){
+    int i = 89;
+    //int 类型的指针
+    int *p = &amp;i;
+    double j = 78.9;
+    //赋值为double类型变量的地址
+    p = &amp;j;
+    printf(&quot;double size:%d\n&quot;, sizeof(double));
+    printf(&quot;%#x,%lf\n&quot;,p,*p); //想通过4字节读取8字节变量的值，是不行的    
+
+    getchar();
+}
+*/
+
+//2.NULL空指针
+/*
+void main(){
+    int i = 9;
+    int *p = NULL;
+    //p = &amp;i;
+
+    //空指针的默认值为0
+    printf(&quot;%#x\n&quot;,p);
+    //访问内存地址0x000000操作系统不允许
+    //p = 100; //操作系统不允许访问
+    printf(&quot;%d\n&quot;,*p);
+    getchar();
+}
+*/
+
+//3.多级指针（二级指针）
+//指针保存的是变量的地址，保存的这个变量还可以是一个指针变量
+//动态内存分配给二维数组
+/*
+void main(){
+    int a = 50;
+    //p1上保存的a的地址
+    int* p1 = &amp;a;
+
+    //p2上保存的p1的地址
+    int** p2 = &amp;p1;
+
+    //int*** p3 = &amp;p2;
+
+    printf(&quot;p1:%#x,p2:%#x\n&quot;,p1,p2);
+    **p2 = 90;
+
+    printf(&quot;%d\n&quot;,a);
+
+    getchar();
+}
+*/
+
+//4.指针的运算
+//指针的运算，一般在数组遍历时才有意义，基于数组在内存中线性排列的方式
+/*
+void main(){
+    //数组在内存中连续存储
+    int ids[] = { 78, 90, 23, 65, 19 };
+    //数组变量名：ids就是数组的首地址，下面三个输出结果是一样的
+    printf(&quot;%#x\n&quot;,ids);
+    printf(&quot;%#x\n&quot;,&amp;ids);
+    printf(&quot;%#x\n&quot;,&amp;ids[0]);
+    //指针变量
+    int *p = ids;
+    printf(&quot;%d\n&quot;,*p);
+    //指针的加法
+    p++; //p++向前移动sizeof(数据类型)个字节
+    printf(&quot;p的值:%#x\n&quot;, p);
+    //p--;
+    printf(&quot;%d\n&quot;, *p);
+    getchar();
+}
+*/
+//5.通过指针给数组赋值
+/*
+void main(){
+    int uids[5];
+    //高级写法
+    //int i = 0;
+    //for (; i &lt; 5; i++){
+    //    uids[i] = i;
+    //}
+    //早些版本的写法
+    int* p = uids;
+    printf(&quot;%#x\n&quot;,p);
+    int i = 0; //i是数组元素的值
+    for (; p &lt; uids + 5; p++){
+        *p = i;
+        i++;
+    }
+
+    getchar();
+}
+*/
 </code></pre>
           
         
