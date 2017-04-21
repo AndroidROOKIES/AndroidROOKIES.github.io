@@ -771,7 +771,9 @@ void main(){
     getchar();
 }
 */
-</code></pre><h1 id="动态内存分配"><a href="#动态内存分配" class="headerlink" title="动态内存分配"></a>动态内存分配</h1><pre><code>#define _CRT_SECURE_NO_WARNINGS
+</code></pre><h1 id="动态内存分配"><a href="#动态内存分配" class="headerlink" title="动态内存分配"></a>动态内存分配</h1><p>关于动态内存分配的函数介绍：</p>
+<p>Malloc()函数是在内存的动态存储区中分配一个长度为size字节的连续空间。其参数是一个无符号整型数，返回一个指向所分配的连续存储域的起始地址的指针。当函数未能成功分配存储空间时（如内存不足）则返回一个NULL指针。</p>
+<pre><code>#define _CRT_SECURE_NO_WARNINGS
 #include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 #include &lt;Windows.h&gt;
