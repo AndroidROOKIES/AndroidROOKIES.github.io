@@ -105,7 +105,7 @@
 #include &amp;lt;stdio.h&amp;gt;
 #include &amp;lt;stdlib.h&amp;gt;
 #inc">
-<meta property="og:updated_time" content="2017-04-21T06:13:06.767Z">
+<meta property="og:updated_time" content="2017-04-21T06:23:02.866Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="c语言学习系列(一)基本数据类型">
 <meta name="twitter:description" content="最近在学习c语言 ， 所以就跟着动脑学院的视频课程来进行一个简单的学习 ， 下面贴出自己在视频中学习的代码用于记录学习的过程 ：
@@ -754,9 +754,9 @@ void main(){
 */
 
 //内存分配的几个注意细节
-//1.不能多次释放
+//1.不能多次释放（否则会产生中断）
 //2.释放完之后（指针仍然有值），给指针置NULL，标志释放完成
-//3.内存泄露（p重新赋值之后，再free，并没有真正释放内存）
+//3.内存泄露（p重新赋值之后，再free，并没有真正释放内存（之前的内存））
 /*
 void main(){
     int len;
@@ -779,7 +779,7 @@ void main(){
 }
 */
 
-//p1重新赋值之后，再free，并没有真正释放内存，容易造成内存泄漏，所以在重新赋值之前要先free，如下：
+//内存泄漏的例子,p1重新赋值之后，再free，并没有真正释放内存，容易造成内存泄漏，所以在重新赋值之前要先free，如下：
 void main(){
     //40M
     int* p1 = malloc(1024 * 1024 * 10 * sizeof(int));
