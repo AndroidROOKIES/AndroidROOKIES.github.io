@@ -113,7 +113,7 @@ printf(&amp;quot;hello&amp;quot">
 举例：
 创建头文件my.txt文件
 printf(&amp;quot;hello&amp;quot">
-<meta property="og:updated_time" content="2017-05-04T03:16:06.826Z">
+<meta property="og:updated_time" content="2017-05-04T06:31:42.251Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C语言学习系列(五)预编译-宏定义">
 <meta name="twitter:description" content="预编译C语言执行的流程
@@ -412,7 +412,127 @@ void main(){
 
     system(&quot;pause&quot;);
 }
-</code></pre><h1 id="宏定义、宏替换、预编译指令"><a href="#宏定义、宏替换、预编译指令" class="headerlink" title="宏定义、宏替换、预编译指令"></a>宏定义、宏替换、预编译指令</h1>
+</code></pre><h1 id="宏定义、宏替换、预编译指令"><a href="#宏定义、宏替换、预编译指令" class="headerlink" title="宏定义、宏替换、预编译指令"></a>宏定义、宏替换、预编译指令</h1><p>define指令</p>
+<ol>
+<li>定义标示</li>
+<li>定义常数（便于修改与阅读）</li>
+<li>定义“宏函数”</li>
+</ol>
+<h2 id="1-定义标示"><a href="#1-定义标示" class="headerlink" title="1. 定义标示"></a>1. 定义标示</h2><p>举例1：</p>
+<pre><code>//表示支持C++语法
+#ifdef __cplusplus
+
+#endif //相当于if(){}后面的括号
+
+//表示支持Android、Windows、苹果平台等等
+#ifdef ANDROID
+
+#endif
+</code></pre><p>举例2：</p>
+<p>防止文件重复引入</p>
+<p>有三个文件A.h、B.h、Test.cpp，分别如下：</p>
+<p>A.h：</p>
+<pre><code>#include &quot;B.h&quot;
+void printfA();
+</code></pre><p>B.h：</p>
+<pre><code>#include &quot;A.h&quot;
+void printfB();
+</code></pre><p>Test.cpp里面引用了A.h</p>
+<pre><code>#include &quot;A.h&quot;
+</code></pre><p>当Test包含a的时候，a又会去包含b，b又会包含a，这样就会造成循环包含。类似于Hibernate里面的SQL循环引用。最终会报如下错误：</p>
+<pre><code>fatal error C1014: 包含文件太多 : 深度 = 1024
+</code></pre><p>通过宏定义判断来解决这个问题（修改A.h）：</p>
+<pre><code>//如果没有定义AH，定义AH
+#ifndef AH
+#define AH
+#include &quot;B.h&quot;
+
+void printfA();
+
+#endif
+</code></pre><p>修改B.h:</p>
+<pre><code>#ifndef BH
+#define BH
+#include &quot;A.h&quot;
+
+void printfB();
+
+#endif
+</code></pre><p>以上为老版本的解决方法，在新版本中可以用：</p>
+<p>修改A.h：</p>
+<pre><code>//该头文件只被包含一次，让编译器自定处理好循环包含问题
+#pragma once
+#include &quot;B.h&quot;
+
+void printfA();
+</code></pre><p>修改B.h:</p>
+<pre><code>#pragma once
+#include &quot;A.h&quot;
+
+void printfB();
+</code></pre><h2 id="2-定义常数（便于修改与阅读）"><a href="#2-定义常数（便于修改与阅读）" class="headerlink" title="2. 定义常数（便于修改与阅读）"></a>2. 定义常数（便于修改与阅读）</h2><p>举例：</p>
+<pre><code>#define MAX 100
+
+void main(){
+
+    int i = 90;
+    if (i &lt; MAX){
+    printf(&quot;比MAX小..&quot;);
+    }
+
+    system(&quot;pause&quot;);
+}
+</code></pre><h2 id="3-定义“宏函数”"><a href="#3-定义“宏函数”" class="headerlink" title="3. 定义“宏函数”"></a>3. 定义“宏函数”</h2><p>就是一个替换的过程</p>
+<pre><code>//普通函数(无参数)
+void dn_com_jni_read(){
+    printf(&quot;read\n&quot;);
+}
+
+void dn_com_jni_write(){
+    printf(&quot;write\n&quot;);
+}
+
+//宏函数
+//NAME是参数（比如代表普通函数的read/write）
+#define jni(NAME)  dn_com_jni_##NAME();
+
+void main(){
+     //调用
+    jni(write);//替换：dn_com_jni_write();
+    getchar();
+}
+</code></pre><p>日志输出：</p>
+<pre><code>//__VA_ARGS__ 代表可变参数
+#define LOG(FORMAT,...) printf(##FORMAT,__VA_ARGS__); 
+
+void main(){
+
+        LOG(&quot;%s%d&quot;,&quot;大小：&quot;,89);//相当于替换成：printf(&quot;%s%d&quot;,&quot;大小：&quot;,89);
+        getchar();
+    }
+</code></pre><p>LOG会有级别，于是进一步升级：</p>
+<pre><code>#define LOG_I(FORMAT,...)  printf(&quot;INFO:&quot;); printf(##FORMAT,__VA_ARGS__); 
+
+#define LOG_E(FORMAT,...)  printf(&quot;ERRO:&quot;); printf(##FORMAT,__VA_ARGS__); 
+
+void main(){
+
+            LOG_I(&quot;%s%d&quot;,&quot;大小：&quot;,89);
+            //替换成：printf(&quot;INFO:&quot;); printf(&quot;%s%d&quot;,&quot;大小：&quot;,89);
+        }
+</code></pre><p>进一步简化重复代码，重复LEVEL日志级别：</p>
+<pre><code>#define LOG(LEVEL,FORMAT,...) printf(##LEVEL); printf(##FORMAT,__VA_ARGS__);
+#define LOG_I(FORMAT,...) LOG(&quot;INFO:&quot;,##FORMAT,__VA_ARGS__);
+#define LOG_E(FORMAT,...) LOG(&quot;ERROR:&quot;,##FORMAT,__VA_ARGS__);
+#define LOG_W(FORMAT,...) LOG(&quot;WARN:&quot;,##FORMAT,__VA_ARGS__);
+</code></pre><p>举例：</p>
+<p>在Android JNI开发的时候，我们打印一句日志是通过__android_log_print函数来实现的，因此我们可以通过宏定义简化代码：</p>
+<pre><code>//Android
+#define LOGI(FORMAT,...) __android_log_print(ANDROID_LOG_INFO,&quot;isen&quot;,FORMAT,##__VA_ARGS__);
+
+LOGI(&quot;%s&quot;,&quot;ok&quot;);
+//替换__android_log_print(ANDROID_LOG_INFO, &quot;isen&quot;, &quot;%s&quot;, &quot;ok&quot;);
+</code></pre>
       
     </div>
 
@@ -587,7 +707,7 @@ void main(){
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#预编译"><span class="nav-number">1.</span> <span class="nav-text">预编译</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#宏定义、宏替换、预编译指令"><span class="nav-number">2.</span> <span class="nav-text">宏定义、宏替换、预编译指令</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#预编译"><span class="nav-number">1.</span> <span class="nav-text">预编译</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#宏定义、宏替换、预编译指令"><span class="nav-number">2.</span> <span class="nav-text">宏定义、宏替换、预编译指令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-定义标示"><span class="nav-number">2.1.</span> <span class="nav-text">1. 定义标示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-定义常数（便于修改与阅读）"><span class="nav-number">2.2.</span> <span class="nav-text">2. 定义常数（便于修改与阅读）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-定义“宏函数”"><span class="nav-number">2.3.</span> <span class="nav-text">3. 定义“宏函数”</span></a></li></ol></li></ol></div>
             
 
           </div>
