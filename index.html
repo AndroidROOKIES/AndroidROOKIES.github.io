@@ -564,8 +564,9 @@ JNIEXPORT jstring JNICALL Java_com_test_JniTest_getStringFromC
 <p><img src="http://oph0qv0je.bkt.clouddn.com/08.jpg" alt=""></p>
 <p>点击“配置类型”-&gt;动态库(.dll)-&gt;应用-&gt;确定</p>
 <p><img src="http://oph0qv0je.bkt.clouddn.com/09.png" alt=""></p>
+<p>最后，点击“生成”-&gt;“生成解决方案”</p>
 <p>注意：Windows下面动态库以dll结尾，Linux下面以so结尾</p>
-<p>在工程生成dll文件，然后把这个目录添加到环境变量中，这样做的目的是为了Java在执行的时候能够找到我们的动态库文件</p>
+<p>在工程生成dll文件，然后把这个目录添加到环境变量中(也可以直接把dll文件复制到Java工程)，这样做的目的是为了Java在执行的时候能够找到我们的动态库文件</p>
 <p><img src="http://oph0qv0je.bkt.clouddn.com/10.png" alt=""></p>
 <p>最后回到Java工程，通过System.loadLibrary导入动态库</p>
 <pre><code>package com.test;
