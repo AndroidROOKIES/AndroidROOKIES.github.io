@@ -112,7 +112,7 @@ JNIEXPORT jstring JNICALL Java_com_test_JniTest_getStringFromC
 <meta property="og:image" content="http://oph0qv0je.bkt.clouddn.com/Java%E5%B1%9E%E6%80%A7%E4%B8%8E%E6%96%B9%E6%B3%95%E7%AD%BE%E5%90%8D%E5%88%97%E8%A1%A8.png">
 <meta property="og:image" content="http://oph0qv0je.bkt.clouddn.com/dos.png">
 <meta property="og:image" content="http://oph0qv0je.bkt.clouddn.com/javap.png">
-<meta property="og:updated_time" content="2017-05-11T08:59:22.566Z">
+<meta property="og:updated_time" content="2017-05-12T03:22:45.374Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JNI系列(二)JIN数据类型与属性方法的访问">
 <meta name="twitter:description" content="关于Java调c/c++或者c/c++调用Java中的方法属性，需要在c中实现函数，该函数的结构如下：
@@ -715,7 +715,70 @@ test.man.sayHi();
 //但是通过JNI的方式，可以访问到父类的sayHi方法
 test.accessNonvirtualMethod();
 </code></pre><p>}</p>
-<h3 id="经典问题——中文乱码"><a href="#经典问题——中文乱码" class="headerlink" title="经典问题——中文乱码"></a>经典问题——中文乱码</h3>
+<h3 id="经典问题——中文乱码"><a href="#经典问题——中文乱码" class="headerlink" title="经典问题——中文乱码"></a>经典问题——中文乱码</h3><h2 id="问题："><a href="#问题：" class="headerlink" title="问题："></a>问题：</h2><p>从Java层传入中文到c层，在c中输出没有乱码问题，然而，在c层将字符串传入到Java层，在Java层输出打印时出现乱码问题。</p>
+<p>测试乱码:</p>
+<p>Java代码：</p>
+<pre><code>//传入中文到c层
+public native void testChineseIn(String chinese);
+//c传入中文到Java层
+public native String testChineseOut();
+
+public static void main(String[] args) {
+
+JniTest test = new JniTest();
+test.testChineseIn(&quot;你好&quot;);
+System.out.println(test.testChineseOut());
+
+}
+</code></pre><p>c代码:</p>
+<pre><code>JNIEXPORT void JNICALL Java_com_test_JniTest_testChineseIn
+(JNIEnv *env, jobject jobj,jstring chinese){
+    char *str = (*env)-&gt;GetStringUTFChars(env,chinese,NULL);
+    printf(&quot;%s&quot;,str);
+}
+
+JNIEXPORT jstring JNICALL Java_com_test_JniTest_testChineseOut
+(JNIEnv *env, jobject jobj){
+    char *chinese = &quot;你好，中国&quot;;
+    jstring j_str =(*env)-&gt;NewStringUTF(env,chinese);
+    return j_str;
+}
+</code></pre><h2 id="原因分析"><a href="#原因分析" class="headerlink" title="原因分析:"></a>原因分析:</h2><p>调用NewStringUTF的时候，产生的是UTF-16的字符串，但是我们需要的时候UTF-8字符串。</p>
+<h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法:"></a>解决方法:</h2><p>通过Java的String类的构造方法来进行字符集变换。</p>
+<p>通过调用构造方法String string = new String(byte[], charsetName);来解决乱码问题</p>
+<p>c代码：</p>
+<pre><code>//中文问题
+JNIEXPORT jstring JNICALL Java_com_test_JniTest_testChineseOut
+(JNIEnv *env, jobject jobj, jstring in){
+
+    //c -&gt; jstring
+    char *c_str = &quot;马蓉与宋江&quot;;
+
+
+    //执行String(byte bytes[], String charsetName)构造方法需要的条件
+    //1.jmethodID：获取构造方法的ID
+    //2.byte数组
+    //3.字符编码jstring
+
+    //1.得到string类，获取构造方法ID
+    jclass str_cls = (*env)-&gt;FindClass(env, &quot;java/lang/String&quot;);
+    jmethodID constructor_mid = (*env)-&gt;GetMethodID(env, str_cls, &quot;&lt;init&gt;&quot;, &quot;([BLjava/lang/String;)V&quot;);
+
+    //2.创建字节数组，并且将C的字符串拷贝进去
+    jbyteArray bytes = (*env)-&gt;NewByteArray(env, strlen(c_str));
+
+    //byte数组赋值
+    //0-&gt;strlen(c_str)，从头到尾
+    //对等于，从c_str这个字符数组，复制到bytes这个字符数组
+    (*env)-&gt;SetByteArrayRegion(env, bytes, 0, strlen(c_str), c_str);
+
+    //3.字符编码jstring
+    jstring charsetName = (*env)-&gt;NewStringUTF(env, &quot;GB2312&quot;);
+
+    //调用构造函数，返回编码之后的jstring
+    return (*env)-&gt;NewObject(env,str_cls,constructor_mid,bytes,charsetName);
+}
+</code></pre>
       
     </div>
 
@@ -890,7 +953,7 @@ test.accessNonvirtualMethod();
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#JNI基本数据类型"><span class="nav-number">1.</span> <span class="nav-text">JNI基本数据类型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#JNI基本数据类型（左边Java，右边JNI，一一对应关系）"><span class="nav-number">1.1.</span> <span class="nav-text">JNI基本数据类型（左边Java，右边JNI，一一对应关系）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#引用类型-对象"><span class="nav-number">1.2.</span> <span class="nav-text">引用类型(对象)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#C-C-中访问Java的成员"><span class="nav-number">2.</span> <span class="nav-text">C/C++中访问Java的成员</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#关于属性与方法的签名"><span class="nav-number">2.1.</span> <span class="nav-text">关于属性与方法的签名</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#属性的签名"><span class="nav-number">2.1.1.</span> <span class="nav-text">属性的签名</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方法的签名"><span class="nav-number">2.1.2.</span> <span class="nav-text">方法的签名</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-C-中访问Java的属性和方法"><span class="nav-number">2.2.</span> <span class="nav-text">C/C++中访问Java的属性和方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#访问Java的非静态属性"><span class="nav-number">2.2.1.</span> <span class="nav-text">访问Java的非静态属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#访问Java的静态属性"><span class="nav-number">2.2.2.</span> <span class="nav-text">访问Java的静态属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#访问Java的非静态方法"><span class="nav-number">2.2.3.</span> <span class="nav-text">访问Java的非静态方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#访问Java的静态方法"><span class="nav-number">2.2.4.</span> <span class="nav-text">访问Java的静态方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#访问Java类的构造方法"><span class="nav-number">2.2.5.</span> <span class="nav-text">访问Java类的构造方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#调用Java类的父类的方法"><span class="nav-number">2.2.6.</span> <span class="nav-text">调用Java类的父类的方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#经典问题——中文乱码"><span class="nav-number">2.2.7.</span> <span class="nav-text">经典问题——中文乱码</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#JNI基本数据类型"><span class="nav-number">1.</span> <span class="nav-text">JNI基本数据类型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#JNI基本数据类型（左边Java，右边JNI，一一对应关系）"><span class="nav-number">1.1.</span> <span class="nav-text">JNI基本数据类型（左边Java，右边JNI，一一对应关系）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#引用类型-对象"><span class="nav-number">1.2.</span> <span class="nav-text">引用类型(对象)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#C-C-中访问Java的成员"><span class="nav-number">2.</span> <span class="nav-text">C/C++中访问Java的成员</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#关于属性与方法的签名"><span class="nav-number">2.1.</span> <span class="nav-text">关于属性与方法的签名</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#属性的签名"><span class="nav-number">2.1.1.</span> <span class="nav-text">属性的签名</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方法的签名"><span class="nav-number">2.1.2.</span> <span class="nav-text">方法的签名</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-C-中访问Java的属性和方法"><span class="nav-number">2.2.</span> <span class="nav-text">C/C++中访问Java的属性和方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#访问Java的非静态属性"><span class="nav-number">2.2.1.</span> <span class="nav-text">访问Java的非静态属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#访问Java的静态属性"><span class="nav-number">2.2.2.</span> <span class="nav-text">访问Java的静态属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#访问Java的非静态方法"><span class="nav-number">2.2.3.</span> <span class="nav-text">访问Java的非静态方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#访问Java的静态方法"><span class="nav-number">2.2.4.</span> <span class="nav-text">访问Java的静态方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#访问Java类的构造方法"><span class="nav-number">2.2.5.</span> <span class="nav-text">访问Java类的构造方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#调用Java类的父类的方法"><span class="nav-number">2.2.6.</span> <span class="nav-text">调用Java类的父类的方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#经典问题——中文乱码"><span class="nav-number">2.2.7.</span> <span class="nav-text">经典问题——中文乱码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题："><span class="nav-number">2.3.</span> <span class="nav-text">问题：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#原因分析"><span class="nav-number">2.4.</span> <span class="nav-text">原因分析:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解决方法"><span class="nav-number">2.5.</span> <span class="nav-text">解决方法:</span></a></li></ol></li></ol></div>
             
 
           </div>
