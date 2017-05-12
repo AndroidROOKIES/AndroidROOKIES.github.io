@@ -695,7 +695,7 @@ JNIEXPORT void JNICALL Java_com_dongnaoedu_jni_JniTest_accessNonvirtualMethod
     test.accessNonvirtualMethod();
 
 }
-</code></pre><h3 id="经典问题——中文乱码"><a href="#经典问题——中文乱码" class="headerlink" title="经典问题——中文乱码"></a>经典问题——中文乱码</h3><h2 id="问题："><a href="#问题：" class="headerlink" title="问题："></a>问题：</h2><p>从Java层传入中文到c层，在c中输出没有乱码问题，然而，在c层将字符串传入到Java层，在Java层输出打印时出现乱码问题。</p>
+</code></pre><h3 id="经典问题——中文乱码"><a href="#经典问题——中文乱码" class="headerlink" title="经典问题——中文乱码"></a>经典问题——中文乱码</h3><h4 id="问题："><a href="#问题：" class="headerlink" title="问题："></a>问题：</h4><p>从Java层传入中文到c层，在c中输出没有乱码问题，然而，在c层将字符串传入到Java层，在Java层输出打印时出现乱码问题。</p>
 <p>测试乱码:</p>
 <p>Java代码：</p>
 <pre><code>//传入中文到c层
@@ -723,8 +723,8 @@ JNIEXPORT jstring JNICALL Java_com_test_JniTest_testChineseOut
     jstring j_str =(*env)-&gt;NewStringUTF(env,chinese);
     return j_str;
 }
-</code></pre><h2 id="原因分析"><a href="#原因分析" class="headerlink" title="原因分析:"></a>原因分析:</h2><p>调用NewStringUTF的时候，产生的是UTF-16的字符串，但是我们需要的时候UTF-8字符串。</p>
-<h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法:"></a>解决方法:</h2><p>通过Java的String类的构造方法来进行字符集变换。</p>
+</code></pre><h4 id="原因分析"><a href="#原因分析" class="headerlink" title="原因分析:"></a>原因分析:</h4><p>调用NewStringUTF的时候，产生的是UTF-16的字符串，但是我们需要的时候UTF-8字符串。</p>
+<h4 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法:"></a>解决方法:</h4><p>通过Java的String类的构造方法来进行字符集变换。</p>
 <p>通过调用构造方法String string = new String(byte[], charsetName);来解决乱码问题</p>
 <p>c代码：</p>
 <pre><code>//中文问题
