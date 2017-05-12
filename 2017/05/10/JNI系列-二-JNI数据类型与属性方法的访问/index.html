@@ -112,7 +112,7 @@ JNIEXPORT jstring JNICALL Java_com_test_JniTest_getStringFromC
 <meta property="og:image" content="http://oph0qv0je.bkt.clouddn.com/Java%E5%B1%9E%E6%80%A7%E4%B8%8E%E6%96%B9%E6%B3%95%E7%AD%BE%E5%90%8D%E5%88%97%E8%A1%A8.png">
 <meta property="og:image" content="http://oph0qv0je.bkt.clouddn.com/dos.png">
 <meta property="og:image" content="http://oph0qv0je.bkt.clouddn.com/javap.png">
-<meta property="og:updated_time" content="2017-05-12T03:22:45.374Z">
+<meta property="og:updated_time" content="2017-05-12T03:39:31.013Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JNI系列(二)JIN数据类型与属性方法的访问">
 <meta name="twitter:description" content="关于Java调c/c++或者c/c++调用Java中的方法属性，需要在c中实现函数，该函数的结构如下：
@@ -708,14 +708,16 @@ JNIEXPORT void JNICALL Java_com_dongnaoedu_jni_JniTest_accessNonvirtualMethod
 </ol>
 <p>通过CallNonvirtualVoidMethod，访问不覆盖的父类方法（C++使用virtual关键字来覆盖父类的实现），当然你也可以指定哪个父类（如果有多个父类的话）。</p>
 <p>最后在Java中测试：</p>
-<p>public static void main(String[] args) {</p>
-<pre><code>JniTest test = new JniTest();
-//这时候是调用子类Man的方法
-test.man.sayHi();
-//但是通过JNI的方式，可以访问到父类的sayHi方法
-test.accessNonvirtualMethod();
-</code></pre><p>}</p>
-<h3 id="经典问题——中文乱码"><a href="#经典问题——中文乱码" class="headerlink" title="经典问题——中文乱码"></a>经典问题——中文乱码</h3><h2 id="问题："><a href="#问题：" class="headerlink" title="问题："></a>问题：</h2><p>从Java层传入中文到c层，在c中输出没有乱码问题，然而，在c层将字符串传入到Java层，在Java层输出打印时出现乱码问题。</p>
+<pre><code>public static void main(String[] args) {
+
+    JniTest test = new JniTest();
+    //这时候是调用子类Man的方法
+    test.man.sayHi();
+    //但是通过JNI的方式，可以访问到父类的sayHi方法
+    test.accessNonvirtualMethod();
+
+}
+</code></pre><h3 id="经典问题——中文乱码"><a href="#经典问题——中文乱码" class="headerlink" title="经典问题——中文乱码"></a>经典问题——中文乱码</h3><h2 id="问题："><a href="#问题：" class="headerlink" title="问题："></a>问题：</h2><p>从Java层传入中文到c层，在c中输出没有乱码问题，然而，在c层将字符串传入到Java层，在Java层输出打印时出现乱码问题。</p>
 <p>测试乱码:</p>
 <p>Java代码：</p>
 <pre><code>//传入中文到c层
