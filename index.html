@@ -270,6 +270,176 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/15/JNI系列-六-Eclipse下NDK开发/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Feng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Feng's Notes">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/05/15/JNI系列-六-Eclipse下NDK开发/" itemprop="url">
+                  JNI系列(六)Eclipse下NDK开发
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-15T14:00:21+08:00">
+                2017-05-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JNI/" itemprop="url" rel="index">
+                    <span itemprop="name">JNI</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Eclipse-NDK开发流程"><a href="#Eclipse-NDK开发流程" class="headerlink" title="Eclipse NDK开发流程"></a>Eclipse NDK开发流程</h2><ol>
+<li>编写Java层Native方法</li>
+<li>javah命令生成头文件</li>
+<li>创建jni目录</li>
+<li>配置NDK路径，添加本地支持add native support，配置ADT需要包含的头文件</li>
+<li>实现头文件中定义的函数</li>
+<li>编译生成.so动态库</li>
+<li>加载动态库</li>
+</ol>
+<p>下面以文件加密解密的app为例：</p>
+<h3 id="编写Java层Native方法："><a href="#编写Java层Native方法：" class="headerlink" title="编写Java层Native方法："></a>编写Java层Native方法：</h3><p>创建Cryptor类，实现两个native方法，加密，解密</p>
+<pre><code>package com.dongnaoedu.ndkfilecrypt;
+
+public class Cryptor {
+
+
+    public native static void crypt(String normal_path, String crypt_path);
+
+
+    public native static void decrypt(String crypt_path, String decrypt_path);
+
+    static{
+        System.loadLibrary(&quot;ndk_file_crypt&quot;);
+    }
+}
+</code></pre><h3 id="javah命令生成头文件"><a href="#javah命令生成头文件" class="headerlink" title="javah命令生成头文件"></a>javah命令生成头文件</h3><p>在命令行下，通过cd命令转到工程的src目录，执行以下命令生成头文件：</p>
+<pre><code>javah 完整类名
+</code></pre><h3 id="创建jni目录"><a href="#创建jni目录" class="headerlink" title="创建jni目录"></a>创建jni目录</h3><p>在Eclipse的项目中创建jni文件，把生成的头文件放入jni中</p>
+<h3 id="配置NDK路径，添加本地支持add-native-support，配置ADT需要包含的头文件"><a href="#配置NDK路径，添加本地支持add-native-support，配置ADT需要包含的头文件" class="headerlink" title="配置NDK路径，添加本地支持add native support，配置ADT需要包含的头文件"></a>配置NDK路径，添加本地支持add native support，配置ADT需要包含的头文件</h3><p>首先，需要设置NDK的路径：</p>
+<p>Window-&gt;Preferences-&gt;Android-&gt;NDK:</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/15/JNI系列-五-JNI缓存策略/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2984,179 +3154,6 @@ void main(void){
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/17/自定义view基础知识/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Feng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/uploads/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Feng's Notes">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/04/17/自定义view基础知识/" itemprop="url">
-                  自定义view基础知识
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-17T16:32:11+08:00">
-                2017-04-17
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/android/" itemprop="url" rel="index">
-                    <span itemprop="name">android</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>关于自定义组件有三种定义方式：</p>
-<ol>
-<li>完全自己自定义去写，组件类继承View;</li>
-<li>从已经有的组件扩展；</li>
-<li>将多个组件组合成一个组件；</li>
-</ol>
-<p>首先看一下继承自View的组件类的实现：</p>
-<pre><code>public class MyView extends View{
-
-    public MyView(Context context) {
-        super(context);
-    }
-
-    public MyView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
-
-    public MyView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-    }
-
-    @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-    }
-
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-    }
-
-}
-</code></pre><p>需要重写两个方法和三个构造方法，对于三个构造方法的调用场景是不一样的，第一个只有一个参数，在代码中创建组件时会调用该构造方法，比如创建一个按钮：TextView tv = new TextView(this)，this 是指当前的 Activity，Activity 是 Context 的子类。第二个方法在 layout 布局文件中使用时调用，参数 attrs 表示当前配置中的属性集合，例如在要 layout.xml 中定义一个TextView：<textview android:layout_width="match_parent" android:layout_height="wrap_co-ntent" android:text="hello">，Android 会调用第二个构造方法 Inflate 出 TextView 对象。而第三个构造方法是不会自动调用的，当我们在 Theme 中定义了 Style 属性时通常在第二个构造方法中手动调用。</textview></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -3206,7 +3203,7 @@ void main(void){
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-count">15</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
