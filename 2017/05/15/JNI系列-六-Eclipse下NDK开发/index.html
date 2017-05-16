@@ -115,7 +115,13 @@ javah命令生成头文件
 下面以文件加密解密的app为例：
 编写Java层Native方法：创建Cryptor类，实现两个native方法，加密，解密
 package">
-<meta property="og:updated_time" content="2017-05-15T08:08:25.892Z">
+<meta property="og:image" content="http://oph0qv0je.bkt.clouddn.com/eclipse-ndk.png">
+<meta property="og:image" content="http://oph0qv0je.bkt.clouddn.com/ndk.png">
+<meta property="og:image" content="http://oph0qv0je.bkt.clouddn.com/ndk2.png">
+<meta property="og:image" content="http://oph0qv0je.bkt.clouddn.com/ndk3.png">
+<meta property="og:image" content="http://oph0qv0je.bkt.clouddn.com/ndk4.png">
+<meta property="og:image" content="http://oph0qv0je.bkt.clouddn.com/ndk5.png">
+<meta property="og:updated_time" content="2017-05-16T06:13:17.652Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JNI系列(六)Eclipse下NDK开发">
 <meta name="twitter:description" content="Eclipse NDK开发流程
@@ -130,6 +136,7 @@ javah命令生成头文件
 下面以文件加密解密的app为例：
 编写Java层Native方法：创建Cryptor类，实现两个native方法，加密，解密
 package">
+<meta name="twitter:image" content="http://oph0qv0je.bkt.clouddn.com/eclipse-ndk.png">
 
 
 
@@ -424,7 +431,140 @@ public class Cryptor {
 </code></pre><h3 id="创建jni目录"><a href="#创建jni目录" class="headerlink" title="创建jni目录"></a>创建jni目录</h3><p>在Eclipse的项目中创建jni文件，把生成的头文件放入jni中</p>
 <h3 id="配置NDK路径，添加本地支持add-native-support，配置ADT需要包含的头文件"><a href="#配置NDK路径，添加本地支持add-native-support，配置ADT需要包含的头文件" class="headerlink" title="配置NDK路径，添加本地支持add native support，配置ADT需要包含的头文件"></a>配置NDK路径，添加本地支持add native support，配置ADT需要包含的头文件</h3><p>首先，需要设置NDK的路径：</p>
 <p>Window-&gt;Preferences-&gt;Android-&gt;NDK:</p>
+<p><img src="http://oph0qv0je.bkt.clouddn.com/eclipse-ndk.png" alt=""></p>
+<p>如果出现“Not a valid NDK directory”，则在你安装的ndk的主目录下创建一个ndk-build空文件，然后重新打开对话框选择就可以了。</p>
+<p><img src="http://oph0qv0je.bkt.clouddn.com/ndk.png" alt=""></p>
+<p>添加Add Native Support:</p>
+<p>选择项目，点击右键，Android Tools-&gt;Add Native Support弹出下面的界面，输入lib的名字，前缀系统默认为lib</p>
+<p><img src="http://oph0qv0je.bkt.clouddn.com/ndk2.png" alt=""></p>
+<p>在工程目录会生成下面的一些文件</p>
+<p><img src="http://oph0qv0je.bkt.clouddn.com/ndk3.png" alt=""></p>
+<p>我们可以把.cpp改成.c(c语言文件，cpp为c++,也可不修改)，修改的话就是用c语言来写，不修改就是c++,如果修改的话，Android.mk文件中也要修改LOCAL_SRC_FILES := crypt.c</p>
+<p>其中Application.mk是我们自己添加的，用于指定输出什么架构的so动态库文件，Application.mk如下：</p>
+<pre><code># armeabi armeabi-v7a arm64-v8a mips mips64 x86 x86_64
+APP_ABI := armeabi armeabi-v7a
+APP_PLATFORM := android-8
+</code></pre><p>配置ADT中需要包含的NDK头文件：右击工程–&gt;属性–&gt;C/C++常规–&gt;路径和符号，添加NDK的以下目录：</p>
+<pre><code>E:\eclipse\android-ndk-r14b\toolchains\arm-linux-androideabi-4.9\prebuilt\windows-x86_64\lib\gcc\arm-linux-androideabi\4.9.x\include
 
+E:\eclipse\android-ndk-r14b\toolchains\arm-linux-androideabi-4.9\prebuilt\windows-x86_64\lib\gcc\arm-linux-androideabi\4.9.x\include-fixed
+
+E:\eclipse\android-ndk-r14b\platforms\android-18\arch-arm\usr\include
+</code></pre><p><img src="http://oph0qv0je.bkt.clouddn.com/ndk4.png" alt=""></p>
+<p>配置后如下：</p>
+<p><img src="http://oph0qv0je.bkt.clouddn.com/ndk5.png" alt=""></p>
+<h3 id="实现头文件中定义的函数"><a href="#实现头文件中定义的函数" class="headerlink" title="实现头文件中定义的函数"></a>实现头文件中定义的函数</h3><p>在crpty.c中实现函数：</p>
+<pre><code>#include &quot;com_example_firstndk_Cryptor.h&quot;
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+char password[] = &quot;love you&quot;;
+
+//加密
+JNIEXPORT void JNICALL Java_com_example_firstndk_Cryptor_crypt
+  (JNIEnv *env, jclass jcls, jstring normal_path_jstr, jstring crypt_path_jstr){
+
+    //jstring -&gt; char*
+        const char* normal_path = (*env)-&gt;GetStringUTFChars(env,normal_path_jstr,JNI_FALSE);
+        const char* crypt_path = (*env)-&gt;GetStringUTFChars(env,crypt_path_jstr,JNI_FALSE);
+
+        //打开文件
+        FILE *normal_fp = fopen(normal_path, &quot;rb&quot;);
+        FILE *crypt_fp = fopen(crypt_path, &quot;wb&quot;);
+        //一次读取一个字符
+        int ch;
+        int i = 0; //循环使用密码中的字母进行异或运算
+        int pwd_len = strlen(password); //密码的长度
+        while ((ch = fgetc(normal_fp)) != EOF) { //End of File
+            //写入（异或运算）
+            fputc(ch ^ password[i % pwd_len], crypt_fp);
+            i++;
+        }
+        //关闭
+        fclose(crypt_fp);
+        fclose(normal_fp);
+}
+
+//解密
+JNIEXPORT void JNICALL Java_com_example_firstndk_Cryptor_decrypt
+  (JNIEnv *env, jclass jcls, jstring crypt_path_jstr, jstring decrypt_path_jstr){
+
+        const char* crypt_path = (*env)-&gt;GetStringUTFChars(env,crypt_path_jstr,JNI_FALSE);
+        const char* decrypt_path = (*env)-&gt;GetStringUTFChars(env,decrypt_path_jstr,JNI_FALSE);
+
+        //打开文件
+        FILE *normal_fp = fopen(crypt_path, &quot;rb&quot;);
+        FILE *crypt_fp = fopen(decrypt_path, &quot;wb&quot;);
+        //一次读取一个字符
+        int ch;
+        int i = 0; //循环使用密码中的字母进行异或运算
+        int pwd_len = strlen(password); //密码的长度
+        while ((ch = fgetc(normal_fp)) != EOF) { //End of File
+            //写入（异或运算）
+            fputc(ch ^ password[i % pwd_len], crypt_fp);
+            i++;
+        }
+        //关闭
+        fclose(crypt_fp);
+        fclose(normal_fp);
+
+}
+</code></pre><h3 id="编译生成-so动态库"><a href="#编译生成-so动态库" class="headerlink" title="编译生成.so动态库"></a>编译生成.so动态库</h3><p>直接make project（Build Project）一下即可。</p>
+<h3 id="加载动态库"><a href="#加载动态库" class="headerlink" title="加载动态库"></a>加载动态库</h3><p>通过System.loadLibrary方法加载.so动态库文件，不用写lib前缀，系统会默认添加。</p>
+<pre><code>package com.example.firstndk;
+
+public class Cryptor {
+    public native static void crypt(String normal_path, String crypt_path);
+    public native static void decrypt(String crypt_path, String decrypt_path);
+
+    static{
+        System.loadLibrary(&quot;crypt&quot;);
+    }
+}
+</code></pre><p>接下来，我们就需要写android代码来测试调用我们的动态库啦，书写两个按钮，在按钮点击时分别调用加密和解密功能，记得添加SD卡读写权限。</p>
+<pre><code>package com.example.firstndk;
+
+import java.io.File;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+
+public class MainActivity extends Activity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+    }
+
+    public void mCrypt(View v) {
+        String normal_path = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separatorChar
+                + &quot;liuyan.png&quot;;
+        String crypt_path = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separatorChar
+                + &quot;liuyan_crypt.png&quot;;
+        Cryptor.crypt(normal_path, crypt_path);
+        Log.d(&quot;isen&quot;, &quot;加密完成&quot;);
+    }
+
+    public void mDecrypt(View v) {
+        String crypt_path = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separatorChar
+                + &quot;liuyan_crypt.png&quot;;
+        String decrypt_path = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separatorChar
+                + &quot;liuyan_decrypt.png&quot;;
+        Cryptor.decrypt(crypt_path, decrypt_path);
+        Log.d(&quot;isen&quot;, &quot;解密完成&quot;);
+    }
+
+}
+</code></pre><p>如果要适配所有平台，需要修改Application.mk为：</p>
+<pre><code>APP_ABI := armeabi armeabi-v7a arm64-v8a mips mips64 x86 x86_64
+</code></pre>
       
     </div>
 
@@ -599,7 +739,7 @@ public class Cryptor {
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Eclipse-NDK开发流程"><span class="nav-number">1.</span> <span class="nav-text">Eclipse NDK开发流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#编写Java层Native方法："><span class="nav-number">1.1.</span> <span class="nav-text">编写Java层Native方法：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#javah命令生成头文件"><span class="nav-number">1.2.</span> <span class="nav-text">javah命令生成头文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建jni目录"><span class="nav-number">1.3.</span> <span class="nav-text">创建jni目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置NDK路径，添加本地支持add-native-support，配置ADT需要包含的头文件"><span class="nav-number">1.4.</span> <span class="nav-text">配置NDK路径，添加本地支持add native support，配置ADT需要包含的头文件</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Eclipse-NDK开发流程"><span class="nav-number">1.</span> <span class="nav-text">Eclipse NDK开发流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#编写Java层Native方法："><span class="nav-number">1.1.</span> <span class="nav-text">编写Java层Native方法：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#javah命令生成头文件"><span class="nav-number">1.2.</span> <span class="nav-text">javah命令生成头文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建jni目录"><span class="nav-number">1.3.</span> <span class="nav-text">创建jni目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置NDK路径，添加本地支持add-native-support，配置ADT需要包含的头文件"><span class="nav-number">1.4.</span> <span class="nav-text">配置NDK路径，添加本地支持add native support，配置ADT需要包含的头文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现头文件中定义的函数"><span class="nav-number">1.5.</span> <span class="nav-text">实现头文件中定义的函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编译生成-so动态库"><span class="nav-number">1.6.</span> <span class="nav-text">编译生成.so动态库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#加载动态库"><span class="nav-number">1.7.</span> <span class="nav-text">加载动态库</span></a></li></ol></li></ol></div>
             
 
           </div>
