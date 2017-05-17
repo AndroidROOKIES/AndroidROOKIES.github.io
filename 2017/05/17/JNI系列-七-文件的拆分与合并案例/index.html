@@ -87,43 +87,37 @@
 
 
 
-<meta name="description" content="JNI引用变量引用类型：局部引用和全局引用
-作用：在JNI中告知虚拟机何时回收一个JNI变量
-局部引用局部引用，通过DeleteLocalRef手动释放对象
-使用场景
-1.访问一个很大的java对象，使用完之后，还要进行复杂的耗时操作。
-2.创建了大量的局部引用，占用了太多的内存，而且这些局部引用跟后面的操作没有关联性。
-举例：
-Java代码：
-// 局部引用
-public native void">
+<meta name="description" content="文件拆分思路：
+例如，我们需要拆分的文件大小为110M,需要拆分成9个小文件，那个有两种情况：
+
+如果110能够被9整除的话，那么每个文件大小是：110/9
+很显然，这里不能够整除，那么我们前面（9-1）个文件需要大一些，大小为：110/（9-1）。最后一个文件的大小稍微小一些，大小为：110%（9-1）
+
+c代码如下：
+#include &amp;quot;com_dongnaoedu_ndkfilep">
 <meta property="og:type" content="article">
-<meta property="og:title" content="JNI系列(四)JNI引用与异常处理">
-<meta property="og:url" content="http://yoursite.com/2017/05/15/JNI系列-四-JNI引用与异常处理/index.html">
+<meta property="og:title" content="JNI系列(七)文件的拆分与合并案例">
+<meta property="og:url" content="http://yoursite.com/2017/05/17/JNI系列-七-文件的拆分与合并案例/index.html">
 <meta property="og:site_name" content="Feng's Notes">
-<meta property="og:description" content="JNI引用变量引用类型：局部引用和全局引用
-作用：在JNI中告知虚拟机何时回收一个JNI变量
-局部引用局部引用，通过DeleteLocalRef手动释放对象
-使用场景
-1.访问一个很大的java对象，使用完之后，还要进行复杂的耗时操作。
-2.创建了大量的局部引用，占用了太多的内存，而且这些局部引用跟后面的操作没有关联性。
-举例：
-Java代码：
-// 局部引用
-public native void">
-<meta property="og:updated_time" content="2017-05-15T02:38:07.826Z">
+<meta property="og:description" content="文件拆分思路：
+例如，我们需要拆分的文件大小为110M,需要拆分成9个小文件，那个有两种情况：
+
+如果110能够被9整除的话，那么每个文件大小是：110/9
+很显然，这里不能够整除，那么我们前面（9-1）个文件需要大一些，大小为：110/（9-1）。最后一个文件的大小稍微小一些，大小为：110%（9-1）
+
+c代码如下：
+#include &amp;quot;com_dongnaoedu_ndkfilep">
+<meta property="og:updated_time" content="2017-05-17T02:59:27.843Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="JNI系列(四)JNI引用与异常处理">
-<meta name="twitter:description" content="JNI引用变量引用类型：局部引用和全局引用
-作用：在JNI中告知虚拟机何时回收一个JNI变量
-局部引用局部引用，通过DeleteLocalRef手动释放对象
-使用场景
-1.访问一个很大的java对象，使用完之后，还要进行复杂的耗时操作。
-2.创建了大量的局部引用，占用了太多的内存，而且这些局部引用跟后面的操作没有关联性。
-举例：
-Java代码：
-// 局部引用
-public native void">
+<meta name="twitter:title" content="JNI系列(七)文件的拆分与合并案例">
+<meta name="twitter:description" content="文件拆分思路：
+例如，我们需要拆分的文件大小为110M,需要拆分成9个小文件，那个有两种情况：
+
+如果110能够被9整除的话，那么每个文件大小是：110/9
+很显然，这里不能够整除，那么我们前面（9-1）个文件需要大一些，大小为：110/（9-1）。最后一个文件的大小稍微小一些，大小为：110%（9-1）
+
+c代码如下：
+#include &amp;quot;com_dongnaoedu_ndkfilep">
 
 
 
@@ -151,13 +145,13 @@ public native void">
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/05/15/JNI系列-四-JNI引用与异常处理/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/05/17/JNI系列-七-文件的拆分与合并案例/"/>
 
 
 
 
 
-  <title> JNI系列(四)JNI引用与异常处理 | Feng's Notes </title>
+  <title> JNI系列(七)文件的拆分与合并案例 | Feng's Notes </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -296,7 +290,7 @@ public native void">
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/15/JNI系列-四-JNI引用与异常处理/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/17/JNI系列-七-文件的拆分与合并案例/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Feng">
@@ -317,7 +311,7 @@ public native void">
             
             
               
-                JNI系列(四)JNI引用与异常处理
+                JNI系列(七)文件的拆分与合并案例
               
             
           </h1>
@@ -332,8 +326,8 @@ public native void">
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-15T09:31:32+08:00">
-                2017-05-15
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-17T10:10:31+08:00">
+                2017-05-17
               </time>
             
 
@@ -388,128 +382,158 @@ public native void">
       
 
       
-        <h2 id="JNI引用变量"><a href="#JNI引用变量" class="headerlink" title="JNI引用变量"></a>JNI引用变量</h2><p>引用类型：局部引用和全局引用</p>
-<p>作用：在JNI中告知虚拟机何时回收一个JNI变量</p>
-<h3 id="局部引用"><a href="#局部引用" class="headerlink" title="局部引用"></a>局部引用</h3><p>局部引用，通过DeleteLocalRef手动释放对象</p>
-<p>使用场景</p>
-<p>1.访问一个很大的java对象，使用完之后，还要进行复杂的耗时操作。</p>
-<p>2.创建了大量的局部引用，占用了太多的内存，而且这些局部引用跟后面的操作没有关联性。</p>
-<p>举例：</p>
-<p>Java代码：</p>
-<pre><code>// 局部引用
-public native void localRef();
-</code></pre><p>c代码：</p>
-<p>模拟：循环创建数组</p>
-<pre><code>JNIEXPORT void JNICALL Java_com_dongnaoedu_jni_JniTest_localRef(JNIEnv *env, jobject jobj){
+        <h2 id="文件拆分"><a href="#文件拆分" class="headerlink" title="文件拆分"></a>文件拆分</h2><p>思路：</p>
+<p>例如，我们需要拆分的文件大小为110M,需要拆分成9个小文件，那个有两种情况：</p>
+<ol>
+<li>如果110能够被9整除的话，那么每个文件大小是：110/9</li>
+<li>很显然，这里不能够整除，那么我们前面（9-1）个文件需要大一些，大小为：110/（9-1）。最后一个文件的大小稍微小一些，大小为：110%（9-1）</li>
+</ol>
+<p>c代码如下：</p>
+<pre><code>#include &quot;com_dongnaoedu_ndkfilepatch_NDKFileUtils.h&quot;
+
+#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+
+#include &lt;android/log.h&gt;
+
+#define LOGI(FORMAT,...) __android_log_print(ANDROID_LOG_INFO,&quot;jason&quot;,FORMAT,__VA_ARGS__)
+#define LOGE(FORMAT,...) __android_log_print(ANDROID_LOG_ERROR,&quot;jason&quot;,FORMAT,__VA_ARGS__)
+
+//获取文件大小
+long get_file_size(char *path){
+    FILE *fp = fopen(path,&quot;rb&quot;);
+    fseek(fp,0,SEEK_END);
+    return ftell(fp);
+}
+
+//拆分
+JNIEXPORT void JNICALL Java_com_dongnaoedu_ndkfilepatch_NDKFileUtils_diff
+  (JNIEnv *env, jclass jcls, jstring path_jstr,jstring path_pattern_jstr, jint file_num){
+    //jstring -&gt; char*
+    //需要分割的文件路径
+    const char* path = (*env)-&gt;GetStringUTFChars(env,path_jstr,NULL);
+    const char* path_pattern = (*env)-&gt;GetStringUTFChars(env,path_pattern_jstr,NULL);
+
+    //得到分割之后的子文件的路径列表
+    char **patches = malloc(sizeof(char*) * file_num);
     int i = 0;
-    for (; i &lt; 5; i++){
-        //创建Date对象（在循环中创建了占用内存大的对象）
-        jclass cls = (*env)-&gt;FindClass(env, &quot;java/util/Date&quot;);
-        jmethodID constructor_mid = (*env)-&gt;GetMethodID(env, cls, &quot;&lt;init&gt;&quot;, &quot;()V&quot;);
-        jobject obj = (*env)-&gt;NewObject(env, cls, constructor_mid);
-        //此处省略一百行代码...
-
-        //不在使用jobject对象了
-        //通知垃圾回收器回收这些对象
-        (*env)-&gt;DeleteLocalRef(env, obj);
-        //此处省略一百行代码...
-    }
-}
-</code></pre><p>测试：</p>
-<pre><code>public static void main(String[] args) {
-
-    JniTest test = new JniTest();
-    test.localRef();
-
-}
-</code></pre><h3 id="全局引用"><a href="#全局引用" class="headerlink" title="全局引用"></a>全局引用</h3><p>作用：共享(可以跨多个线程)，手动控制内存使用</p>
-<p>举例：</p>
-<p>Java代码：提供三个方法，分别用于创建、获取、删除JNI全局引用</p>
-<pre><code>public native void createGlobalRef();
-
-public native String getGlobalRef();
-
-public native void deteleGlobalRef();
-</code></pre><p>c代码：<br>    //定义全局引用的字符串对象<br>    jstring global_str;</p>
-<pre><code>//创建
-JNIEXPORT void JNICALL Java_com_dongnaoedu_jni_JniTest_createGlobalRef(JNIEnv *env, jobject jobj){
-    jstring obj = (*env)-&gt;NewStringUTF(env, &quot;jni development is powerful!&quot;);
-    //创建全局引用
-    global_str = (*env)-&gt;NewGlobalRef(env, obj);
-}
-
-//获得
-JNIEXPORT jstring JNICALL Java_com_dongnaoedu_jni_JniTest_getGlobalRef(JNIEnv *env, jobject jobj){
-    return global_str;
-}
-
-//释放
-JNIEXPORT void JNICALL Java_com_dongnaoedu_jni_JniTest_deleteGlobalRef(JNIEnv *env, jobject jobj){
-    //释放全局引用
-    (*env)-&gt;DeleteGlobalRef(env, global_str);
-}
-</code></pre><p>测试：</p>
-<pre><code>public static void main(String[] args) {
-
-    JniTest test = new JniTest();
-    test.localRef();
-
-    test.createGlobalRef();
-    System.out.println(test.getGlobalRef());
-    test.deteleGlobalRef();
-
-    //删除之后再取出会抛出空指针异常
-    System.out.println(test.getGlobalRef());
-
-}
-</code></pre><h3 id="弱全局引用"><a href="#弱全局引用" class="headerlink" title="弱全局引用"></a>弱全局引用</h3><p>节省内存，在内存不足时可以是释放所引用的对象</p>
-<p>可以引用一个不常用的对象，如果为NULL，临时创建</p>
-<p>创建：NewWeakGlobalRef,销毁：DeleteGlobalWeakRef</p>
-<h2 id="JNI异常处理"><a href="#JNI异常处理" class="headerlink" title="JNI异常处理"></a>JNI异常处理</h2><p>1.在JNI层手动清空异常信息（ExceptionClear），保证Java代码可以继续运行</p>
-<p>2.补救措施保证C代码继续运行</p>
-<p>JNI自己抛出的异常，在Java层无法被捕捉，只能在C层清空。</p>
-<p>用户通过ThrowNew抛出的异常，可以在Java层捕捉。</p>
-<p>例如：属性名字不小心写错了(本来想获取key的属性，结果写成不存在的key2)，拿到的是空jfieldID</p>
-<pre><code>JNIEXPORT void JNICALL Java_com_dongnaoedu_jni_JniTest_exeception(JNIEnv *env, jobject jobj){
-    jclass cls = (*env)-&gt;GetObjectClass(env, jobj);
-    //属性名字不小心写错了(本来想获取key的属性，结果写成不存在的key2)，拿到的是空的jfieldID
-    jfieldID fid = (*env)-&gt;GetFieldID(env, cls, &quot;key2&quot;, &quot;Ljava/lang/String;&quot;);
-    //检测是否发生Java异常
-    jthrowable exception = (*env)-&gt;ExceptionOccurred(env);
-    if (exception != NULL){
-        //让Java代码可以继续运行
-        //手动清空异常信息
-        (*env)-&gt;ExceptionClear(env);
-
-        //提供补救措施，获取一个存在的key属性
-        fid = (*env)-&gt;GetFieldID(env, cls, &quot;key&quot;, &quot;Ljava/lang/String;&quot;);
+    for (; i &lt; file_num; i++) {
+        patches[i] = malloc(sizeof(char) * 100);
+        //元素赋值
+        //需要分割的文件：C://jason/liuyan.png
+        //子文件：C://jason/liuyan_%d.png
+        sprintf(patches[i], path_pattern, (i+1));
+        LOGI(&quot;patch path:%s&quot;,patches[i]);
     }
 
-    //获取属性的值
-    jstring jstr = (*env)-&gt;GetObjectField(env, jobj, fid);
-    char *str = (*env)-&gt;GetStringUTFChars(env, jstr, NULL);
-
-    //对比属性值是否正确
-    if (_stricmp(str, &quot;super jason&quot;) != 0){
-        //认为抛出异常，给Java层处理
-        jclass newExcCls = (*env)-&gt;FindClass(env, &quot;java/lang/IllegalArgumentException&quot;);
-        (*env)-&gt;ThrowNew(env,newExcCls,&quot;key&apos;s value is invalid!&quot;);
+    //不断读取path文件，循环写入file_num个文件中
+    //  整除
+    //  文件大小：90，分成9个文件，每个文件10
+    //  不整除
+    //  文件大小：110，分成9个文件，
+    //  前(9-1)个文件为(110/(9-1))=13
+    //  最后一个文件(110%(9-1))=6
+    int filesize = get_file_size(path);
+    FILE *fpr = fopen(path,&quot;rb&quot;);
+    //整除
+    if(filesize % file_num == 0){
+        //单个文件大小
+        int part = filesize / file_num;
+        i = 0;
+        //逐一写入不同的分割子文件中
+        for (; i &lt; file_num; i++) {
+            FILE *fpw = fopen(patches[i], &quot;wb&quot;);
+            int j = 0;
+            for(; j &lt; part; j++){
+                //边读边写
+                fputc(fgetc(fpr),fpw);
+            }
+            fclose(fpw);
+        }
     }
+    else{
+        //不整除
+        int part = filesize / (file_num - 1);
+        i = 0;
+        //逐一写入不同的分割子文件中
+        for (; i &lt; file_num - 1; i++) {
+            FILE *fpw = fopen(patches[i], &quot;wb&quot;);
+            int j = 0;
+            for(; j &lt; part; j++){
+                //边读边写
+                fputc(fgetc(fpr),fpw);
+            }
+            fclose(fpw);
+        }
+        //the last one
+        FILE *fpw = fopen(patches[file_num - 1], &quot;wb&quot;);
+        i = 0;
+        for(; i &lt; filesize % (file_num - 1); i++){
+            fputc(fgetc(fpr),fpw);
+        }
+        fclose(fpw);
+    }
+
+    //关闭被分割的文件
+    fclose(fpr);
+
+    //释放
+    i = 0;
+    for(; i &lt; file_num; i++){
+        free(patches[i]);
+    }
+    free(patches);
+
+    (*env)-&gt;ReleaseStringUTFChars(env,path_jstr,path);
+    (*env)-&gt;ReleaseStringUTFChars(env,path_pattern_jstr,path_pattern);
 }
-</code></pre><p>测试：</p>
-<pre><code>public static void main(String[] args) {
+</code></pre><p>首先我们需要一个分割之后的字符串数组（也就是char二级指针），用于存放分割之后的文件路径。</p>
+<p>然后分整除和不整除两种情况来分别处理，不断读取被分割的文件，循环写入每个子文件中。</p>
+<h2 id="文件合并"><a href="#文件合并" class="headerlink" title="文件合并"></a>文件合并</h2><p>文件的合并就是一个逆向的过程。</p>
+<pre><code>//合并
+JNIEXPORT void JNICALL Java_com_dongnaoedu_ndkfilepatch_NDKFileUtils_patch
+  (JNIEnv *env, jclass jcls,jstring path_pattern_jstr, jint file_num,jstring merge_path_jstr){
+    //合并之后的文件
+    const char* merge_path = (*env)-&gt;GetStringUTFChars(env,merge_path_jstr,NULL);
+    //分割子文件的pattern
+    const char* path_pattern = (*env)-&gt;GetStringUTFChars(env,path_pattern_jstr,NULL);
 
-    JniTest test = new JniTest();
-
-    try {
-        test.testException();
-        System.out.println(&quot;JNI手动抛出了异常，Java不会继续执行，这句话不会被打印\n&quot;);
-    } catch (Exception e) {
-        System.out.println(&quot;捕获到JNI手动抛出的异常，这句话会被打印：&quot; + e.getMessage() + &quot;\n&quot;);
+    //得到分割之后的子文件的路径列表
+    char **patches = malloc(sizeof(char*) * file_num);
+    int i = 0;
+    for (; i &lt; file_num; i++) {
+        patches[i] = malloc(sizeof(char) * 100);
+        //元素赋值
+        //需要分割的文件：C://jason/liuyan.png
+        //子文件：C://jason/liuyan_%d.png
+        sprintf(patches[i], path_pattern, (i+1));
+        LOGI(&quot;patch path:%s&quot;,patches[i]);
     }
 
-    System.out.println(&quot;程序继续执行，这句话会被打印\n&quot;);
+    FILE *fpw = fopen(merge_path,&quot;wb&quot;);
+    //把所有的分割文件读取一遍，写入一个总的文件中
+    i = 0;
+    for(; i &lt; file_num; i++){
+        //每个子文件的大小
+        int filesize = get_file_size(patches[i]);
+        FILE *fpr = fopen(patches[i], &quot;rb&quot;);
+        int j = 0;
+        for (; j &lt; filesize; j++) {
+            fputc(fgetc(fpr),fpw);
+        }
+        fclose(fpr);
+    }
+    fclose(fpw);
 
+    //释放
+    i = 0;
+    for(; i &lt; file_num; i++){
+        free(patches[i]);
+    }
+    free(patches);
+
+    (*env)-&gt;ReleaseStringUTFChars(env,path_pattern_jstr,path_pattern);
+    (*env)-&gt;ReleaseStringUTFChars(env,merge_path_jstr,merge_path);
 }
 </code></pre>
       
@@ -553,8 +577,8 @@ JNIEXPORT void JNICALL Java_com_dongnaoedu_jni_JniTest_deleteGlobalRef(JNIEnv *e
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/05/12/JNI系列-三-JNI数组处理/" rel="next" title="JNI系列(三)数组处理">
-                <i class="fa fa-chevron-left"></i> JNI系列(三)数组处理
+              <a href="/2017/05/15/JNI系列-六-Eclipse下NDK开发/" rel="next" title="JNI系列(六)Eclipse下NDK开发">
+                <i class="fa fa-chevron-left"></i> JNI系列(六)Eclipse下NDK开发
               </a>
             
           </div>
@@ -562,10 +586,6 @@ JNIEXPORT void JNICALL Java_com_dongnaoedu_jni_JniTest_deleteGlobalRef(JNIEnv *e
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/05/15/JNI系列-五-JNI缓存策略/" rel="prev" title="JNI系列(五)JNI缓存策略">
-                JNI系列(五)JNI缓存策略 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -690,7 +710,7 @@ JNIEXPORT void JNICALL Java_com_dongnaoedu_jni_JniTest_deleteGlobalRef(JNIEnv *e
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#JNI引用变量"><span class="nav-number">1.</span> <span class="nav-text">JNI引用变量</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#局部引用"><span class="nav-number">1.1.</span> <span class="nav-text">局部引用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#全局引用"><span class="nav-number">1.2.</span> <span class="nav-text">全局引用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#弱全局引用"><span class="nav-number">1.3.</span> <span class="nav-text">弱全局引用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JNI异常处理"><span class="nav-number">2.</span> <span class="nav-text">JNI异常处理</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#文件拆分"><span class="nav-number">1.</span> <span class="nav-text">文件拆分</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件合并"><span class="nav-number">2.</span> <span class="nav-text">文件合并</span></a></li></ol></div>
             
 
           </div>
