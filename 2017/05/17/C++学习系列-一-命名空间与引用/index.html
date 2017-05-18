@@ -87,16 +87,31 @@
 
 
 
-<meta name="description" content="每天一小步，人生一大步">
+<meta name="description" content="C与C++的关系
+C++可以与C代码进行混编，即表示C++里面可以写C，但是反过来却不可以
+C++是面向对象编程语言、C是面向过程的编程
+C++是对C的一个增强，C++有class、引用的概念，堆内存的分配释放除了C语言的malloc、free，还有new、delete关键字
+
+C++的命名空间C++的命名空间命名空间，也叫名字空间，类似于Java中包（归类）。当项目比较大的时候，用于区分不同人写">
 <meta property="og:type" content="article">
 <meta property="og:title" content="C++学习系列(一)命名空间与引用">
 <meta property="og:url" content="http://yoursite.com/2017/05/17/C++学习系列-一-命名空间与引用/index.html">
 <meta property="og:site_name" content="Feng's Notes">
-<meta property="og:description" content="每天一小步，人生一大步">
-<meta property="og:updated_time" content="2017-05-17T06:47:06.455Z">
+<meta property="og:description" content="C与C++的关系
+C++可以与C代码进行混编，即表示C++里面可以写C，但是反过来却不可以
+C++是面向对象编程语言、C是面向过程的编程
+C++是对C的一个增强，C++有class、引用的概念，堆内存的分配释放除了C语言的malloc、free，还有new、delete关键字
+
+C++的命名空间C++的命名空间命名空间，也叫名字空间，类似于Java中包（归类）。当项目比较大的时候，用于区分不同人写">
+<meta property="og:updated_time" content="2017-05-18T07:13:17.581Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C++学习系列(一)命名空间与引用">
-<meta name="twitter:description" content="每天一小步，人生一大步">
+<meta name="twitter:description" content="C与C++的关系
+C++可以与C代码进行混编，即表示C++里面可以写C，但是反过来却不可以
+C++是面向对象编程语言、C是面向过程的编程
+C++是对C的一个增强，C++有class、引用的概念，堆内存的分配释放除了C语言的malloc、free，还有new、delete关键字
+
+C++的命名空间C++的命名空间命名空间，也叫名字空间，类似于Java中包（归类）。当项目比较大的时候，用于区分不同人写">
 
 
 
@@ -361,7 +376,162 @@
       
 
       
-        
+        <h2 id="C与C-的关系"><a href="#C与C-的关系" class="headerlink" title="C与C++的关系"></a>C与C++的关系</h2><ol>
+<li>C++可以与C代码进行混编，即表示C++里面可以写C，但是反过来却不可以</li>
+<li>C++是面向对象编程语言、C是面向过程的编程</li>
+<li>C++是对C的一个增强，C++有class、引用的概念，堆内存的分配释放除了C语言的malloc、free，还有new、delete关键字</li>
+</ol>
+<h2 id="C-的命名空间"><a href="#C-的命名空间" class="headerlink" title="C++的命名空间"></a>C++的命名空间</h2><h3 id="C-的命名空间-1"><a href="#C-的命名空间-1" class="headerlink" title="C++的命名空间"></a>C++的命名空间</h3><p>命名空间，也叫名字空间，类似于Java中包（归类）。当项目比较大的时候，用于区分不同人写的代码、不同库的代码。不同命名空间下面，函数名、变量名、类名等都可以重复。</p>
+<p>举例：</p>
+<pre><code>#include &lt;iostream&gt;
+
+//标准命名空间(包含很多标准的定义)
+//standard
+//命名空间类似于Java中包（归类）    
+using namespace std;
+
+void main(){
+    //运算符重载
+    //std::cout &lt;&lt; &quot;this is c plus plus&quot; &lt;&lt; std::endl;
+    cout &lt;&lt; &quot;this is c plus plus&quot; &lt;&lt; endl;
+    system(&quot;pause&quot;);
+}
+</code></pre><p>通过using namespace来使用std这个命名空间。也可以通过std::的方式来用命名空间，::叫做访问修饰符。</p>
+<p>在C++中用cout来输出，它是头文件iostream的输出函数，由于C++可以与C代码进行混编也可以用printf()输出，其中&lt;&lt;是运算符重载，endl是换行的意思。</p>
+<h3 id="自定义命名空间"><a href="#自定义命名空间" class="headerlink" title="自定义命名空间"></a>自定义命名空间</h3><pre><code>#include &lt;iostream&gt;
+
+//标准命名空间
+using namespace std;
+
+//自定义命名空间
+namespace NSP_A{
+    int a = 9;
+}
+
+namespace NSP_B{
+    int a = 12;
+    //命名空间嵌套
+    namespace NSP_C{
+        int c = 90;        
+    }
+}
+
+void main(){
+    //使用命名空间
+    //::访问修饰符
+    cout &lt;&lt; NSP_A::a &lt;&lt; endl;
+    cout &lt;&lt; NSP_B::a &lt;&lt; endl;
+
+    cout &lt;&lt; NSP_B::NSP_C::c &lt;&lt; endl;    
+    system(&quot;pause&quot;);
+}
+</code></pre><h3 id="C-命名空间中的结构体"><a href="#C-命名空间中的结构体" class="headerlink" title="C++命名空间中的结构体"></a>C++命名空间中的结构体</h3><p>说明一下：结构体不能被继承，类可以被继承</p>
+<pre><code>include &lt;iostream&gt;
+
+//自定义命名空间
+namespace NSP_A{
+    int a = 9;
+    struct Teacher{
+        char name[20];
+        int age;
+    };
+    struct Student{
+        char name[20];
+        int age;
+    };
+
+}
+
+void main(){
+    //使用命名空间中的结构体
+    using NSP_A::Student;
+    Student t;
+    t.age = 90;
+
+    system(&quot;pause&quot;);
+}
+</code></pre><p>注意：C++中通过using使用了命名空间中的结构体，在使用结构体的时候，struct关键字可以省略。</p>
+<h3 id="C-中的结构体"><a href="#C-中的结构体" class="headerlink" title="C++中的结构体"></a>C++中的结构体</h3><pre><code>//结构体
+
+struct MyTeacher{
+public:
+    char name[20];
+    int age;
+public:
+    void say(){
+        cout &lt;&lt; this-&gt;age &lt;&lt; &quot;岁&quot; &lt;&lt; endl;
+    }
+};
+void main(){
+    MyTeacher t1;
+    t1.age = 10;
+    t1.say();
+    system(&quot;pause&quot;);
+}
+</code></pre><p>C++是C的增强，C++中的结构体可以有访问修饰符，一个修饰符可以修饰多个变量或者函数。</p>
+<p>C++中的结构体与Java中的类非常类似，在C语言中只能用函数指针当作成员函数，在C++中直接类似Java中的方法当做函数。</p>
+<p>C++中的结构体有一个this指针，指向自身。</p>
+<h3 id="C-中的类（class）"><a href="#C-中的类（class）" class="headerlink" title="C++中的类（class）"></a>C++中的类（class）</h3><pre><code>#define PI 3.14
+//圆
+class MyCircle{
+//属性（共用权限访问修饰符）
+private:
+    double r;
+    double s;
+public:
+    void setR(double r){
+        this-&gt;r = r;
+    }
+    //获取面积
+    double getS(){
+        return PI * r * r;
+    }
+};
+
+void main(){
+    MyCircle c1;
+    c1.setR(4);
+
+    cout &lt;&lt; &quot;圆的面积：&quot; &lt;&lt; c1.getS() &lt;&lt; endl;
+
+    system(&quot;pause&quot;);
+}
+</code></pre><p>与Java类似，有一个tihs指针指向自身。</p>
+<p>类的定义末尾需要有分号。</p>
+<h3 id="C-中布尔类型"><a href="#C-中布尔类型" class="headerlink" title="C++中布尔类型"></a>C++中布尔类型</h3><p>C++中有布尔类型bool，C语言没有</p>
+<pre><code>void main(){
+    //bool isSingle = true;
+    bool isSingle = 17;
+    //false -17
+
+    if (isSingle){
+        cout &lt;&lt; &quot;单身&quot; &lt;&lt; endl;
+        cout &lt;&lt; sizeof(bool) &lt;&lt; endl;
+    }
+    else{
+        cout &lt;&lt; &quot;有对象&quot; &lt;&lt; endl;
+    }
+
+    int a = 10, b = 20;
+    //三目预算符，C++中可以左值，Java中不可以
+    ((a &gt; b) ? a : b) = 30;
+    cout &lt;&lt; b &lt;&lt; endl;
+
+    system(&quot;pause&quot;);
+}
+</code></pre><h2 id="C-中的引用"><a href="#C-中的引用" class="headerlink" title="C++中的引用"></a>C++中的引用</h2><p>变量名相当于内存的“门牌号”，人为地取名字，因此可以有多个别名，而这种别名就是引用。</p>
+<p>引用的主要作用：作为函数的参数或者返回值，代替指针，使得程序可读性加强。</p>
+<pre><code>void main(){
+    //变量名-门牌号(内存空间0x00001的别名，可不可以有多个名字？)
+    int a = 10;
+    //b就这个内存空间另外一个别名\
+    //“&amp;”表示C++中的引用，与取地址符要区分开
+    int &amp;b = a;    
+    cout &lt;&lt; b &lt;&lt; endl;
+
+    system(&quot;pause&quot;);
+}
+</code></pre>
       
     </div>
 
@@ -454,8 +624,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/uploads/avatar.png"
@@ -517,6 +696,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#C与C-的关系"><span class="nav-number">1.</span> <span class="nav-text">C与C++的关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-的命名空间"><span class="nav-number">2.</span> <span class="nav-text">C++的命名空间</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#C-的命名空间-1"><span class="nav-number">2.1.</span> <span class="nav-text">C++的命名空间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自定义命名空间"><span class="nav-number">2.2.</span> <span class="nav-text">自定义命名空间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C-命名空间中的结构体"><span class="nav-number">2.3.</span> <span class="nav-text">C++命名空间中的结构体</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C-中的结构体"><span class="nav-number">2.4.</span> <span class="nav-text">C++中的结构体</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C-中的类（class）"><span class="nav-number">2.5.</span> <span class="nav-text">C++中的类（class）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C-中布尔类型"><span class="nav-number">2.6.</span> <span class="nav-text">C++中布尔类型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-中的引用"><span class="nav-number">3.</span> <span class="nav-text">C++中的引用</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
