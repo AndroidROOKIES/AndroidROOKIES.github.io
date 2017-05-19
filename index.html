@@ -708,21 +708,23 @@ void main(){
 <li>通过va_start开始读取可变参数，其中形参i是最后一个固定参数。</li>
 <li>通过va_arg读取，需要指定类型。</li>
 <li><p>通过va_end结束读取。</p>
-<p> #include <stdarg.h><br> void func(int i,…)<br> {</stdarg.h></p>
-<pre><code>//可变参数指针
-va_list args_p;
-//开始读取可变参数，i是最后一个固定参数
-va_start(args_p,i);
-int a = va_arg(args_p,int);
-char b = va_arg(args_p, char);
-int c = va_arg(args_p, int);
-cout &lt;&lt; a &lt;&lt; endl;
-cout &lt;&lt; b &lt;&lt; endl;
-cout &lt;&lt; c &lt;&lt; endl;
-//结束
-va_end(args_p);
-</code></pre><p> }</p>
-</li>
+<pre><code>#include &lt;stdarg.h&gt;
+void func(int i,...)
+{
+    //可变参数指针
+    va_list args_p;
+    //开始读取可变参数，i是最后一个固定参数
+    va_start(args_p,i);
+    int a = va_arg(args_p,int);
+    char b = va_arg(args_p, char);
+    int c = va_arg(args_p, int);
+    cout &lt;&lt; a &lt;&lt; endl;
+    cout &lt;&lt; b &lt;&lt; endl;
+    cout &lt;&lt; c &lt;&lt; endl;
+    //结束
+    va_end(args_p);
+}
+</code></pre></li>
 </ol>
 <pre><code>void main(){
     func(9,20,&apos;b&apos;,30);

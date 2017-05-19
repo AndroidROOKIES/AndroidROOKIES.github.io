@@ -103,7 +103,7 @@ C++是面向对象编程语言、C是面向过程的编程
 C++是对C的一个增强，C++有class、引用的概念，堆内存的分配释放除了C语言的malloc、free，还有new、delete关键字
 
 C++的命名空间C++的命名空间命名空间，也叫名字空间，类似于Java中包（归类）。当项目比较大的时候，用于区分不同人写">
-<meta property="og:updated_time" content="2017-05-19T03:02:17.965Z">
+<meta property="og:updated_time" content="2017-05-19T06:22:32.542Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C++学习系列(一)命名空间与引用">
 <meta name="twitter:description" content="C与C++的关系
@@ -717,21 +717,23 @@ void main(){
 <li>通过va_start开始读取可变参数，其中形参i是最后一个固定参数。</li>
 <li>通过va_arg读取，需要指定类型。</li>
 <li><p>通过va_end结束读取。</p>
-<p> #include <stdarg.h><br> void func(int i,…)<br> {</stdarg.h></p>
-<pre><code>//可变参数指针
-va_list args_p;
-//开始读取可变参数，i是最后一个固定参数
-va_start(args_p,i);
-int a = va_arg(args_p,int);
-char b = va_arg(args_p, char);
-int c = va_arg(args_p, int);
-cout &lt;&lt; a &lt;&lt; endl;
-cout &lt;&lt; b &lt;&lt; endl;
-cout &lt;&lt; c &lt;&lt; endl;
-//结束
-va_end(args_p);
-</code></pre><p> }</p>
-</li>
+<pre><code>#include &lt;stdarg.h&gt;
+void func(int i,...)
+{
+    //可变参数指针
+    va_list args_p;
+    //开始读取可变参数，i是最后一个固定参数
+    va_start(args_p,i);
+    int a = va_arg(args_p,int);
+    char b = va_arg(args_p, char);
+    int c = va_arg(args_p, int);
+    cout &lt;&lt; a &lt;&lt; endl;
+    cout &lt;&lt; b &lt;&lt; endl;
+    cout &lt;&lt; c &lt;&lt; endl;
+    //结束
+    va_end(args_p);
+}
+</code></pre></li>
 </ol>
 <pre><code>void main(){
     func(9,20,&apos;b&apos;,30);
