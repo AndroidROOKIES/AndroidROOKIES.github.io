@@ -724,14 +724,15 @@ void func(int i,...)
     //结束
     va_end(args_p);
 }
-</code></pre></li>
-</ol>
-<pre><code>void main(){
+
+void main(){
     func(9,20,&apos;b&apos;,30);
 
     system(&quot;pause&quot;);
 }
-</code></pre><p>也可以循环读取，需要有条件限制（比如可变参数都大于0），且可变参数的类型都一样，否则读取的结果不正确，例子：</p>
+</code></pre></li>
+</ol>
+<p>也可以循环读取，需要有条件限制（比如可变参数都大于0），且可变参数的类型都一样，否则读取的结果不正确，例子：</p>
 <pre><code>void func(int i,...)
 {
     //可变参数指针
