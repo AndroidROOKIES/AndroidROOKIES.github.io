@@ -270,7 +270,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/22/C++学习系列-二-C++中的类/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/21/C++学习系列-二-C++中的类/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Feng">
@@ -292,7 +292,7 @@
             
               
                 
-                <a class="post-title-link" href="/2017/05/22/C++学习系列-二-C++中的类/" itemprop="url">
+                <a class="post-title-link" href="/2017/05/21/C++学习系列-二-C++中的类/" itemprop="url">
                   C++学习系列(二)C++中的类
                 </a>
               
@@ -309,8 +309,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-22T11:20:12+08:00">
-                2017-05-22
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-21T11:20:12+08:00">
+                2017-05-21
               </time>
             
 
@@ -320,9 +320,29 @@
           </span>
 
           
-
-          
+            <span class="post-category" >
             
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index">
+                    <span itemprop="name">C++</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
           
 
           
@@ -347,7 +367,83 @@
       
         
           
-            
+            <p>C++与Java一样，也是一种面向对象的编程语言。</p>
+<h2 id="C-类的普遍写法"><a href="#C-类的普遍写法" class="headerlink" title="C++类的普遍写法"></a>C++类的普遍写法</h2><p>类的定义是在头文件中（MyTeacher.h）：</p>
+<pre><code>#pragma once
+
+class MyTeacher{
+//属性
+public:
+    int age;
+    char* name;
+//方法
+public:
+    void setAge(int age);
+    int getAge();
+    void setName(char* name);
+    char* getName();
+};
+</code></pre><p>实现在源文件中(MyTeacher.cpp):</p>
+<pre><code>#include &quot;MyTeacher.h&quot;
+
+void MyTeacher::setAge(int age){
+    this-&gt;age = age;
+}
+
+int MyTeacher::getAge(){
+    return this-&gt;age;
+}
+
+void MyTeacher::setName(char* name){
+    this-&gt;name = name;
+}
+
+char* MyTeacher::getName(){
+    return this-&gt;name;
+}
+</code></pre><p>类的使用（01.cpp）：</p>
+<pre><code>#include &quot;MyTeacher.h&quot;
+
+void main(){
+    MyTeacher t1;
+    t1.name = &quot;Jack&quot;;
+    t1.age = 20;
+
+    cout &lt;&lt; t1.getName() &lt;&lt; endl;
+
+    system(&quot;pause&quot;);
+}
+</code></pre><p>这就是一个c++类的普遍写法，下面为了方便，都写在源文件（01.cpp)中。</p>
+<h2 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h2><p>构造函数分为有参构造和无参构造两种，无参构造函数是系统默认的，一旦提供啦有参构造就会覆盖无参构造。</p>
+<p>举例：</p>
+<pre><code>class Teacher{
+private:
+    char *name;
+    int age;
+public:
+    //无参构造函数（写了，就会覆盖默认的无参构造函数）
+    Teacher(){
+        cout &lt;&lt; &quot;无参构造函数&quot; &lt;&lt; endl;
+    }
+    //有参构造函数会覆盖默认的构造函数
+    Teacher(char *name, int age){
+        this-&gt;name = name;
+        this-&gt;age = age;
+        cout &lt;&lt; &quot;有参构造函数&quot; &lt;&lt; endl;
+    }    
+};
+
+void main(){
+    //两种初始化对象的方法
+    //Teacher t1;
+    Teacher t2(&quot;yuehan&quot;,20);
+
+    //另外一种调用方式
+    Teacher t3 = Teacher(&quot;jack&quot;,21);
+
+    system(&quot;pause&quot;);
+}
+</code></pre>
           
         
       
