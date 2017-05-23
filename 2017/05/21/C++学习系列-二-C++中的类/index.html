@@ -119,7 +119,9 @@ public:
     void setAge(int age);
     int getAge();
     void s">
-<meta property="og:updated_time" content="2017-05-22T10:02:30.002Z">
+<meta property="og:image" content="http://oph0qv0je.bkt.clouddn.com/copy01.png">
+<meta property="og:image" content="http://oph0qv0je.bkt.clouddn.com/copy02.png">
+<meta property="og:updated_time" content="2017-05-23T09:31:27.945Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C++学习系列(二)C++中的类">
 <meta name="twitter:description" content="C++与Java一样，也是一种面向对象的编程语言。
@@ -136,6 +138,7 @@ public:
     void setAge(int age);
     int getAge();
     void s">
+<meta name="twitter:image" content="http://oph0qv0je.bkt.clouddn.com/copy01.png">
 
 
 
@@ -510,7 +513,143 @@ void main(){
 
     system(&quot;pause&quot;);
 }
-</code></pre><h2 id="拷贝构造函数"><a href="#拷贝构造函数" class="headerlink" title="拷贝构造函数"></a>拷贝构造函数</h2>
+</code></pre><h2 id="拷贝构造函数"><a href="#拷贝构造函数" class="headerlink" title="拷贝构造函数"></a>拷贝构造函数</h2><p>拷贝构造函数被调用的场景：</p>
+<ol>
+<li>声明时赋值</li>
+<li>作为参数传入，实参给形参赋值</li>
+<li>作为函数返回值返回，给变量初始化赋值</li>
+</ol>
+<p>系统默认的拷贝构造函数就是拷贝值的，实例如下：</p>
+<pre><code>class Teacher{
+private:
+    char *name;
+    int age;
+public:
+    Teacher(char *name, int age){
+        this-&gt;name = name;
+        this-&gt;age = age;
+        cout &lt;&lt; &quot;有参构造函数&quot; &lt;&lt; endl;
+    }
+    //拷贝构造函数（值拷贝）
+    //默认拷贝构造函数，就是值拷贝
+    Teacher(const Teacher &amp;obj){
+        this-&gt;name = obj.name;
+        this-&gt;age = obj.age;
+        cout &lt;&lt; &quot;拷贝构造函数&quot; &lt;&lt; endl;
+    }
+    void myprint(){
+        cout &lt;&lt; name &lt;&lt; &quot;,&quot; &lt;&lt; age &lt;&lt; endl;
+    }
+};
+
+Teacher func1(Teacher t){
+    t.myprint();
+    return t;
+}
+
+void main(){
+    Teacher t1(&quot;rose&quot;,20);
+
+    //拷贝构造函数被调用的场景
+    //1.声明时赋值
+    //Teacher t2 = t1;
+    //t2.myprint();
+    //2.作为参数传入，实参给形参赋值
+    func1(t1);
+    //3.作为函数返回值返回，给变量初始化赋值
+    //Teacher t3 = func1(t1);
+
+    //这里不会被调用
+    //Teacher t1 ;
+    //Teacher t2;
+    //t1 = t2;
+
+    system(&quot;pause&quot;);
+}
+</code></pre><h3 id="浅拷贝（值拷贝）问题"><a href="#浅拷贝（值拷贝）问题" class="headerlink" title="浅拷贝（值拷贝）问题"></a>浅拷贝（值拷贝）问题</h3><pre><code>class Teacher{
+private:
+    char *name;
+    int age;
+public:
+    Teacher(char *name, int age){
+        this-&gt;name = (char*)malloc(100);
+        strcpy(this-&gt;name,name);
+        this-&gt;age = age;
+        cout &lt;&lt; &quot;有参构造函数&quot; &lt;&lt; endl;
+    }    
+    ~Teacher(){
+        cout &lt;&lt; &quot;析构&quot; &lt;&lt; endl;
+        //释放内存
+        free(this-&gt;name);
+    }
+    void myprint(){
+        cout &lt;&lt; name &lt;&lt; &quot;,&quot; &lt;&lt; age &lt;&lt; endl;
+    }
+};
+
+void func(){
+    Teacher t1(&quot;rose&quot;, 20);
+
+    Teacher t2 = t1;
+    t2.myprint();
+}
+
+void main(){
+    func();
+
+    system(&quot;pause&quot;);
+}
+</code></pre><p>以上代码，默认的拷贝构造函数实现是浅拷贝，即值拷贝，会带来一些问题：</p>
+<p>如果有动态内存分配的时候，如果单纯是值拷贝，析构的时候就会析构两次。</p>
+<p>上面代码中的char* name，t1、t2都指向了同一个地址，如下图，那么析构的时候就会free两次，因为一个内存地址不能释放两次，因此会触发异常中断。</p>
+<p><img src="http://oph0qv0je.bkt.clouddn.com/copy01.png" alt=""></p>
+<h3 id="深拷贝"><a href="#深拷贝" class="headerlink" title="深拷贝"></a>深拷贝</h3><p>通过深拷贝来解决浅拷贝这个问题</p>
+<pre><code>class Teacher{
+private:
+    char *name;
+    int age;
+public:
+    Teacher(char *name, int age){
+        int len = strlen(name);
+        this-&gt;name = (char*)malloc(len+1);
+        strcpy(this-&gt;name, name);
+        this-&gt;age = age;
+        cout &lt;&lt; &quot;有参构造函数&quot; &lt;&lt; endl;
+    }
+    ~Teacher(){
+        cout &lt;&lt; &quot;析构&quot; &lt;&lt; endl;
+        //释放内存
+        free(this-&gt;name);
+    }
+    //深拷贝
+    Teacher(const Teacher &amp;obj){
+        //复制name属性
+        int len = strlen(obj.name);
+        this-&gt;name = (char*)malloc(len+1);
+        strcpy(this-&gt;name,obj.name);
+        this-&gt;age = obj.age;
+    }
+    void myprint(){
+        cout &lt;&lt; name &lt;&lt; &quot;,&quot; &lt;&lt; age &lt;&lt; endl;
+    }
+};
+
+void func(){
+    Teacher t1(&quot;rose&quot;, 20);
+
+    Teacher t2 = t1;
+    t2.myprint();
+}
+
+void main(){
+    func();
+
+    system(&quot;pause&quot;);
+}
+</code></pre><p>重写覆盖默认的浅拷贝，自己写一个深拷贝。</p>
+<p>t1、t2都指向了不同的内存地址。</p>
+<p><img src="http://oph0qv0je.bkt.clouddn.com/copy02.png" alt=""></p>
+
       
     </div>
 
@@ -685,7 +824,7 @@ void main(){
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#C-类的普遍写法"><span class="nav-number">1.</span> <span class="nav-text">C++类的普遍写法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#构造函数"><span class="nav-number">2.</span> <span class="nav-text">构造函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#析构函数"><span class="nav-number">3.</span> <span class="nav-text">析构函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#拷贝构造函数"><span class="nav-number">4.</span> <span class="nav-text">拷贝构造函数</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#C-类的普遍写法"><span class="nav-number">1.</span> <span class="nav-text">C++类的普遍写法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#构造函数"><span class="nav-number">2.</span> <span class="nav-text">构造函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#析构函数"><span class="nav-number">3.</span> <span class="nav-text">析构函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#拷贝构造函数"><span class="nav-number">4.</span> <span class="nav-text">拷贝构造函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#浅拷贝（值拷贝）问题"><span class="nav-number">4.1.</span> <span class="nav-text">浅拷贝（值拷贝）问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#深拷贝"><span class="nav-number">4.2.</span> <span class="nav-text">深拷贝</span></a></li></ol></li></ol></div>
             
 
           </div>
