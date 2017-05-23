@@ -119,7 +119,7 @@ public:
     void setAge(int age);
     int getAge();
     void s">
-<meta property="og:updated_time" content="2017-05-22T06:35:28.374Z">
+<meta property="og:updated_time" content="2017-05-22T10:02:30.002Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C++学习系列(二)C++中的类">
 <meta name="twitter:description" content="C++与Java一样，也是一种面向对象的编程语言。
@@ -476,7 +476,41 @@ void main(){
 
     system(&quot;pause&quot;);
 }
-</code></pre>
+</code></pre><h2 id="析构函数"><a href="#析构函数" class="headerlink" title="析构函数"></a>析构函数</h2><p>析构函数：当对象要被系统释放时，析构函数被调用</p>
+<p>作用：善后处理，例如释放动态分配的内存。</p>
+<p>举例：</p>
+<pre><code>class Teacher{
+private:
+    char *name;
+    int age;
+public:
+    //无参构造函数赋默认值
+    Teacher(){
+        this-&gt;name = (char*)malloc(100);
+        strcpy(name,&quot;jack walson&quot;);
+        age = 20;
+        cout &lt;&lt; &quot;无参构造函数&quot; &lt;&lt; endl;
+    }
+    //析构函数
+    //当对象要被系统释放时，析构函数被调用
+    //作用：善后处理
+    ~Teacher(){
+        cout &lt;&lt; &quot;析构&quot; &lt;&lt; endl;
+        //释放内存
+        free(this-&gt;name);
+    }
+};
+
+void func(){
+    Teacher t1;
+}
+
+void main(){
+    func();
+
+    system(&quot;pause&quot;);
+}
+</code></pre><h2 id="拷贝构造函数"><a href="#拷贝构造函数" class="headerlink" title="拷贝构造函数"></a>拷贝构造函数</h2>
       
     </div>
 
@@ -651,7 +685,7 @@ void main(){
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#C-类的普遍写法"><span class="nav-number">1.</span> <span class="nav-text">C++类的普遍写法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#构造函数"><span class="nav-number">2.</span> <span class="nav-text">构造函数</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#C-类的普遍写法"><span class="nav-number">1.</span> <span class="nav-text">C++类的普遍写法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#构造函数"><span class="nav-number">2.</span> <span class="nav-text">构造函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#析构函数"><span class="nav-number">3.</span> <span class="nav-text">析构函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#拷贝构造函数"><span class="nav-number">4.</span> <span class="nav-text">拷贝构造函数</span></a></li></ol></div>
             
 
           </div>

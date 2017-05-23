@@ -443,7 +443,41 @@ void main(){
 
     system(&quot;pause&quot;);
 }
-</code></pre>
+</code></pre><h2 id="析构函数"><a href="#析构函数" class="headerlink" title="析构函数"></a>析构函数</h2><p>析构函数：当对象要被系统释放时，析构函数被调用</p>
+<p>作用：善后处理，例如释放动态分配的内存。</p>
+<p>举例：</p>
+<pre><code>class Teacher{
+private:
+    char *name;
+    int age;
+public:
+    //无参构造函数赋默认值
+    Teacher(){
+        this-&gt;name = (char*)malloc(100);
+        strcpy(name,&quot;jack walson&quot;);
+        age = 20;
+        cout &lt;&lt; &quot;无参构造函数&quot; &lt;&lt; endl;
+    }
+    //析构函数
+    //当对象要被系统释放时，析构函数被调用
+    //作用：善后处理
+    ~Teacher(){
+        cout &lt;&lt; &quot;析构&quot; &lt;&lt; endl;
+        //释放内存
+        free(this-&gt;name);
+    }
+};
+
+void func(){
+    Teacher t1;
+}
+
+void main(){
+    func();
+
+    system(&quot;pause&quot;);
+}
+</code></pre><h2 id="拷贝构造函数"><a href="#拷贝构造函数" class="headerlink" title="拷贝构造函数"></a>拷贝构造函数</h2>
           
         
       
