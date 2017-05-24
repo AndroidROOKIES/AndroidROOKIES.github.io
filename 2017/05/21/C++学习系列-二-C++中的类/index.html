@@ -121,7 +121,7 @@ public:
     void s">
 <meta property="og:image" content="http://oph0qv0je.bkt.clouddn.com/copy01.png">
 <meta property="og:image" content="http://oph0qv0je.bkt.clouddn.com/copy02.png">
-<meta property="og:updated_time" content="2017-05-23T09:31:27.945Z">
+<meta property="og:updated_time" content="2017-05-24T02:26:42.033Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C++学习系列(二)C++中的类">
 <meta name="twitter:description" content="C++与Java一样，也是一种面向对象的编程语言。
@@ -649,7 +649,115 @@ void main(){
 </code></pre><p>重写覆盖默认的浅拷贝，自己写一个深拷贝。</p>
 <p>t1、t2都指向了不同的内存地址。</p>
 <p><img src="http://oph0qv0je.bkt.clouddn.com/copy02.png" alt=""></p>
+<h2 id="构造函数的属性初始化列表"><a href="#构造函数的属性初始化列表" class="headerlink" title="构造函数的属性初始化列表"></a>构造函数的属性初始化列表</h2><p>作用：在Student类中有两个Teacher的私有属性对象。在Student构造的时候需要初始化Teacher，但是又不能直接访问Teacher类的私有属性。因此只能通过初始化列表的方式来调用。相当于Java利用super(…)调用父类的构造函数初始化父类。</p>
+<p>举例：</p>
+<pre><code>class Teacher{
+private:
+    char* name;
+public:
+    Teacher(char* name){
+        this-&gt;name = name;
+        cout &lt;&lt; &quot;Teacher有参构造函数&quot; &lt;&lt; endl;
+    }
+    ~Teacher(){
+        cout &lt;&lt; &quot;Teacher析构函数&quot; &lt;&lt; endl;
+    }
+    char* getName(){
+        return this-&gt;name;
+    }
 
+};
+
+class Student{
+private:
+    int id;
+    //属性对象
+    //Teacher t = Teacher(&quot;miss cang&quot;);
+    Teacher t1;
+    Teacher t2;
+public:
+    Student(int id,char *t1_n, char* t2_n) : t1(t1_n), t2(t2_n){
+        this-&gt;id = id;
+        cout &lt;&lt; &quot;Student有参构造函数&quot; &lt;&lt; endl;
+    }
+    void myprint(){
+        cout &lt;&lt; id &lt;&lt; &quot;,&quot; &lt;&lt; t1.getName() &lt;&lt;&quot;,&quot; &lt;&lt; t2.getName() &lt;&lt; endl;
+    }
+    ~Student(){
+        cout &lt;&lt; &quot;Student析构函数&quot; &lt;&lt; endl;
+    }
+};
+
+void func(){
+    Student s1(10, &quot;miss bo&quot;, &quot;mrs liu&quot;);
+    //Student s2(20, &quot;miss cang&quot;, &quot;jason&quot;);
+    s1.myprint();
+    //s2.myprint();
+}
+
+void main(){
+    func();
+
+    system(&quot;pause&quot;);
+}
+</code></pre><h2 id="C-动态内存分配"><a href="#C-动态内存分配" class="headerlink" title="C++动态内存分配"></a>C++动态内存分配</h2><p>C++ 通过new(delete)动态内存分配，调用构造和析构函数。</p>
+<p>C中通过malloc(free)进行动态内存分配，不会调用构造和析构函数。</p>
+<p>举例：</p>
+<pre><code>class Teacher{
+private:
+    char* name;
+public:
+    Teacher(char* name){
+        this-&gt;name = name;
+        cout &lt;&lt; &quot;Teacher有参构造函数&quot; &lt;&lt; endl;
+    }
+    ~Teacher(){
+        cout &lt;&lt; &quot;Teacher析构函数&quot; &lt;&lt; endl;
+    }
+    void setName(char* name){
+        this-&gt;name = name;
+    }
+    char* getName(){
+        return this-&gt;name;
+    }
+};
+
+void func(){
+    //C++    
+    //会调用构造和析构函数
+    Teacher *t1 = new Teacher(&quot;jack&quot;);
+    cout &lt;&lt; t1-&gt;getName() &lt;&lt; endl;
+    //释放
+    delete t1;
+
+    //C
+    //Teacher *t2 = (Teacher*)malloc(sizeof(Teacher));
+    //t2-&gt;setName(&quot;jack&quot;);
+    //free(t2);
+
+}
+
+void main(){
+
+    func();
+
+
+    //关于C与C++中数组类型比较
+    //C
+    //int *p1 = (int*)malloc(sizeof(int) * 10);
+    //p1[0] = 9;
+    //free(p1);
+
+    //C++数组与Java类似
+    int *p2 = new int[10];
+    p2[0] = 2;
+    //释放数组 []
+    delete[] p2;
+
+    system(&quot;pause&quot;);
+}
+</code></pre><p>注意：C++中数组的话，delete的时候需要加上[]</p>
+<h2 id="static-静态属性和方法"><a href="#static-静态属性和方法" class="headerlink" title="static 静态属性和方法"></a>static 静态属性和方法</h2>
       
     </div>
 
@@ -824,7 +932,7 @@ void main(){
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#C-类的普遍写法"><span class="nav-number">1.</span> <span class="nav-text">C++类的普遍写法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#构造函数"><span class="nav-number">2.</span> <span class="nav-text">构造函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#析构函数"><span class="nav-number">3.</span> <span class="nav-text">析构函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#拷贝构造函数"><span class="nav-number">4.</span> <span class="nav-text">拷贝构造函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#浅拷贝（值拷贝）问题"><span class="nav-number">4.1.</span> <span class="nav-text">浅拷贝（值拷贝）问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#深拷贝"><span class="nav-number">4.2.</span> <span class="nav-text">深拷贝</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#C-类的普遍写法"><span class="nav-number">1.</span> <span class="nav-text">C++类的普遍写法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#构造函数"><span class="nav-number">2.</span> <span class="nav-text">构造函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#析构函数"><span class="nav-number">3.</span> <span class="nav-text">析构函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#拷贝构造函数"><span class="nav-number">4.</span> <span class="nav-text">拷贝构造函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#浅拷贝（值拷贝）问题"><span class="nav-number">4.1.</span> <span class="nav-text">浅拷贝（值拷贝）问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#深拷贝"><span class="nav-number">4.2.</span> <span class="nav-text">深拷贝</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#构造函数的属性初始化列表"><span class="nav-number">5.</span> <span class="nav-text">构造函数的属性初始化列表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-动态内存分配"><span class="nav-number">6.</span> <span class="nav-text">C++动态内存分配</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#static-静态属性和方法"><span class="nav-number">7.</span> <span class="nav-text">static 静态属性和方法</span></a></li></ol></div>
             
 
           </div>
