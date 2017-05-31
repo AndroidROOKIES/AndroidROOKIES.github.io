@@ -121,7 +121,7 @@ public:
     void s">
 <meta property="og:image" content="http://oph0qv0je.bkt.clouddn.com/copy01.png">
 <meta property="og:image" content="http://oph0qv0je.bkt.clouddn.com/copy02.png">
-<meta property="og:updated_time" content="2017-05-24T02:26:42.033Z">
+<meta property="og:updated_time" content="2017-05-31T03:00:26.858Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C++学习系列(二)C++中的类">
 <meta name="twitter:description" content="C++与Java一样，也是一种面向对象的编程语言。
@@ -757,7 +757,280 @@ void main(){
     system(&quot;pause&quot;);
 }
 </code></pre><p>注意：C++中数组的话，delete的时候需要加上[]</p>
-<h2 id="static-静态属性和方法"><a href="#static-静态属性和方法" class="headerlink" title="static 静态属性和方法"></a>static 静态属性和方法</h2>
+<h2 id="static-静态属性和方法"><a href="#static-静态属性和方法" class="headerlink" title="static 静态属性和方法"></a>static 静态属性和方法</h2><p>C++类的静态属性必须放在全局的地方初始化。</p>
+<p>非静态、静态函数可以访问静态属性，但是静态函数只能访问静态属性，这点与Java类似。</p>
+<p>静态的属性和方法可以直接通过 类名来访问，也可以通过对象来访问。</p>
+<p>举例：</p>
+<pre><code>class Teacher{
+public:
+    char* name;
+    //计数器
+    static int total;
+public:
+    Teacher(char* name){
+        this-&gt;name = name;        
+        cout &lt;&lt; &quot;Teacher有参构造函数&quot; &lt;&lt; endl;
+    }
+    ~Teacher(){
+        cout &lt;&lt; &quot;Teacher析构函数&quot; &lt;&lt; endl;
+    }
+    void setName(char* name){
+        this-&gt;name = name;
+    }
+    char* getName(){
+        return this-&gt;name;
+    }
+    //计数，静态函数
+    static void count(){
+        total++;        
+        cout &lt;&lt; total &lt;&lt; endl;
+    }
+};
+
+//静态属性初始化赋值
+int Teacher::total = 9;
+
+void main(){
+    Teacher::total++;
+    cout &lt;&lt; Teacher::total &lt;&lt; endl;
+    //直接通过类名访问
+    Teacher::count();
+
+    //也可以通过对象名访问
+    Teacher t1(&quot;yuehang&quot;);
+    t1.count();
+
+    system(&quot;pause&quot;);
+}
+</code></pre><h2 id="C-中类的大小"><a href="#C-中类的大小" class="headerlink" title="C++中类的大小"></a>C++中类的大小</h2><p>先来了解一下C++的内存分区：<br>分为：栈、堆、全局（静态、全局）、常量区（字符串）、程序代码区五个区域</p>
+<p>结构体有字节对齐的概念，C++类的普通属性与结构体有相同的内存布局。</p>
+<pre><code>class A{
+public:
+    int i;
+    int j;
+    int k;
+    static int m;//存在于全局静态区
+};
+
+class B{
+public:
+    int i;
+    int j;
+    int k;
+    void myprintf(){//相当于函数指针的写法，存放在代码区
+        cout &lt;&lt; &quot;打印&quot; &lt;&lt; endl;
+    }
+};
+
+
+void main(){
+    cout &lt;&lt; sizeof(A) &lt;&lt; endl;
+    cout &lt;&lt; sizeof(B) &lt;&lt; endl;
+
+    //C/C++ 内存分区：栈、堆、全局（静态、全局）、常量区（字符串）、程序代码区
+    //普通属性与结构体相同的内存布局
+
+    system(&quot;pause&quot;);
+}
+</code></pre><h2 id="C-中的this"><a href="#C-中的this" class="headerlink" title="C++中的this"></a>C++中的this</h2><p>this表示当前对象的指针。</p>
+<p>C++函数是共享的（多个对象共享代码区中的一个函数），必须要有能够标识当前对象是谁的办法，于是就用this指针。</p>
+<p>举例：</p>
+<pre><code>class Teacher{
+private:
+    char* name;
+    int age;
+public:
+    Teacher(char* name,int age){
+        this-&gt;name = name;
+        this-&gt;age = age;
+        cout &lt;&lt; &quot;Teacher有参构造函数&quot; &lt;&lt; endl;
+    }
+    ~Teacher(){
+        cout &lt;&lt; &quot;Teacher析构函数&quot; &lt;&lt; endl;
+    }
+    //常函数（const写在函数后面），修饰的是this
+    //既不能改变指针的值，又不能改变指针指向的内容
+    //const Teacher* const this
+    void myprint() const{
+        printf(&quot;%#x\n&quot;,this);
+        //改变属性的值
+        //this-&gt;name = &quot;yuehang&quot;;
+        //改变this指针的值
+        //this = (Teacher*)0x00009;
+        cout &lt;&lt; this-&gt;name &lt;&lt; &quot;,&quot; &lt;&lt; this-&gt;age &lt;&lt; endl;
+    }
+    void myprint2(){        
+        cout &lt;&lt; this-&gt;name &lt;&lt; &quot;,&quot; &lt;&lt; this-&gt;age &lt;&lt; endl;        
+    }
+};
+
+void main(){
+    Teacher t1(&quot;jack&quot;,20);
+    const Teacher t2(&quot;rose&quot;, 18);
+    //t2.myprint2(); 常量对象只能调用常量函数，不能调用非常量函数
+    //常函数，当前对象不能被修改，防止数据成员被非法访问
+    printf(&quot;%#x\n&quot;, &amp;t1);
+    t1.myprint();
+
+    printf(&quot;%#x\n&quot;, &amp;t2);
+    t2.myprint();
+
+    system(&quot;pause&quot;);
+}
+</code></pre><h2 id="友元函数"><a href="#友元函数" class="headerlink" title="友元函数"></a>友元函数</h2><p>在友元函数中可以访问类的私有的属性。</p>
+<p>举例：modify_i是类A的友元函数，因此modify_i中可以访问A的私有属性</p>
+<pre><code>class A{
+    //友元函数
+    friend void modify_i(A *p, int a);
+private:
+    int i;
+public:
+    A(int i){
+        this-&gt;i = i;
+    }
+    void myprint(){
+        cout &lt;&lt; i &lt;&lt; endl;
+    }
+
+};
+
+//友元函数的实现，在友元函数中可以访问私有的属性
+void modify_i(A *p, int a){
+    p-&gt;i = a;
+}
+
+void main(){
+    A* a = new A(10);
+    a-&gt;myprint();
+
+    modify_i(a,20);
+    a-&gt;myprint();
+
+    system(&quot;pause&quot;);
+}
+</code></pre><h2 id="友元类"><a href="#友元类" class="headerlink" title="友元类"></a>友元类</h2><pre><code>class A{        
+    //友元类
+    friend class B;
+private:
+    int i;
+public:
+    A(int i){
+        this-&gt;i = i;
+    }
+    void myprint(){
+        cout &lt;&lt; i &lt;&lt; endl;
+    }    
+};
+
+class B{
+public:
+    //B这个友元类可以访问A类的任何成员
+    void accessAny(){
+        a.i = 30;        
+    }
+private:
+    A a;
+};
+</code></pre><h2 id="运算符重载"><a href="#运算符重载" class="headerlink" title="运算符重载"></a>运算符重载</h2><pre><code>class Point{
+public:
+    int x;
+    int y;
+public:
+    Point(int x = 0, int y = 0){
+        this-&gt;x = x;
+        this-&gt;y = y;
+    }
+    void myprint(){
+        cout &lt;&lt; x &lt;&lt; &quot;,&quot; &lt;&lt; y &lt;&lt; endl;
+    }
+};
+
+//重载+号
+Point operator+(Point &amp;p1, Point &amp;p2){
+    Point tmp(p1.x + p2.x, p1.y + p2.y);
+    return tmp;
+}
+
+//重载-号
+Point operator-(Point &amp;p1, Point &amp;p2){
+    Point tmp(p1.x - p2.x, p1.y - p2.y);
+    return tmp;
+}
+
+void main(){
+    Point p1(10,20);
+    Point p2(20,10);
+
+    Point p3 = p1 + p2;
+
+    p3.myprint();
+
+    system(&quot;pause&quot;);
+}
+</code></pre><h3 id="成员函数，运算符重载"><a href="#成员函数，运算符重载" class="headerlink" title="成员函数，运算符重载"></a>成员函数，运算符重载</h3><pre><code>class Point{
+public:
+    int x;
+    int y;
+public:
+    Point(int x = 0, int y = 0){
+        this-&gt;x = x;
+        this-&gt;y = y;
+    }
+    //成员函数，运算符重载
+    Point operator+(Point &amp;p2){
+        Point tmp(this-&gt;x + p2.x, this-&gt;y + p2.y);
+        return tmp;
+    }
+    void myprint(){
+        cout &lt;&lt; x &lt;&lt; &quot;,&quot; &lt;&lt; y &lt;&lt; endl;
+    }
+};
+
+void main(){
+    Point p1(10, 20);
+    Point p2(20, 10);
+
+    //运算符的重载，本质还是函数调用
+    //p1.operator+(p2)
+    Point p3 = p1 + p2;
+
+    p3.myprint();
+
+    system(&quot;pause&quot;);
+}
+</code></pre><h3 id="当属性私有时，通过友元函数完成运算符重载"><a href="#当属性私有时，通过友元函数完成运算符重载" class="headerlink" title="当属性私有时，通过友元函数完成运算符重载"></a>当属性私有时，通过友元函数完成运算符重载</h3><pre><code>class Point{
+    friend Point operator+(Point &amp;p1, Point &amp;p2);
+private:
+    int x;
+    int y;
+public:
+    Point(int x = 0, int y = 0){
+        this-&gt;x = x;
+        this-&gt;y = y;
+    }    
+    void myprint(){
+        cout &lt;&lt; x &lt;&lt; &quot;,&quot; &lt;&lt; y &lt;&lt; endl;
+    }
+};
+
+Point operator+(Point &amp;p1, Point &amp;p2){
+    Point tmp(p1.x + p2.x, p1.y + p2.y);
+    return tmp;
+}
+
+void main(){
+    Point p1(10, 20);
+    Point p2(20, 10);
+
+    //运算符的重载，本质还是函数调用
+    //p1.operator+(p2)
+    Point p3 = p1 + p2;
+
+    p3.myprint();
+
+    system(&quot;pause&quot;);
+}
+</code></pre>
       
     </div>
 
@@ -932,7 +1205,7 @@ void main(){
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#C-类的普遍写法"><span class="nav-number">1.</span> <span class="nav-text">C++类的普遍写法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#构造函数"><span class="nav-number">2.</span> <span class="nav-text">构造函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#析构函数"><span class="nav-number">3.</span> <span class="nav-text">析构函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#拷贝构造函数"><span class="nav-number">4.</span> <span class="nav-text">拷贝构造函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#浅拷贝（值拷贝）问题"><span class="nav-number">4.1.</span> <span class="nav-text">浅拷贝（值拷贝）问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#深拷贝"><span class="nav-number">4.2.</span> <span class="nav-text">深拷贝</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#构造函数的属性初始化列表"><span class="nav-number">5.</span> <span class="nav-text">构造函数的属性初始化列表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-动态内存分配"><span class="nav-number">6.</span> <span class="nav-text">C++动态内存分配</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#static-静态属性和方法"><span class="nav-number">7.</span> <span class="nav-text">static 静态属性和方法</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#C-类的普遍写法"><span class="nav-number">1.</span> <span class="nav-text">C++类的普遍写法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#构造函数"><span class="nav-number">2.</span> <span class="nav-text">构造函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#析构函数"><span class="nav-number">3.</span> <span class="nav-text">析构函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#拷贝构造函数"><span class="nav-number">4.</span> <span class="nav-text">拷贝构造函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#浅拷贝（值拷贝）问题"><span class="nav-number">4.1.</span> <span class="nav-text">浅拷贝（值拷贝）问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#深拷贝"><span class="nav-number">4.2.</span> <span class="nav-text">深拷贝</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#构造函数的属性初始化列表"><span class="nav-number">5.</span> <span class="nav-text">构造函数的属性初始化列表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-动态内存分配"><span class="nav-number">6.</span> <span class="nav-text">C++动态内存分配</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#static-静态属性和方法"><span class="nav-number">7.</span> <span class="nav-text">static 静态属性和方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-中类的大小"><span class="nav-number">8.</span> <span class="nav-text">C++中类的大小</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-中的this"><span class="nav-number">9.</span> <span class="nav-text">C++中的this</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#友元函数"><span class="nav-number">10.</span> <span class="nav-text">友元函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#友元类"><span class="nav-number">11.</span> <span class="nav-text">友元类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#运算符重载"><span class="nav-number">12.</span> <span class="nav-text">运算符重载</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#成员函数，运算符重载"><span class="nav-number">12.1.</span> <span class="nav-text">成员函数，运算符重载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#当属性私有时，通过友元函数完成运算符重载"><span class="nav-number">12.2.</span> <span class="nav-text">当属性私有时，通过友元函数完成运算符重载</span></a></li></ol></li></ol></div>
             
 
           </div>
