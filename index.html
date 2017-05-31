@@ -367,7 +367,278 @@
       
         
           
-            
+            <p>C++是面向对象的编程语言，因此具有继承和多态的基本特征。</p>
+<h2 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h2><p>继承主要是提高代码的重用性。</p>
+<p>举例：</p>
+<pre><code>//人类
+class Human{
+public:
+    void say(){
+        cout &lt;&lt; &quot;说话&quot; &lt;&lt; endl;
+    }
+protected:
+    char* name;
+    int age;
+};
+
+//男人
+class Man : public Human{
+public:
+    //泡妞
+    void chasing(){
+        cout &lt;&lt; &quot;泡妞&quot; &lt;&lt; endl;        
+    }
+private:
+    //兄弟
+    char* brother;
+};
+
+void work(Human&amp; h){
+    h.say();
+}
+
+void main(){
+    Man m1;
+    m1.say();
+
+    //1.父类类型的引用或指针
+    Human* h_p = &amp;m1;
+    h_p-&gt;say();
+
+    Human &amp;h1 = m1;
+    h1.say();
+
+    //子类对象初始化父类类型的对象
+    Human h2 = m1;
+
+    system(&quot;pause&quot;);
+}
+</code></pre><p>上面代码我们可以看出，通过:public来继承Human。</p>
+<h3 id="向父类构造方法传参"><a href="#向父类构造方法传参" class="headerlink" title="向父类构造方法传参"></a>向父类构造方法传参</h3><pre><code>class Human{
+public:
+    Human(char* name, int age){
+        this-&gt;name = name;
+        this-&gt;age = age;
+    }
+    void say(){
+        cout &lt;&lt; &quot;说话&quot; &lt;&lt; endl;
+    }
+protected:
+    char* name;
+    int age;
+};
+
+//男人
+class Man : public Human{
+public:
+    //给父类构造函数传参，同时给属性对象赋值
+    Man(char *brother, char *s_name, int s_age, char *h_name, int h_age) : Human(s_name, s_age), h(h_name,h_age){
+        this-&gt;brother = brother;
+    }
+    //泡妞
+    void chasing(){
+        cout &lt;&lt; &quot;泡妞&quot; &lt;&lt; endl;
+    }
+private:
+    //兄弟
+    char* brother;
+    Human h;
+};
+
+void main(){
+    Man m1(&quot;danny&quot;,&quot;jack&quot;,18,&quot;jason&quot;,18);
+
+    system(&quot;pause&quot;);
+}
+</code></pre><p>通过在自身构造的时候给父类构造函数传参。子类构造的时候，会先构造父类。</p>
+<h3 id="子类与父类构造函数与析构函数调用的顺序"><a href="#子类与父类构造函数与析构函数调用的顺序" class="headerlink" title="子类与父类构造函数与析构函数调用的顺序"></a>子类与父类构造函数与析构函数调用的顺序</h3><pre><code>class Human{
+public:
+    Human(char* name, int age){
+        this-&gt;name = name;
+        this-&gt;age = age;
+        cout &lt;&lt; &quot;Human 构造函数&quot; &lt;&lt; endl;
+    }
+    ~Human(){
+        cout &lt;&lt; &quot;Human 析构函数&quot; &lt;&lt; endl;
+    }
+    void say(){
+        cout &lt;&lt; &quot;说话&quot; &lt;&lt; endl;
+    }
+protected:
+    char* name;
+    int age;
+};
+
+//男人
+class Man : public Human{
+public:
+    //给父类构造函数传参，同时给属性对象赋值
+    Man(char *brother, char *s_name,int s_age) : Human(s_name, s_age){
+        this-&gt;brother = brother;
+        cout &lt;&lt; &quot;Man 构造函数&quot; &lt;&lt; endl;
+    }
+    ~Man(){
+        cout &lt;&lt; &quot;Man 析构函数&quot; &lt;&lt; endl;
+    }
+    //泡妞
+    void chasing(){
+        cout &lt;&lt; &quot;泡妞&quot; &lt;&lt; endl;
+    }
+private:
+    //兄弟
+    char* brother;    
+};
+
+void func(){
+    //父类构造函数先调用
+    //子类的析构函数先调用
+    Man m1(&quot;danny&quot;, &quot;jack&quot;, 18);
+}
+
+void main(){
+    func();
+
+    system(&quot;pause&quot;);
+}
+</code></pre><p>构造的时候先调用父类的构造函数，然后调用子类的构造函数。析构的时候相反。总结就是，先构造，先释放。</p>
+<h3 id="子类对象调用父类的成员"><a href="#子类对象调用父类的成员" class="headerlink" title="子类对象调用父类的成员"></a>子类对象调用父类的成员</h3><pre><code>class Human{
+public:
+    Human(char* name, int age){
+        this-&gt;name = name;
+        this-&gt;age = age;
+        cout &lt;&lt; &quot;Human 构造函数&quot; &lt;&lt; endl;
+    }
+    ~Human(){
+        cout &lt;&lt; &quot;Human 析构函数&quot; &lt;&lt; endl;
+    }
+    void say(){
+        cout &lt;&lt; &quot;说话&quot; &lt;&lt; endl;
+    }
+public:
+    char* name;
+    int age;
+};
+
+//男人
+class Man : public Human{
+public:
+    //给父类构造函数传参，同时给属性对象赋值
+    Man(char *brother, char *s_name, int s_age) : Human(s_name, s_age){
+        this-&gt;brother = brother;
+        cout &lt;&lt; &quot;Man 构造函数&quot; &lt;&lt; endl;
+    }
+    ~Man(){
+        cout &lt;&lt; &quot;Man 析构函数&quot; &lt;&lt; endl;
+    }
+    //泡妞
+    void chasing(){
+        cout &lt;&lt; &quot;泡妞&quot; &lt;&lt; endl;
+    }
+    void say(){
+        cout &lt;&lt; &quot;男人喜欢装逼&quot; &lt;&lt; endl;
+    }
+private:
+    //兄弟
+    char* brother;
+};
+
+void main(){
+    //是覆盖，并非动态
+    Man m1(&quot;alan&quot;,&quot;john&quot;,18);
+    m1.say();
+    //调用父类的say方法
+    m1.Human::say();
+
+    m1.Human::age = 10;
+
+    system(&quot;pause&quot;);
+}
+</code></pre><p>注意：Java中就无法使用被覆盖的父类方法，可以通过JNI的方式访问。</p>
+<h3 id="多继承"><a href="#多继承" class="headerlink" title="多继承"></a>多继承</h3><pre><code>//人
+class Person{
+
+};
+
+//公民
+class Citizen{
+
+};
+
+//学生，既是人，又是公民
+class Student : public Person, public Citizen{
+
+};
+</code></pre><h3 id="继承的访问修饰符"><a href="#继承的访问修饰符" class="headerlink" title="继承的访问修饰符"></a>继承的访问修饰符</h3><pre><code>基类中      继承方式             子类中
+public     ＆ public继承        =&gt; public
+public     ＆ protected继承     =&gt; protected   
+public     ＆ private继承       =&gt; private
+
+protected  ＆ public继承        =&gt; protected
+protected  ＆ protected继承     =&gt; protected   
+protected  ＆ private继承       =&gt; private
+
+private    ＆ public继承        =&gt; 子类无权访问
+private    ＆ protected继承     =&gt; 子类无权访问
+private    ＆ private继承       =&gt; 子类无权访问
+</code></pre><h3 id="继承的二义性"><a href="#继承的二义性" class="headerlink" title="继承的二义性"></a>继承的二义性</h3><pre><code>class A{
+public:
+    char* name;
+};
+
+class A1 : public A{
+
+};
+
+class A2 : public A{
+
+};
+
+class B : public A1, public A2{
+
+};
+
+void main(){
+    B b;
+
+    //这句话编译不通过，因为存在二义性
+    b.name = &quot;jason&quot;;
+
+    //B中有两个name的副本，我们可以指定使用哪个父类的name
+    b.A1::name = &quot;jason&quot;;
+    b.A2::name = &quot;jason&quot;;
+
+    system(&quot;pause&quot;);
+}
+</code></pre><p>如图：</p>
+<p><img src="http://oph0qv0je.bkt.clouddn.com/virtual.png" alt=""></p>
+<p>解决方法：虚继承，不同路径继承来的同名成员只有一份拷贝，解决不明确的问题</p>
+<p>如果某个类B的两个父类（A1、A2）都继承于同一父类（A），那么这两个父类（A1、A2）可以通过在继承的时候加上virtual关键字来解决二义性问题。</p>
+<pre><code>class A{
+public:
+    char* name;
+};
+
+class A1 : virtual public A{
+
+};
+
+class A2 : virtual public A{
+
+};
+
+class B : public A1, public A2{
+
+};
+
+void main(){
+    B b;    
+    b.name = &quot;jason&quot;;
+    //指定父类显示调用
+    //b.A1::name = &quot;jason&quot;;
+    //b.A2::name = &quot;jason&quot;;
+    system(&quot;pause&quot;);
+}
+</code></pre><h2 id="多态"><a href="#多态" class="headerlink" title="多态"></a>多态</h2>
           
         
       
