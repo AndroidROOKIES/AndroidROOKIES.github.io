@@ -122,7 +122,7 @@ protected:
 
 //男人">
 <meta property="og:image" content="http://oph0qv0je.bkt.clouddn.com/virtual.png">
-<meta property="og:updated_time" content="2017-05-31T07:18:17.942Z">
+<meta property="og:updated_time" content="2017-05-31T08:34:52.075Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C++学习系列(三)继承与多态">
 <meta name="twitter:description" content="C++是面向对象的编程语言，因此具有继承和多态的基本特征。
@@ -676,7 +676,181 @@ void main(){
     //b.A2::name = &quot;jason&quot;;
     system(&quot;pause&quot;);
 }
-</code></pre><h2 id="多态"><a href="#多态" class="headerlink" title="多态"></a>多态</h2>
+</code></pre><h2 id="多态"><a href="#多态" class="headerlink" title="多态"></a>多态</h2><p>多态作用：程序的扩展性</p>
+<p>动态多态：程序运行过程中，觉得哪一个函数被调用（重写）。</p>
+<p>静态多态：重载。</p>
+<p>发生动态多态的条件：</p>
+<ol>
+<li>继承</li>
+<li>父类的引用或者指针指向子类的对象</li>
+<li>函数的重写(需要增加virtual关键字，否则的话就是覆盖)</li>
+</ol>
+<p>举例：</p>
+<p>Plane.h</p>
+<pre><code>#pragma once
+
+//普通飞机
+class Plane{
+public:
+    virtual void fly();
+    virtual void land();
+};
+</code></pre><p>Plane.cpp</p>
+<pre><code>#include &quot;Plane.h&quot;
+
+#include &lt;iostream&gt;
+using namespace std;
+
+void Plane::fly(){
+    cout &lt;&lt; &quot;起飞&quot; &lt;&lt; endl;
+}
+
+void Plane::land(){
+    cout &lt;&lt; &quot;着陆&quot; &lt;&lt; endl;
+}
+</code></pre><p>Jet.h</p>
+<pre><code>#pragma once
+
+#include &quot;Plane.h&quot;
+
+//直升飞机
+class Jet : public Plane{
+    virtual void fly();
+    virtual void land();
+};
+</code></pre><p>Jet.cpp</p>
+<pre><code>#include &quot;Jet.h&quot;
+#include &lt;iostream&gt;
+using namespace std;
+
+void Jet::fly(){
+    cout &lt;&lt; &quot;直升飞机在原地起飞...&quot; &lt;&lt; endl;
+}
+
+void Jet::land(){
+    cout &lt;&lt; &quot;直升飞机降落在女神的屋顶...&quot; &lt;&lt; endl;
+}
+</code></pre><p>Copter.h</p>
+<pre><code>#pragma once
+
+#include &quot;Plane.h&quot;
+
+//普通飞机
+class Copter : public Plane{
+public:
+    virtual void fly();
+    virtual void land();
+};
+</code></pre><p>Copter.cpp</p>
+<pre><code>#include &quot;Copter.h&quot;
+#include &lt;iostream&gt;
+using namespace std;
+
+void Copter::fly(){
+    cout &lt;&lt; &quot;喷气式飞机在跑道上起飞...&quot; &lt;&lt; endl;
+}
+
+void Copter::land(){
+    cout &lt;&lt; &quot;喷气式飞机在跑道上降落...&quot; &lt;&lt; endl;
+}
+</code></pre><p>01.cpp</p>
+<pre><code>#include &quot;Plane.h&quot;
+#include &quot;Jet.h&quot;
+#include &quot;Copter.h&quot;
+//业务函数
+void bizPlay(Plane&amp; p){
+    p.fly();
+    p.land();
+}
+
+void main(){
+    Plane p1;
+    bizPlay(p1);
+
+    //直升飞机
+    Jet p2;
+    bizPlay(p2);
+
+    Copter p3;
+    bizPlay(p3);
+
+    system(&quot;pause&quot;);
+}
+</code></pre><h2 id="纯虚函数-抽象类"><a href="#纯虚函数-抽象类" class="headerlink" title="纯虚函数(抽象类)"></a>纯虚函数(抽象类)</h2><ol>
+<li>当一个类具有一个纯虚函数，这个类就是抽象类</li>
+<li>抽象类不能实例化对象</li>
+<li>子类继承抽象类，必须要实现纯虚函数，如果没有，子类也是抽象类</li>
+</ol>
+<p>抽象类的作用：为了继承约束（新增加的类必须实现父类，提高代码重用性，保证系统的条理性、封闭性），根本不知道未来的实现</p>
+<p>举例：</p>
+<pre><code>class Shape{
+public:
+    //纯虚函数
+    virtual void sayArea() = 0;
+    void print(){
+        cout &lt;&lt; &quot;hi&quot; &lt;&lt; endl;
+    }
+};
+
+//圆
+class Circle : public Shape{
+public:
+    Circle(int r){
+        this-&gt;r = r;
+    }
+    void sayArea(){
+        cout &lt;&lt; &quot;圆的面积：&quot; &lt;&lt; (3.14 * r * r) &lt;&lt; endl;
+    }
+private:
+    int r;
+};
+
+void main(){
+    //Shape s;抽象类不可实例化
+    Circle c(10);
+
+    system(&quot;pause&quot;);
+}
+</code></pre><h2 id="接口（只是逻辑上的划分，语法上跟抽象类的写法没有区别）"><a href="#接口（只是逻辑上的划分，语法上跟抽象类的写法没有区别）" class="headerlink" title="接口（只是逻辑上的划分，语法上跟抽象类的写法没有区别）"></a>接口（只是逻辑上的划分，语法上跟抽象类的写法没有区别）</h2><p>下面代码可以当做一个接口</p>
+<pre><code>class Drawble{
+    virtual void draw();
+};
+</code></pre><h2 id="模板函数（泛型）"><a href="#模板函数（泛型）" class="headerlink" title="模板函数（泛型）"></a>模板函数（泛型）</h2><pre><code>void myswap(int&amp; a,int&amp; b){
+    int tmp = 0;
+    tmp = a;
+    a = b;
+    b = tmp;
+}
+
+void myswap(char&amp; a, char&amp; b){
+    char tmp = 0;
+    tmp = a;
+    a = b;
+    b = tmp;
+}
+</code></pre><p>发现上面这两个函数业务逻辑一样，数据类型不一样，因此可以写成模板函数</p>
+<pre><code>//模板函数
+template &lt;typename T&gt;
+void myswap(T&amp; a, T&amp; b){
+    T tmp = 0;
+    tmp = a;
+    a = b;
+    b = tmp;
+}
+
+void main(){
+    //根据实际类型，自动推导
+    int a = 10, b = 20;
+    myswap&lt;int&gt;(a,b);
+    cout &lt;&lt; a &lt;&lt; &quot;,&quot; &lt;&lt; b &lt;&lt; endl;
+
+    char x = &apos;v&apos;, y = &apos;w&apos;;
+    myswap(x, y);
+    cout &lt;&lt; x &lt;&lt; &quot;,&quot; &lt;&lt; y &lt;&lt; endl;
+
+    system(&quot;pause&quot;);
+}
+</code></pre>
       
     </div>
 
@@ -851,7 +1025,7 @@ void main(){
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#继承"><span class="nav-number">1.</span> <span class="nav-text">继承</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#向父类构造方法传参"><span class="nav-number">1.1.</span> <span class="nav-text">向父类构造方法传参</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#子类与父类构造函数与析构函数调用的顺序"><span class="nav-number">1.2.</span> <span class="nav-text">子类与父类构造函数与析构函数调用的顺序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#子类对象调用父类的成员"><span class="nav-number">1.3.</span> <span class="nav-text">子类对象调用父类的成员</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多继承"><span class="nav-number">1.4.</span> <span class="nav-text">多继承</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#继承的访问修饰符"><span class="nav-number">1.5.</span> <span class="nav-text">继承的访问修饰符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#继承的二义性"><span class="nav-number">1.6.</span> <span class="nav-text">继承的二义性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多态"><span class="nav-number">2.</span> <span class="nav-text">多态</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#继承"><span class="nav-number">1.</span> <span class="nav-text">继承</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#向父类构造方法传参"><span class="nav-number">1.1.</span> <span class="nav-text">向父类构造方法传参</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#子类与父类构造函数与析构函数调用的顺序"><span class="nav-number">1.2.</span> <span class="nav-text">子类与父类构造函数与析构函数调用的顺序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#子类对象调用父类的成员"><span class="nav-number">1.3.</span> <span class="nav-text">子类对象调用父类的成员</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多继承"><span class="nav-number">1.4.</span> <span class="nav-text">多继承</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#继承的访问修饰符"><span class="nav-number">1.5.</span> <span class="nav-text">继承的访问修饰符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#继承的二义性"><span class="nav-number">1.6.</span> <span class="nav-text">继承的二义性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多态"><span class="nav-number">2.</span> <span class="nav-text">多态</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#纯虚函数-抽象类"><span class="nav-number">3.</span> <span class="nav-text">纯虚函数(抽象类)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#接口（只是逻辑上的划分，语法上跟抽象类的写法没有区别）"><span class="nav-number">4.</span> <span class="nav-text">接口（只是逻辑上的划分，语法上跟抽象类的写法没有区别）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模板函数（泛型）"><span class="nav-number">5.</span> <span class="nav-text">模板函数（泛型）</span></a></li></ol></div>
             
 
           </div>
