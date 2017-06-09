@@ -367,7 +367,28 @@
       
         
           
-            
+            <p>C++异常处理，根据抛出的异常数据类型，进入到相应的catch块中。</p>
+<pre><code>void main(){
+    try{
+        int age = 300;
+        if (age &gt; 200){
+            throw 9.8;
+        }
+    }
+    catch (int a){
+        cout &lt;&lt; &quot;int异常&quot; &lt;&lt; endl;
+    }
+    catch (char* b){
+        cout &lt;&lt; b &lt;&lt; endl;
+    }
+    catch (...){// ...表示任意类型
+        cout &lt;&lt; &quot;未知异常&quot; &lt;&lt; endl;
+    }
+    system(&quot;pause&quot;);
+}
+</code></pre><p>根据throw抛出不同类型的异常，就会在相应的catch块里面捕获到，其中…代表任意类型。一旦有catch块捕获，后面的catch就不会执行。</p>
+<p>throw 抛出函数外</p>
+
           
         
       

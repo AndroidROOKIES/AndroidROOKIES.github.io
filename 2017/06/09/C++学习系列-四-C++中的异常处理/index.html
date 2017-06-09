@@ -87,16 +87,43 @@
 
 
 
-<meta name="description" content="每天一小步，人生一大步">
+<meta name="description" content="C++异常处理，根据抛出的异常数据类型，进入到相应的catch块中。
+void main(){
+    try{
+        int age = 300;
+        if (age &amp;gt; 200){
+            throw 9.8;
+        }
+    }
+    catch (int a){
+        cout &amp;lt;&amp;lt; &amp;quot;int异常&amp;q">
 <meta property="og:type" content="article">
 <meta property="og:title" content="C++学习系列(四)C++中的异常处理">
 <meta property="og:url" content="http://yoursite.com/2017/06/09/C++学习系列-四-C++中的异常处理/index.html">
 <meta property="og:site_name" content="Feng's Notes">
-<meta property="og:description" content="每天一小步，人生一大步">
-<meta property="og:updated_time" content="2017-06-09T02:10:59.208Z">
+<meta property="og:description" content="C++异常处理，根据抛出的异常数据类型，进入到相应的catch块中。
+void main(){
+    try{
+        int age = 300;
+        if (age &amp;gt; 200){
+            throw 9.8;
+        }
+    }
+    catch (int a){
+        cout &amp;lt;&amp;lt; &amp;quot;int异常&amp;q">
+<meta property="og:updated_time" content="2017-06-09T05:59:22.189Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C++学习系列(四)C++中的异常处理">
-<meta name="twitter:description" content="每天一小步，人生一大步">
+<meta name="twitter:description" content="C++异常处理，根据抛出的异常数据类型，进入到相应的catch块中。
+void main(){
+    try{
+        int age = 300;
+        if (age &amp;gt; 200){
+            throw 9.8;
+        }
+    }
+    catch (int a){
+        cout &amp;lt;&amp;lt; &amp;quot;int异常&amp;q">
 
 
 
@@ -361,7 +388,28 @@
       
 
       
-        
+        <p>C++异常处理，根据抛出的异常数据类型，进入到相应的catch块中。</p>
+<pre><code>void main(){
+    try{
+        int age = 300;
+        if (age &gt; 200){
+            throw 9.8;
+        }
+    }
+    catch (int a){
+        cout &lt;&lt; &quot;int异常&quot; &lt;&lt; endl;
+    }
+    catch (char* b){
+        cout &lt;&lt; b &lt;&lt; endl;
+    }
+    catch (...){// ...表示任意类型
+        cout &lt;&lt; &quot;未知异常&quot; &lt;&lt; endl;
+    }
+    system(&quot;pause&quot;);
+}
+</code></pre><p>根据throw抛出不同类型的异常，就会在相应的catch块里面捕获到，其中…代表任意类型。一旦有catch块捕获，后面的catch就不会执行。</p>
+<p>throw 抛出函数外</p>
+
       
     </div>
 
