@@ -812,6 +812,42 @@ void main(){
 
     system(&quot;pause&quot;);
 }
+</code></pre><h2 id="模板类"><a href="#模板类" class="headerlink" title="模板类"></a>模板类</h2><p>自己定义一个模板类：</p>
+<pre><code>template&lt;class T&gt;
+class A{
+public:
+    A(T a){
+        this-&gt;a = a;
+    }
+protected:
+    T a;
+};
+</code></pre><p>普通类继承模板类</p>
+<pre><code>class B : public A&lt;int&gt;{
+public:
+    B(int a,int b) : A&lt;int&gt;(a){
+        this-&gt;b = b;
+    }
+private:
+    int b;
+};
+</code></pre><p>模板类继承模板类</p>
+<pre><code>template &lt;class T&gt;
+class C : public A&lt;T&gt;{
+public:
+    C(T c, T a) : A&lt;T&gt;(a){
+        this-&gt;c = c;
+    }
+protected:
+    T c;
+};
+</code></pre><p>实例化模板类</p>
+<pre><code>void main(){
+    //实例化模板类对象
+    //List&lt;String&gt; list;
+    A&lt;int&gt; a(6);
+    system(&quot;pause&quot;);
+}
 </code></pre>
           
         
