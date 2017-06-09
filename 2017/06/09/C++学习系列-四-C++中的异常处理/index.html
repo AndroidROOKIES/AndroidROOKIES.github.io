@@ -111,7 +111,7 @@ void main(){
     }
     catch (int a){
         cout &amp;lt;&amp;lt; &amp;quot;int异常&amp;q">
-<meta property="og:updated_time" content="2017-06-09T05:59:22.189Z">
+<meta property="og:updated_time" content="2017-06-09T06:52:54.614Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C++学习系列(四)C++中的异常处理">
 <meta name="twitter:description" content="C++异常处理，根据抛出的异常数据类型，进入到相应的catch块中。
@@ -408,8 +408,115 @@ void main(){
     system(&quot;pause&quot;);
 }
 </code></pre><p>根据throw抛出不同类型的异常，就会在相应的catch块里面捕获到，其中…代表任意类型。一旦有catch块捕获，后面的catch就不会执行。</p>
-<p>throw 抛出函数外</p>
+<p><strong>throw 抛出函数外</strong></p>
+<pre><code>void mydiv(int a, int b){
+    if (b == 0){
+        throw &quot;除数为零&quot;;
+    }
+}
 
+void func(){
+    try{
+        mydiv(8, 0);
+    }
+    catch (char* a){
+        throw a;
+    }
+}
+
+void main(){
+    try{
+        func();
+    }
+    catch (char* a){
+        cout &lt;&lt; a &lt;&lt; endl;
+    }
+    system(&quot;pause&quot;);
+}
+</code></pre><p>异常在函数里面抛出的话，可以一层一层往外抛出。</p>
+<p><strong>抛出对象</strong></p>
+<pre><code>class MyException{
+
+};
+
+void mydiv(int a, int b){
+    if (b == 0){
+        throw MyException();
+        //throw new MyException; //不要抛出异常指针        
+    }
+}
+
+void main(){
+    try{
+        mydiv(8,0);
+    }
+    catch (MyException&amp; e2){
+        cout &lt;&lt; &quot;MyException引用&quot; &lt;&lt; endl;
+    }
+    //会产生对象的副本
+    //catch (MyException e){
+    //    cout &lt;&lt; &quot;MyException&quot; &lt;&lt; endl;
+    //}
+    catch (MyException* e1){
+        cout &lt;&lt; &quot;MyException指针&quot; &lt;&lt; endl;        
+        delete e1;
+    }
+
+    system(&quot;pause&quot;);
+}
+</code></pre><p><strong>标准异常（类似于Java NullPointerException）</strong></p>
+<pre><code>class NullPointerException : public exception{
+public:
+    NullPointerException(char* msg) : exception(msg){
+
+    }
+};
+
+void mydiv(int a, int b){
+    if (b &gt; 10){
+        throw out_of_range(&quot;超出范围&quot;);        
+    }    
+    else if (b == NULL){
+        throw NullPointerException(&quot;为空&quot;);
+    }
+    else if (b == 0){
+        throw invalid_argument(&quot;参数不合法&quot;);
+    }
+}
+
+void main(){
+    try{
+        mydiv(8,NULL);
+    }
+    catch (out_of_range e1){
+        cout &lt;&lt; e1.what() &lt;&lt; endl;
+    }
+    catch (NullPointerException&amp; e2){
+        cout &lt;&lt; e2.what() &lt;&lt; endl;
+    }
+    catch (...){
+
+    }
+
+    system(&quot;pause&quot;);
+}
+</code></pre><p><strong>外部类异常</strong></p>
+<pre><code>class Err{
+public:
+    class MyException{
+        public:MyException(){
+
+        }
+    };
+};
+
+void mydiv(int a, int b){
+    if (b &gt; 10){
+        throw Err::MyException();
+    }
+
+}
+</code></pre>
       
     </div>
 
