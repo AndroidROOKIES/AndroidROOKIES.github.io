@@ -270,6 +270,126 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/12/C++学习系列-五-C++中的类型转换/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Feng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Feng's Notes">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/06/12/C++学习系列-五-C++中的类型转换/" itemprop="url">
+                  C++学习系列(五)C++中的类型转换
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-12T09:11:34+08:00">
+                2017-06-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/09/C++学习系列-四-C++中的异常处理/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3699,542 +3819,11 @@ JNIEXPORT jintArray JNICALL Java_com_test_JniTest_getArray(JNIEnv *env, jobject 
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/10/JNI系列-二-JNI数据类型与属性方法的访问/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Feng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/uploads/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Feng's Notes">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/05/10/JNI系列-二-JNI数据类型与属性方法的访问/" itemprop="url">
-                  JNI系列(二)JIN数据类型与属性方法的访问
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-10T16:08:15+08:00">
-                2017-05-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/JNI/" itemprop="url" rel="index">
-                    <span itemprop="name">JNI</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>关于Java调c/c++或者c/c++调用Java中的方法属性，需要在c中实现函数，该函数的结构如下：</p>
-<p>举例</p>
-<pre><code>#include&quot;com_test_JniTest.h&quot;
-
-//函数实现
-JNIEXPORT jstring JNICALL Java_com_test_JniTest_getStringFromC
-(JNIEnv *env, jclass jcls){
-
-    //JNIEnv 结构体指针
-    //env二级指针（一个结构体指针的指针，主要用来在C/C++中使用虚拟机的功能，
-    //比如说：访问Java方法，属性，创建Java对象、处理字符串等等）
-    //代表Java运行环境，调用Java中的代码
-    //返回Java字符串
-    return (*env)-&gt;NewStringUTF(env,&quot;marong&quot;);
-}
-</code></pre><p>#include”com_test_JniTest.h”是函数生成的头文件(javah命令)，也可以自己手写添加。</p>
-<p>其中，jstring表示函数返回的JNI数据类型，字符串类型(相当于Java中的string类型)。</p>
-<p>Java_com_test_JniTest_getStringFromC表示函数名 , 其组成为Java+Java工程中的类名+类中方法名。</p>
-<p>函数的参数：一般都会包含至少两个参数（JNIEnv*,jclass或者jobject)</p>
-<ol>
-<li>当Java中的native方法为静态方法时：jclass 代表native方法所属类的class对象(JniTest.class)</li>
-<li>当Java中的native方法为非静态方法时：jobject 代表native方法所属的对象（new出来的对象）</li>
-</ol>
-<h1 id="JNI基本数据类型"><a href="#JNI基本数据类型" class="headerlink" title="JNI基本数据类型"></a>JNI基本数据类型</h1><p>Java基本数据类型与JNI数据类型的映射关系</p>
-<pre><code>Java类型-&gt;JNI类型-&gt;C类型
-</code></pre><h2 id="JNI基本数据类型（左边Java，右边JNI，一一对应关系）"><a href="#JNI基本数据类型（左边Java，右边JNI，一一对应关系）" class="headerlink" title="JNI基本数据类型（左边Java，右边JNI，一一对应关系）"></a>JNI基本数据类型（左边Java，右边JNI，一一对应关系）</h2><pre><code>boolean  jboolean
-byte     jbyte
-char     jchar
-short    jshort
-int      jint
-long     jlong
-float    jfloat
-double   jdouble
-void     void
-</code></pre><h2 id="引用类型-对象"><a href="#引用类型-对象" class="headerlink" title="引用类型(对象)"></a>引用类型(对象)</h2><pre><code>String jstring
-object jobject
-//数组,基本数据类型的数组
-byte[] jByteArray
-//对象数组
-object[](String[]) jobjectArray
-</code></pre><h1 id="C-C-中访问Java的成员"><a href="#C-C-中访问Java的成员" class="headerlink" title="C/C++中访问Java的成员"></a>C/C++中访问Java的成员</h1><p>C/C++通过JNI的api来访问Java的成员,在介绍访问Java成员之前先来说一下Java属性与方法的签名。</p>
-<h2 id="关于属性与方法的签名"><a href="#关于属性与方法的签名" class="headerlink" title="关于属性与方法的签名"></a>关于属性与方法的签名</h2><h3 id="属性的签名"><a href="#属性的签名" class="headerlink" title="属性的签名"></a>属性的签名</h3><p>属性的签名其实就是属性的类型的简称，对应关系如下：</p>
-<p><img src="http://oph0qv0je.bkt.clouddn.com/Java%E5%B1%9E%E6%80%A7%E4%B8%8E%E6%96%B9%E6%B3%95%E7%AD%BE%E5%90%8D%E5%88%97%E8%A1%A8.png" alt=""></p>
-<p>注意：类的签名格式（不要忘记”；”）如下</p>
-<pre><code>L完整包名;
-</code></pre><h3 id="方法的签名"><a href="#方法的签名" class="headerlink" title="方法的签名"></a>方法的签名</h3><p>通过命令来获取指定类的所有属性和方法的签名：</p>
-<p>打开dos命令，输入javap来帮助查找每个命令的信息：</p>
-<p><img src="http://oph0qv0je.bkt.clouddn.com/dos.png" alt=""></p>
-<p>通过以下命令就可以拿到指定类的所有属性和方法的签名了</p>
-<pre><code>javap -s -p 完整类名
-</code></pre><p>通过cd命令，来到Java工程的bin目录，然后输入命令：</p>
-<p><img src="http://oph0qv0je.bkt.clouddn.com/javap.png" alt=""></p>
-<p>其中descriptor:后面就是我们需要的签名</p>
-<p>方法签名的规律：</p>
-<pre><code>(参数类型签名)返回值类型签名
-</code></pre><h2 id="C-C-中访问Java的属性和方法"><a href="#C-C-中访问Java的属性和方法" class="headerlink" title="C/C++中访问Java的属性和方法"></a>C/C++中访问Java的属性和方法</h2><p>有以下几种情况：</p>
-<ol>
-<li>访问Java类的非静态属性</li>
-<li>访问Java类的静态属性</li>
-<li>访问Java类的非静态方法</li>
-<li>访问Java类的静态方法</li>
-<li>间接访问Java类的父类的方法</li>
-<li>访问Java类的构造方法</li>
-</ol>
-<h3 id="访问Java的非静态属性"><a href="#访问Java的非静态属性" class="headerlink" title="访问Java的非静态属性"></a>访问Java的非静态属性</h3><p>c访问Java的属性，返回给Java修改之后的属性内容</p>
-<p>首先，在Java中写一个native方法，通过调用accessField，利用C修改属性并返回：</p>
-<pre><code>public String key = &quot;isen&quot;;
-//访问属性，返回修改之后的属性内容
-public native String accessField();
-</code></pre><p>接下来书写c代码：</p>
-<pre><code>//访问属性
-//修改属性key
-JNIEXPORT jstring JNICALL Java_com_dongnaoedu_jni_JniTest_accessField
-(JNIEnv *env, jobject jobj){
-    //jobj是t对象，通过对象拿到class(JniTest.class)
-    jclass cls = (*env)-&gt;GetObjectClass(env, jobj);
-    //jfieldID 拿到对应属性的id
-    //传入参数：属性名称，属性签名
-    jfieldID fid = (*env)-&gt;GetFieldID(env, cls, &quot;key&quot;, &quot;Ljava/lang/String;&quot;);    
-
-    //通过属性id，获取key属性的值
-    //Get&lt;Type&gt;Field
-    jstring jstr = (*env)-&gt;GetObjectField(env, jobj, fid);    
-    printf(&quot;jstr:%#x\n&quot;,&amp;jstr);
-
-    //jstring 转为 c字符串，第三个参数是一个出参，用来告诉我们GetStringUTFChars内部是否复制了一份字符串
-    //isCopy 是否复制（true代表复制，false不复制（或者为NULL））
-    char *c_str = (*env)-&gt;GetStringUTFChars(env,jstr,JNI_FALSE);
-
-    //在c中拼接修改属性值，得到新的字符串
-    char text[20] = &quot;super &quot;;
-    strcat(text,c_str);
-
-
-    //拼接完成之后，从C字符串转为jstring
-    jstring new_jstr = (*env)-&gt;NewStringUTF(env, text);
-
-    //修改key（设置新的属性值）
-    //注意规则：Set&lt;Type&gt;Field
-    (*env)-&gt;SetObjectField(env, jobj, fid, new_jstr);
-
-    printf(&quot;new_jstr:%#x\n&quot;, &amp;new_jstr);
-
-    //最后释放资源，通知垃圾回收器来回收
-    //良好的习惯就是，每次GetStringUTFChars，结束的时候都有一个  ReleaseStringUTFChars与之呼应
-    (*env)-&gt;ReleaseStringUTFChars(env, jstr, cstr);
-
-    return new_jstr;
-}
-</code></pre><p>c中代码可总结为：</p>
-<ol>
-<li>通过对象拿到class</li>
-<li>拿到对应属性的ID</li>
-<li>通过属性ID拿到属性值</li>
-<li>jstring 转为 c字符串</li>
-<li>拼接c字符串，生成新的字符串</li>
-<li>c字符串转为jstring</li>
-<li>设置新的属性</li>
-<li>释放资源</li>
-</ol>
-<p>最后，在Java中测试：</p>
-<pre><code>public static void main(String[] args) {
-
-    JniTest test = new JniTest();
-    System.out.println(test.str);
-    //修改非静态属性str
-    test.accessField();
-    System.out.println(test.str);
-
-}
-</code></pre><h3 id="访问Java的静态属性"><a href="#访问Java的静态属性" class="headerlink" title="访问Java的静态属性"></a>访问Java的静态属性</h3><p>Java代码：</p>
-<pre><code>//访问静态属性count，修改它的值
-public static int count = 9;
-public native void accessStaticField();
-</code></pre><p>c代码：</p>
-<p>c中访问静态属性count，修改它的值</p>
-<pre><code>JNIEXPORT void JNICALL Java_com_dongnaoedu_jni_JniTest_accessStaticField
-(JNIEnv *env, jobject jobj){
-    //jclass
-    jclass cls = (*env)-&gt;GetObjectClass(env, jobj);
-    //jfieldID 获取静态属性id
-    jfieldID fid = (*env)-&gt;GetStaticFieldID(env, cls, &quot;count&quot;, &quot;I&quot;);
-
-    //获取静态属性值
-    //GetStatic&lt;Type&gt;Field
-    jint count = (*env)-&gt;GetStaticIntField(env, cls, fid);
-    count++;
-    //修改
-    //SetStatic&lt;Type&gt;Field
-    (*env)-&gt;SetStaticIntField(env,cls,fid,count);
-}
-</code></pre><p>最后在Java中测试：</p>
-<p>public static void main(String[] args) {</p>
-<pre><code>JniTest test = new JniTest();
-System.out.println(count);
-test.accessStaticField();
-System.out.println(count);
-</code></pre><p>}</p>
-<h3 id="访问Java的非静态方法"><a href="#访问Java的非静态方法" class="headerlink" title="访问Java的非静态方法"></a>访问Java的非静态方法</h3><p>Java代码如下，通过调用accessMethod，在C语言中调用genRandomInt方法</p>
-<pre><code>//产生指定范围的随机数
-public int genRandomInt(int max){
-    System.out.println(&quot;genRandomInt 执行了...&quot;);
-    return new Random().nextInt(max); 
-}
-
-public native void accessMethod();
-</code></pre><p>C代码如下：</p>
-<pre><code>//借用java的api产生指定大小的随机数
-JNIEXPORT void JNICALL Java_com_dongnaoedu_jni_JniTest_accessMethod(JNIEnv * env, jobject obj){
-    //jclass
-    jclass cls = (*env)-&gt;GetObjectClass(env, obj);
-    //jmethodID，拿到方法的ID最后一个参数是方法的签名
-    jmethodID mid = (*env)-&gt;GetMethodID(env, cls, &quot;genRandomInt&quot;, &quot;(I)I&quot;);
-    //调用方法，产生了一个随机数，最后一个是可变参数，就是调用该方法所传入的参数
-    //规则：Call&lt;Type&gt;Method 返回值类型
-    jint random = (*env)-&gt;CallIntMethod(env, obj, mid, 200);
-    printf(&quot;output from C ： %d&quot;, random);
-}
-</code></pre><p>最后在Java中测试：</p>
-<pre><code>public static void main(String[] args) {
-
-    JniTest test = new JniTest();
-    test.accessMethod();
-
-}
-</code></pre><h3 id="访问Java的静态方法"><a href="#访问Java的静态方法" class="headerlink" title="访问Java的静态方法"></a>访问Java的静态方法</h3><p>Java代码如下，通过调用accessStaticMethod，在C语言中调用getUUID方法</p>
-<pre><code>public native void accessStaticMethod();
-
-//产生UUID字符串
-public static String getUUID(){
-    System.out.println(&quot;getUUID 执行了...&quot;);
-    return UUID.randomUUID().toString();
-}
-</code></pre><p>C代码：</p>
-<pre><code>JNIEXPORT void JNICALL Java_com_dongnaoedu_jni_JniTest_accessStaticMethod
-(JNIEnv * env, jobject jobj){
-    jclass clz = (*env)-&gt;GetObjectClass(env, jobj);
-    jmethodID mid = (*env)-&gt;GetStaticMethodID(env, clz, &quot;getUUID&quot;, &quot;()Ljava/lang/String;&quot;);
-
-    //调用java的静态方法，拿到返回值
-    //CallStatic&lt;Type&gt;Method
-    jstring jstr = (*env)-&gt;CallStaticObjectMethod(env, clz, mid);
-
-    //随机文件名称 uuid.txt
-    //jstring 转成 c字符串
-    //isCopy JNI_FALSE，代表java和c操作的是同一个字符串
-    char *uuid_str = (*env)-&gt;GetStringUTFChars(env, uuid, JNI_FALSE);
-
-    //后续操作，产生以UUID为文件名的文件
-    //拼接
-    char fielName[100];
-    sprintf(filename, &quot;D://%s.txt&quot;,uuid_str);
-    FILE *fp = fopen(filename,&quot;w&quot;);
-    fputs(&quot;i love isen&quot;, fp);
-    fclose(fp);
-
-    printf(&quot;output from C : File had saved&quot;, jstr);
-}
-</code></pre><p>最后在Java中测试：</p>
-<pre><code>public static void main(String[] args) {
-
-    JniTest test = new JniTest();
-    test.accessStaticMethod();
-
-}
-</code></pre><h3 id="访问Java类的构造方法"><a href="#访问Java类的构造方法" class="headerlink" title="访问Java类的构造方法"></a>访问Java类的构造方法</h3><p>Java代码如下，通过调用accessConstructor，在底层用C语言调用java.util.Date产生一个当前的时间戳，并且返回。</p>
-<pre><code>//调用Date的构造函数
-public native long accessConstructor();
-</code></pre><p>C代码:</p>
-<pre><code>//使用java.util.Date产生一个当前的时间戳
-JNIEXPORT jobject JNICALL Java_com_dongnaoedu_jni_JniTest_accessConstructor
-(JNIEnv *env, jobject jobj){
-
-    jclass cls = (*env)-&gt;FindClass(env, &quot;java/util/Date&quot;);
-
-    //jmethodID
-    //构造方法的函数名的格式是：&lt;init&gt;
-    //不能写类名，因为构造方法函数名都一样区分不了，只能通过参数列表（签名）区分
-    jmethodID constructor_mid = (*env)-&gt;GetMethodID(env, cls, &quot;&lt;init&gt;&quot;, &quot;()V&quot;);
-
-    //实例化一个Date对象
-    jobject date_obj = (*env)-&gt;NewObject(env, cls, constructor_mid);
-
-    //调用getTime方法(注意签名，返回值long的属性签名是J)
-    jmethodID mid = (*env)-&gt;GetMethodID(env, cls, &quot;getTime&quot;, &quot;()J&quot;);
-    jlong time = (*env)-&gt;CallLongMethod(env, date_obj, mid);
-
-    printf(&quot;\ntime:%lld\n&quot;,time);
-
-    return date_obj;
-}
-</code></pre><p>最后在Java中测试：</p>
-<pre><code>public static void main(String[] args) {
-
-    JniTest test = new JniTest();
-    //直接在Java中构造Date然后调用getTime
-    Date date = new Date();
-    System.out.println(date.getTime());
-    //通过C语音构造Date然后调用getTime
-    long time = test.accessConstructor();
-    System.out.println(time);
-
-}
-</code></pre><h3 id="调用Java类的父类的方法"><a href="#调用Java类的父类的方法" class="headerlink" title="调用Java类的父类的方法"></a>调用Java类的父类的方法</h3><p>Java代码：</p>
-<p>父类：</p>
-<pre><code>package com.test;
-
-public class Human {
-    protected void sayHi() {
-        System.out.println(&quot;人开始打招呼....&quot;);
-    }    
-}
-</code></pre><p>子类：</p>
-<pre><code>package com.test;
-
-public class Man extends Human {
-    @Override
-    protected void sayHi() {
-        // 可以通过super关键字来访问父类的方法
-        // super.sayHi();
-        System.out.println(&quot;男人开始打招呼....，儿子是我的&quot;);
-    }
-}
-</code></pre><p>在TestJni类中有Human属性：</p>
-<pre><code>//父类的引用指向子类的对象
-Human man= new Man();
-
-public native void accessNonvirtualMethod();
-</code></pre><p>如果是直接使用man.sayHi()的话，访问的是子类Man的方法。</p>
-<p>但是通过底层C的方式可以间接访问到父类Human中的sayHi()方法，跳过子类的实现，这是Java做不到的。</p>
-<p>C代码实现：</p>
-<pre><code>//调用父类的方法
-JNIEXPORT void JNICALL Java_com_dongnaoedu_jni_JniTest_accessNonvirtualMethod
-(JNIEnv *env, jobject jobj){
-
-    //1，先拿到属性man
-
-    jclass cls = (*env)-&gt;GetObjectClass(env, jobj);
-    //获取man（对象）属性的ID
-    jfieldID fid = (*env)-&gt;GetFieldID(env, cls, &quot;human&quot;, &quot;Lcom/dongnaoedu/jni/Human;&quot;);
-    //获取man对象
-    jobject human_obj = (*env)-&gt;GetObjectField(env, jobj, fid);
-
-     //2，拿到父类的类，以及sayHi的方法id
-
-    jclass human_cls = (*env)-&gt;FindClass(env, &quot;com/dongnaoedu/jni/Human&quot;); //注意：传父类的名称
-    jmethodID mid = (*env)-&gt;GetMethodID(env, human_cls, &quot;sayHi&quot;, &quot;()V&quot;);
-
-    //执行,调用自己的(man)sayHi实现
-    //(*env)-&gt;CallObjectMethod(env, human_obj, mid);
-    //调用父类的sayHi方法实现
-    (*env)-&gt;CallNonvirtualObjectMethod(env, human_obj, human_cls, mid);
-}
-</code></pre><ol>
-<li>当存在该类的对象实例时，使用(*env)-&gt;GetObjectClass()获取jclass，相当于Java中的test.getClass()</li>
-<li>当不存在该类的对象实例时，使用(*env)-&gt;FindClass()获取jclass，相当于Java中的Class.forName(“com.test.TestJni”)</li>
-</ol>
-<p>通过CallNonvirtualVoidMethod，访问不覆盖的父类方法（C++使用virtual关键字来覆盖父类的实现），当然你也可以指定哪个父类（如果有多个父类的话）。</p>
-<p>最后在Java中测试：</p>
-<pre><code>public static void main(String[] args) {
-
-    JniTest test = new JniTest();
-    //这时候是调用子类Man的方法
-    test.man.sayHi();
-    //但是通过JNI的方式，可以访问到父类的sayHi方法
-    test.accessNonvirtualMethod();
-
-}
-</code></pre><h3 id="经典问题——中文乱码"><a href="#经典问题——中文乱码" class="headerlink" title="经典问题——中文乱码"></a>经典问题——中文乱码</h3><h4 id="问题："><a href="#问题：" class="headerlink" title="问题："></a>问题：</h4><p>从Java层传入中文到c层，在c中输出没有乱码问题，然而，在c层将字符串传入到Java层，在Java层输出打印时出现乱码问题。</p>
-<p>测试乱码:</p>
-<p>Java代码：</p>
-<pre><code>//传入中文到c层
-public native void testChineseIn(String chinese);
-//c传入中文到Java层
-public native String testChineseOut();
-
-public static void main(String[] args) {
-
-JniTest test = new JniTest();
-test.testChineseIn(&quot;你好&quot;);
-System.out.println(test.testChineseOut());
-
-}
-</code></pre><p>c代码:</p>
-<pre><code>JNIEXPORT void JNICALL Java_com_test_JniTest_testChineseIn
-(JNIEnv *env, jobject jobj,jstring chinese){
-    char *str = (*env)-&gt;GetStringUTFChars(env,chinese,NULL);
-    printf(&quot;%s&quot;,str);
-}
-
-JNIEXPORT jstring JNICALL Java_com_test_JniTest_testChineseOut
-(JNIEnv *env, jobject jobj){
-    char *chinese = &quot;你好，中国&quot;;
-    jstring j_str =(*env)-&gt;NewStringUTF(env,chinese);
-    return j_str;
-}
-</code></pre><h4 id="原因分析"><a href="#原因分析" class="headerlink" title="原因分析:"></a>原因分析:</h4><p>调用NewStringUTF的时候，产生的是UTF-16的字符串，但是我们需要的时候UTF-8字符串。</p>
-<h4 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法:"></a>解决方法:</h4><p>通过Java的String类的构造方法来进行字符集变换。</p>
-<p>通过调用构造方法String string = new String(byte[], charsetName);来解决乱码问题</p>
-<p>c代码：</p>
-<pre><code>//中文问题
-JNIEXPORT jstring JNICALL Java_com_test_JniTest_testChineseOut
-(JNIEnv *env, jobject jobj, jstring in){
-
-    //c -&gt; jstring
-    char *c_str = &quot;马蓉与宋江&quot;;
-
-
-    //执行String(byte bytes[], String charsetName)构造方法需要的条件
-    //1.jmethodID：获取构造方法的ID
-    //2.byte数组
-    //3.字符编码jstring
-
-    //1.得到string类，获取构造方法ID
-    jclass str_cls = (*env)-&gt;FindClass(env, &quot;java/lang/String&quot;);
-    jmethodID constructor_mid = (*env)-&gt;GetMethodID(env, str_cls, &quot;&lt;init&gt;&quot;, &quot;([BLjava/lang/String;)V&quot;);
-
-    //2.创建字节数组，并且将C的字符串拷贝进去
-    jbyteArray bytes = (*env)-&gt;NewByteArray(env, strlen(c_str));
-
-    //byte数组赋值
-    //0-&gt;strlen(c_str)，从头到尾
-    //对等于，从c_str这个字符数组，复制到bytes这个字符数组
-    (*env)-&gt;SetByteArrayRegion(env, bytes, 0, strlen(c_str), c_str);
-
-    //3.字符编码jstring
-    jstring charsetName = (*env)-&gt;NewStringUTF(env, &quot;GB2312&quot;);
-
-    //调用构造函数，返回编码之后的jstring
-    return (*env)-&gt;NewObject(env,str_cls,constructor_mid,bytes,charsetName);
-}
-</code></pre>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -4279,7 +3868,7 @@ JNIEXPORT jstring JNICALL Java_com_test_JniTest_testChineseOut
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-count">21</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
