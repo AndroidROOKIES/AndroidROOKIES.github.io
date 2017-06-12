@@ -367,7 +367,15 @@
       
         
           
-            
+            <h2 id="C-的类型转换"><a href="#C-的类型转换" class="headerlink" title="C++的类型转换"></a>C++的类型转换</h2><p>类型转换分类：</p>
+<ol>
+<li>static_cast 普遍情况（一般的数据类型转换等）。</li>
+<li>const_cast 去常量。</li>
+<li>dynamic_cast 子类类型转为父类类型。</li>
+<li>reinterpret_cast 函数指针转型，不具备移植性。</li>
+</ol>
+<p>对于原始类型转换来说，所有情况都是一种写法，可读性不高，有可能有潜在的风险。</p>
+
           
         
       
@@ -584,7 +592,9 @@ void main(){
     system(&quot;pause&quot;);
 }
 </code></pre><p><strong>标准异常（类似于Java NullPointerException）</strong></p>
-<pre><code>class NullPointerException : public exception{
+<pre><code>#include &lt;stdexcept&gt;
+
+class NullPointerException : public exception{
 public:
     NullPointerException(char* msg) : exception(msg){
 

@@ -111,7 +111,7 @@ void main(){
     }
     catch (int a){
         cout &amp;lt;&amp;lt; &amp;quot;int异常&amp;q">
-<meta property="og:updated_time" content="2017-06-09T06:52:54.614Z">
+<meta property="og:updated_time" content="2017-06-12T02:52:29.423Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C++学习系列(四)C++中的异常处理">
 <meta name="twitter:description" content="C++异常处理，根据抛出的异常数据类型，进入到相应的catch块中。
@@ -465,7 +465,9 @@ void main(){
     system(&quot;pause&quot;);
 }
 </code></pre><p><strong>标准异常（类似于Java NullPointerException）</strong></p>
-<pre><code>class NullPointerException : public exception{
+<pre><code>#include &lt;stdexcept&gt;
+
+class NullPointerException : public exception{
 public:
     NullPointerException(char* msg) : exception(msg){
 
