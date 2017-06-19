@@ -367,7 +367,150 @@
       
         
           
-            
+            <h2 id="C-的IO操作"><a href="#C-的IO操作" class="headerlink" title="C++的IO操作"></a>C++的IO操作</h2><p>文本文件操作</p>
+<pre><code>void main(){
+    char* fname = &quot;c://dest.txt&quot;;
+    //输出流
+    ofstream fout(fname);
+    //创建失败
+    if (fout.bad()){ //文件打开失败
+        return;
+    }
+
+    fout &lt;&lt; &quot;jack&quot; &lt;&lt; endl;
+    fout &lt;&lt; &quot;rose&quot; &lt;&lt; endl;
+
+    //关闭
+    fout.close();
+
+    //读取
+    ifstream fin(fname);
+    if (fin.bad()){
+        return;
+    }
+    char ch;
+    while (fin.get(ch)){
+        //输出
+        cout &lt;&lt; ch;
+    }
+    fin.close();
+
+    system(&quot;pause&quot;);
+}
+</code></pre><p>二进制文件操作</p>
+<pre><code>void main(){
+    char* src = &quot;c://src.jpg&quot;;
+    char* dest = &quot;c://dest.jpg&quot;;
+
+    //输入流
+    ifstream fin(src, ios::binary);
+    //输出流
+    ofstream fout(dest, ios::binary);
+
+    if (fin.bad() || fout.bad()){
+        return;
+    }
+
+    while (!fin.eof()){
+        //读取
+        char buff[1024] = {0};
+        fin.read(buff,1024);
+
+        //写入
+        fout.write(buff,1024);
+    }
+
+    //关闭
+    fin.close();
+    fout.close();
+
+    system(&quot;pause&quot;);
+}
+</code></pre><p>C++对象的持久化</p>
+<pre><code>class Person
+{
+public:
+    Person()
+    {
+
+    }
+    Person(char * name, int age)
+    {
+        this-&gt;name = name;
+        this-&gt;age = age;
+    }
+    void print()
+    {
+        cout &lt;&lt; name &lt;&lt; &quot;,&quot; &lt;&lt; age &lt;&lt; endl;
+    }
+private:
+    char * name;
+    int age;
+};
+
+
+void main()
+{
+    Person p1(&quot;柳岩&quot;, 22);
+    Person p2(&quot;rose&quot;, 18);
+    //输出流
+    ofstream fout(&quot;c://c_obj.data&quot;, ios::binary);
+    fout.write((char*)(&amp;p1), sizeof(Person)); //指针能够读取到正确的数据，读取内存区的长度
+    fout.write((char*)(&amp;p2), sizeof(Person));
+    fout.close();
+
+    //输入流
+    ifstream fin(&quot;c://c_obj.data&quot;, ios::binary);
+    Person tmp;
+    fin.read((char*)(&amp;tmp), sizeof(Person));
+    tmp.print();
+
+    fin.read((char*)(&amp;tmp), sizeof(Person));
+    tmp.print();
+
+    system(&quot;pause&quot;);
+
+}
+</code></pre><h2 id="C-中STL"><a href="#C-中STL" class="headerlink" title="C++中STL"></a>C++中STL</h2><p>STL:standard template library 标准模板库，类似于Java中的util工具集等。</p>
+<pre><code>#include &lt;string&gt;
+void main()
+{
+    string s1 = &quot;craig david&quot;;
+    string s2(&quot; 7 days&quot;);
+    string s3 = s1 + s2;
+
+    cout &lt;&lt; s3 &lt;&lt; endl;
+
+    //转c字符串
+    const char* c_str = s3.c_str();
+    cout &lt;&lt; c_str &lt;&lt; endl;
+
+    //s1.at(2);
+
+
+    system(&quot;pause&quot;);
+}
+</code></pre><p>这里的是c++中的string，在jni开发时，需要先将c++中的string转为c的string，再转换成Java的string。</p>
+<pre><code>//容器
+#include &lt;vector&gt;
+
+void main()
+{
+    //动态数组
+    //不需要使用动态内存分配，就可以使用动态数组
+    vector&lt;int&gt; v;
+    v.push_back(12);
+    v.push_back(10);
+    v.push_back(5);
+
+    for (int i = 0; i &lt; v.size(); i++)
+    {
+        cout &lt;&lt; v[i] &lt;&lt; endl;
+    }
+
+    system(&quot;pause&quot;);
+}
+</code></pre>
           
         
       
