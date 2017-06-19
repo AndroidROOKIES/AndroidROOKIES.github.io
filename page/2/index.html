@@ -270,6 +270,213 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/12/JNI系列-三-JNI数组处理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Feng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Feng's Notes">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/05/12/JNI系列-三-JNI数组处理/" itemprop="url">
+                  JNI系列(三)数组处理
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-12T14:19:24+08:00">
+                2017-05-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JNI/" itemprop="url" rel="index">
+                    <span itemprop="name">JNI</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="数组的处理"><a href="#数组的处理" class="headerlink" title="数组的处理"></a>数组的处理</h1><p>在Java中传入一个数组到c层，在c层给传入的数组进行排序。</p>
+<p>Java代码：</p>
+<pre><code>//数组处理
+public native void giveArray(int array[]);
+
+public static void main(String[] args) {
+
+    JniTest test = new JniTest();
+    int arr[] = { 9, 1, 100, 6, 4, 80 , 46 , 30};
+    //进行排序
+    test.giveArray(arr);
+    System.out.println(Arrays.toString(arr));
+
+}
+</code></pre><p>c代码：</p>
+<pre><code>int compare(int *a,int *b){
+    return (*a) - (*b);
+}
+
+//传入
+JNIEXPORT void JNICALL Java_com_dongnaoedu_jni_JniTest_giveArray
+(JNIEnv *env, jobject jobj, jintArray arr){
+
+    //jintArray -&gt; jint数组的指针 -&gt; c int 数组
+    jint *elems = (*env)-&gt;GetIntArrayElements(env, arr, NULL);
+    //printf(&quot;%#x,%#x\n&quot;, &amp;elems, &amp;arr);
+
+    //数组的长度
+    int len = (*env)-&gt;GetArrayLength(env, arr);
+
+    //排序，其中compare是函数指针，用于比较大小
+    qsort(elems, len, sizeof(jint), compare);    
+
+    //同步：操作完之后需要同步C的数组到Java数组中
+    //mode：函数ReleaseIntArrayElements的最后一个参数，有如下取值
+    //0, Java数组进行更新，并且释放C/C++数组
+    //JNI_ABORT, Java数组不进行更新，但是释放C/C++数组
+    //JNI_COMMIT，Java数组进行更新，不释放C/C++数组（函数执行完，数组还是会释放）
+    (*env)-&gt;ReleaseIntArrayElements(env, arr, elems, 0);
+}
+</code></pre><p>在Java中指定一个数组的长度，传入c中，c返回指定长度的数组</p>
+<p>Java代码:</p>
+<pre><code>public native int[] getArray(int len);
+
+public static void main(String[] args) {
+
+        JniTest test = new JniTest();
+        int[] a = test.getArray(10);
+        System.out.println(Arrays.toString(a));
+
+    }
+</code></pre><p>c代码：</p>
+<pre><code>//返回数组
+JNIEXPORT jintArray JNICALL Java_com_test_JniTest_getArray(JNIEnv *env, jobject jobj, jint len){
+    //创建一个指定大小的数组
+    jintArray jint_arr = (*env)-&gt;NewIntArray(env, len);
+    jint *elems = (*env)-&gt;GetIntArrayElements(env, jint_arr, NULL);
+    int i = 0;
+    for (; i &lt; len; i++){
+        elems[i] = i;
+    }
+
+    //同步
+    (*env)-&gt;ReleaseIntArrayElements(env, jint_arr, elems, 0);
+
+    return jint_arr;
+}
+</code></pre>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/10/JNI系列-二-JNI数据类型与属性方法的访问/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3235,178 +3442,6 @@ void main(){
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/03/08/Activity的组成结构/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Feng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/uploads/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Feng's Notes">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/03/08/Activity的组成结构/" itemprop="url">
-                  Activity的组成结构
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-08T09:33:52+08:00">
-                2017-03-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/android/" itemprop="url" rel="index">
-                    <span itemprop="name">android</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p> <strong>Activity</strong>代表一个窗口，事实上，这里的“窗口”是由Activity的成员变量mWindow来表示的，mWindow本质上是一个PhoneWindow对象，PhoneWindow继承自Window抽象类，负责窗口的管理。但是，PhoneWindow并不用来呈现界面效果，呈现界面由PhoneWindow管理的DecorView对象来完成，DecorView类是FrameLayout的子类，也是整个View树的“根”。DecorView包含三部分内容：通知栏，标题栏，内容显示栏。从源码的 screen_title.xml（该布局文件是常见的窗口风格定义文件）的布局文件中来看一下：</p>
-<pre><code>&lt;LinearLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
-    android:orientation=&quot;vertical&quot;
-    android:fitsSystemWindows=&quot;true&quot;&gt;
-    &lt;!-- Popout bar for action modes --&gt;
-    &lt;ViewStub android:id=&quot;@+id/action_mode_bar_stub&quot;
-              android:inflatedId=&quot;@+id/action_mode_bar&quot;
-              android:layout=&quot;@layout/action_mode_bar&quot;
-              android:layout_width=&quot;match_parent&quot;
-              android:layout_height=&quot;wrap_content&quot;
-              android:theme=&quot;?attr/actionBarTheme&quot; /&gt;
-    &lt;FrameLayout
-        android:layout_width=&quot;match_parent&quot; 
-        android:layout_height=&quot;?android:attr/windowTitleSize&quot;
-        style=&quot;?android:attr/windowTitleBackgroundStyle&quot;&gt;
-        &lt;TextView android:id=&quot;@android:id/title&quot; 
-            style=&quot;?android:attr/windowTitleStyle&quot;
-            android:background=&quot;@null&quot;
-            android:fadingEdge=&quot;horizontal&quot;
-            android:gravity=&quot;center_vertical&quot;
-            android:layout_width=&quot;match_parent&quot;
-            android:layout_height=&quot;match_parent&quot; /&gt;
-    &lt;/FrameLayout&gt;
-    &lt;FrameLayout android:id=&quot;@android:id/content&quot;
-        android:layout_width=&quot;match_parent&quot; 
-        android:layout_height=&quot;0dip&quot;
-        android:layout_weight=&quot;1&quot;
-        android:foregroundGravity=&quot;fill_horizontal|top&quot;
-        android:foreground=&quot;?android:attr/windowContentOverlay&quot; /&gt;
-&lt;/LinearLayout&gt;
-</code></pre><p>从代码中可以看出 ， ActionBar 由 ViewStub 标签定义 ， 内容区包含了两个 FrameLayout 标签，分别代表标题栏和正文区 ， id为@android:id/content的FrameLayout被inflate成名为mContentParent的 FrameLayout 对象 ， 在 Activity 的 onCreate()方法中调用 setContentView()方法加载的布局内容终将成为 mContentParent 的子 View。</p>
-<p>需要说明的是 ， PhoneWindow 类还关联了一个名为 mWindowManager 的 WindowManager对象 ，WindowManager 会创建一个 ViewRootImpl 对象来和 WindowManagerService 进行沟通 ， WindowManagerService 能获取触摸事件 、 键盘事件或轨迹球事件 ， 并通过 ViewRootImpl 将事件分发给各个 Actitivty；另外，ViewRootImpl 还负责 Activity 整个 GUI 的绘制 。 </p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -3456,7 +3491,7 @@ void main(){
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-count">22</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
