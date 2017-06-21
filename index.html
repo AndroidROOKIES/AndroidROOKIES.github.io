@@ -270,6 +270,198 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/21/FFmpeg学习系列-一-Linux下编译FFmpeg/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Feng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Feng's Notes">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/06/21/FFmpeg学习系列-一-Linux下编译FFmpeg/" itemprop="url">
+                  FFmpeg学习系列(一)Linux下编译FFmpeg
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-21T14:48:55+08:00">
+                2017-06-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/FFmpeg/" itemprop="url" rel="index">
+                    <span itemprop="name">FFmpeg</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>在android中进行FFmpeg开发时，我们需要用到编译好的.so库，这些.so需要在Linux环境下进行编译。</p>
+<h2 id="Linux下编译FFmpeg步骤"><a href="#Linux下编译FFmpeg步骤" class="headerlink" title="Linux下编译FFmpeg步骤"></a>Linux下编译FFmpeg步骤</h2><p>1.如果不是Linux操作系统，需要购买阿里云主机，镜像可以选择ubuntu 14.04 64位。</p>
+<p>2.安装XShell（内含Xftp）、Xftp来对服务器进行操作、文件传输</p>
+<p>需要配置Xshell来连接阿里云服务器：</p>
+<p>点击XShell客户端 文件-&gt;打开，弹出会话对话框，点击 “新建”，在对话框中填写“名称”（可随便起一个），主机处填写公网地址点击确认进行连接，然后填写用户，密码。</p>
+<p>连接成功之后，点击Xshell客户端的“新建文件传输”，弹出Xftp,一般在usr下新建一个ndk文件，把我们的ndk拖入ndk文件中。</p>
+<p>3.安装VIM  sudo apt-get install vim-gtk</p>
+<p>安装后如果输入vim不能使用,提示No such file or directory, 更新一下apt-get update</p>
+<p>3.1通过vim编辑一个文本：</p>
+<pre><code>vim isen.txt 进入命令模式。
+</code></pre><p>在命令模式退出：</p>
+<pre><code>按shift + :，输入q!强制退出（不保存退出）
+
+保存退出,shift + z z
+</code></pre><p>命令模式进入编辑模式：</p>
+<pre><code>按i键
+</code></pre><p>编辑模式退出进入命令模式：</p>
+<pre><code>按Esc键
+</code></pre><p>在命令模式中：</p>
+<pre><code>x删除，dd删除行
+</code></pre><p>4.vim配置(高亮显示，行号之类的)</p>
+<p>一般vim正常安装在/etc/vim/中。</p>
+<pre><code>通过vim打开vimrc
+
+vim /etc/vim/vimrc
+
+在末尾添加如下命令
+set nu
+set tabstop
+set cursorline
+set ruler
+</code></pre><p>5.NDK安装</p>
+<p>cd进入ndk目录中，输入ls命令</p>
+<p><img src="http://oph0qv0je.bkt.clouddn.com/linux_ndk.png" alt=""></p>
+<p>发现ndk字体是白色的，表示没有权限不可执行，绿色表示可执行，我们需要给权限让其可执行</p>
+<pre><code>目录给权限：chmod 777 -R ndk
+其中-R代表ndk是一个目录
+</code></pre><p><img src="http://oph0qv0je.bkt.clouddn.com/linux_ndk2.png" alt=""></p>
+<p>ndk目录为绿色可执行。</p>
+<pre><code>解压ndk：./android-ndk-r10e-linux-x86_64.bin 
+</code></pre><p>环境变量配置：</p>
+<pre><code>命令vim ~/.bashrc
+添加：
+export NDKROOT=/usr/ndk/android-ndk-r10e
+export PATH=$NDKROOT:$PATH
+</code></pre><p>更新环境变量：</p>
+<pre><code>source ~/.bashrc
+</code></pre><p>6.准备FFmpeg</p>
+<p>我们需要去FFmpeg官网下载FFmpeg的Linux源码，版本不需要太新：</p>
+<pre><code>ffmpeg-2.6.9.zip
+</code></pre><p>然后执行解压缩命令：</p>
+<pre><code>unzip ffmpeg-2.6.9.zip
+</code></pre>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/18/C++学习系列-六-IO与STL标准模板库/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3819,269 +4011,6 @@ JNIEXPORT void JNICALL Java_com_dongnaoedu_jni_JniTest_initIds(JNIEnv *env, jcla
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/15/JNI系列-四-JNI引用与异常处理/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Feng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/uploads/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Feng's Notes">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/05/15/JNI系列-四-JNI引用与异常处理/" itemprop="url">
-                  JNI系列(四)JNI引用与异常处理
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-15T09:31:32+08:00">
-                2017-05-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/JNI/" itemprop="url" rel="index">
-                    <span itemprop="name">JNI</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="JNI引用变量"><a href="#JNI引用变量" class="headerlink" title="JNI引用变量"></a>JNI引用变量</h2><p>引用类型：局部引用和全局引用</p>
-<p>作用：在JNI中告知虚拟机何时回收一个JNI变量</p>
-<h3 id="局部引用"><a href="#局部引用" class="headerlink" title="局部引用"></a>局部引用</h3><p>局部引用，通过DeleteLocalRef手动释放对象</p>
-<p>使用场景</p>
-<p>1.访问一个很大的java对象，使用完之后，还要进行复杂的耗时操作。</p>
-<p>2.创建了大量的局部引用，占用了太多的内存，而且这些局部引用跟后面的操作没有关联性。</p>
-<p>举例：</p>
-<p>Java代码：</p>
-<pre><code>// 局部引用
-public native void localRef();
-</code></pre><p>c代码：</p>
-<p>模拟：循环创建数组</p>
-<pre><code>JNIEXPORT void JNICALL Java_com_dongnaoedu_jni_JniTest_localRef(JNIEnv *env, jobject jobj){
-    int i = 0;
-    for (; i &lt; 5; i++){
-        //创建Date对象（在循环中创建了占用内存大的对象）
-        jclass cls = (*env)-&gt;FindClass(env, &quot;java/util/Date&quot;);
-        jmethodID constructor_mid = (*env)-&gt;GetMethodID(env, cls, &quot;&lt;init&gt;&quot;, &quot;()V&quot;);
-        jobject obj = (*env)-&gt;NewObject(env, cls, constructor_mid);
-        //此处省略一百行代码...
-
-        //不在使用jobject对象了
-        //通知垃圾回收器回收这些对象
-        (*env)-&gt;DeleteLocalRef(env, obj);
-        //此处省略一百行代码...
-    }
-}
-</code></pre><p>测试：</p>
-<pre><code>public static void main(String[] args) {
-
-    JniTest test = new JniTest();
-    test.localRef();
-
-}
-</code></pre><h3 id="全局引用"><a href="#全局引用" class="headerlink" title="全局引用"></a>全局引用</h3><p>作用：共享(可以跨多个线程)，手动控制内存使用</p>
-<p>举例：</p>
-<p>Java代码：提供三个方法，分别用于创建、获取、删除JNI全局引用</p>
-<pre><code>public native void createGlobalRef();
-
-public native String getGlobalRef();
-
-public native void deteleGlobalRef();
-</code></pre><p>c代码：<br>    //定义全局引用的字符串对象<br>    jstring global_str;</p>
-<pre><code>//创建
-JNIEXPORT void JNICALL Java_com_dongnaoedu_jni_JniTest_createGlobalRef(JNIEnv *env, jobject jobj){
-    jstring obj = (*env)-&gt;NewStringUTF(env, &quot;jni development is powerful!&quot;);
-    //创建全局引用
-    global_str = (*env)-&gt;NewGlobalRef(env, obj);
-}
-
-//获得
-JNIEXPORT jstring JNICALL Java_com_dongnaoedu_jni_JniTest_getGlobalRef(JNIEnv *env, jobject jobj){
-    return global_str;
-}
-
-//释放
-JNIEXPORT void JNICALL Java_com_dongnaoedu_jni_JniTest_deleteGlobalRef(JNIEnv *env, jobject jobj){
-    //释放全局引用
-    (*env)-&gt;DeleteGlobalRef(env, global_str);
-}
-</code></pre><p>测试：</p>
-<pre><code>public static void main(String[] args) {
-
-    JniTest test = new JniTest();
-    test.localRef();
-
-    test.createGlobalRef();
-    System.out.println(test.getGlobalRef());
-    test.deteleGlobalRef();
-
-    //删除之后再取出会抛出空指针异常
-    System.out.println(test.getGlobalRef());
-
-}
-</code></pre><h3 id="弱全局引用"><a href="#弱全局引用" class="headerlink" title="弱全局引用"></a>弱全局引用</h3><p>节省内存，在内存不足时可以是释放所引用的对象</p>
-<p>可以引用一个不常用的对象，如果为NULL，临时创建</p>
-<p>创建：NewWeakGlobalRef,销毁：DeleteGlobalWeakRef</p>
-<h2 id="JNI异常处理"><a href="#JNI异常处理" class="headerlink" title="JNI异常处理"></a>JNI异常处理</h2><p>1.在JNI层手动清空异常信息（ExceptionClear），保证Java代码可以继续运行</p>
-<p>2.补救措施保证C代码继续运行</p>
-<p>JNI自己抛出的异常，在Java层无法被捕捉，只能在C层清空。</p>
-<p>用户通过ThrowNew抛出的异常，可以在Java层捕捉。</p>
-<p>例如：属性名字不小心写错了(本来想获取key的属性，结果写成不存在的key2)，拿到的是空jfieldID</p>
-<pre><code>JNIEXPORT void JNICALL Java_com_dongnaoedu_jni_JniTest_exeception(JNIEnv *env, jobject jobj){
-    jclass cls = (*env)-&gt;GetObjectClass(env, jobj);
-    //属性名字不小心写错了(本来想获取key的属性，结果写成不存在的key2)，拿到的是空的jfieldID
-    jfieldID fid = (*env)-&gt;GetFieldID(env, cls, &quot;key2&quot;, &quot;Ljava/lang/String;&quot;);
-    //检测是否发生Java异常
-    jthrowable exception = (*env)-&gt;ExceptionOccurred(env);
-    if (exception != NULL){
-        //让Java代码可以继续运行
-        //手动清空异常信息
-        (*env)-&gt;ExceptionClear(env);
-
-        //提供补救措施，获取一个存在的key属性
-        fid = (*env)-&gt;GetFieldID(env, cls, &quot;key&quot;, &quot;Ljava/lang/String;&quot;);
-    }
-
-    //获取属性的值
-    jstring jstr = (*env)-&gt;GetObjectField(env, jobj, fid);
-    char *str = (*env)-&gt;GetStringUTFChars(env, jstr, NULL);
-
-    //对比属性值是否正确
-    if (_stricmp(str, &quot;super jason&quot;) != 0){
-        //认为抛出异常，给Java层处理
-        jclass newExcCls = (*env)-&gt;FindClass(env, &quot;java/lang/IllegalArgumentException&quot;);
-        (*env)-&gt;ThrowNew(env,newExcCls,&quot;key&apos;s value is invalid!&quot;);
-    }
-}
-</code></pre><p>测试：</p>
-<pre><code>public static void main(String[] args) {
-
-    JniTest test = new JniTest();
-
-    try {
-        test.testException();
-        System.out.println(&quot;JNI手动抛出了异常，Java不会继续执行，这句话不会被打印\n&quot;);
-    } catch (Exception e) {
-        System.out.println(&quot;捕获到JNI手动抛出的异常，这句话会被打印：&quot; + e.getMessage() + &quot;\n&quot;);
-    }
-
-    System.out.println(&quot;程序继续执行，这句话会被打印\n&quot;);
-
-}
-</code></pre>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -4131,7 +4060,7 @@ JNIEXPORT void JNICALL Java_com_dongnaoedu_jni_JniTest_deleteGlobalRef(JNIEnv *e
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">22</span>
+                <span class="site-state-item-count">23</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -4142,7 +4071,7 @@ JNIEXPORT void JNICALL Java_com_dongnaoedu_jni_JniTest_deleteGlobalRef(JNIEnv *e
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-count">6</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -4153,7 +4082,7 @@ JNIEXPORT void JNICALL Java_com_dongnaoedu_jni_JniTest_deleteGlobalRef(JNIEnv *e
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-count">7</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
