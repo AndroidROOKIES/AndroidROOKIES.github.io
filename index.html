@@ -477,7 +477,7 @@ chmod 777 -R ffmpeg-2.6.9
 <p><img src="http://oph0qv0je.bkt.clouddn.com/ffmpeg_so.png" alt=""></p>
 <p>我们可以看到生成的有.56,.5之类的库，对于这种库android很难加载到，因此要把这个名字加载到前面，以.so结尾，因此，我们需要修改configure文件。</p>
 <p><strong>9.修改configure文件</strong></p>
-<p>ffmpeg-2.6.9根目录下有个configure文件，这个文件比较重要。我们自己写的脚本文件就是依据这个文件来写的。</p>
+<p>ffmpeg-2.6.9根目录下有个configure文件，这个文件比较重要，通过这个文件我们可以看到FFmpeg库之间的依赖关系。我们自己写的脚本文件就是依据这个文件来写的。</p>
 <p>这里我们需要修改一下输出的动态库的命名规则：</p>
 <pre><code>#修改前
 #SLIBNAME_WITH_MAJOR=&apos;$(SLIBNAME).$(LIBMAJOR)&apos;

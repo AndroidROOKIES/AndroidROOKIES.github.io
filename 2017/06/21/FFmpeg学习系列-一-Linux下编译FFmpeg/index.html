@@ -105,7 +105,7 @@ Linux下编译FFmpeg步骤1.如果不是Linux操作系统，需要购买阿里�
 <meta property="og:image" content="http://oph0qv0je.bkt.clouddn.com/linux_ndk2.png">
 <meta property="og:image" content="http://oph0qv0je.bkt.clouddn.com/ffmpeg_so.png">
 <meta property="og:image" content="http://oph0qv0je.bkt.clouddn.com/ffmpeg_so2.png">
-<meta property="og:updated_time" content="2017-06-22T06:58:28.914Z">
+<meta property="og:updated_time" content="2017-06-22T07:01:29.390Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="FFmpeg学习系列(一)Linux下编译FFmpeg">
 <meta name="twitter:description" content="在android中进行FFmpeg开发时，我们需要用到编译好的.so库，这些.so需要在Linux环境下进行编译。
@@ -488,7 +488,7 @@ chmod 777 -R ffmpeg-2.6.9
 <p><img src="http://oph0qv0je.bkt.clouddn.com/ffmpeg_so.png" alt=""></p>
 <p>我们可以看到生成的有.56,.5之类的库，对于这种库android很难加载到，因此要把这个名字加载到前面，以.so结尾，因此，我们需要修改configure文件。</p>
 <p><strong>9.修改configure文件</strong></p>
-<p>ffmpeg-2.6.9根目录下有个configure文件，这个文件比较重要。我们自己写的脚本文件就是依据这个文件来写的。</p>
+<p>ffmpeg-2.6.9根目录下有个configure文件，这个文件比较重要，通过这个文件我们可以看到FFmpeg库之间的依赖关系。我们自己写的脚本文件就是依据这个文件来写的。</p>
 <p>这里我们需要修改一下输出的动态库的命名规则：</p>
 <pre><code>#修改前
 #SLIBNAME_WITH_MAJOR=&apos;$(SLIBNAME).$(LIBMAJOR)&apos;
