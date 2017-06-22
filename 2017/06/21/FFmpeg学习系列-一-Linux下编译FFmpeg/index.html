@@ -105,7 +105,8 @@ Linux下编译FFmpeg步骤1.如果不是Linux操作系统，需要购买阿里�
 <meta property="og:image" content="http://oph0qv0je.bkt.clouddn.com/linux_ndk2.png">
 <meta property="og:image" content="http://oph0qv0je.bkt.clouddn.com/ffmpeg_so.png">
 <meta property="og:image" content="http://oph0qv0je.bkt.clouddn.com/ffmpeg_so2.png">
-<meta property="og:updated_time" content="2017-06-22T07:01:29.390Z">
+<meta property="og:image" content="http://oph0qv0je.bkt.clouddn.com/big_version.png">
+<meta property="og:updated_time" content="2017-06-22T07:22:28.141Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="FFmpeg学习系列(一)Linux下编译FFmpeg">
 <meta name="twitter:description" content="在android中进行FFmpeg开发时，我们需要用到编译好的.so库，这些.so需要在Linux环境下进行编译。
@@ -502,7 +503,8 @@ SLIB_INSTALL_NAME=&apos;$(SLIBNAME_WITH_MAJOR)&apos;
 SLIB_INSTALL_LINKS=&apos;$(SLIBNAME)&apos;
 </code></pre><p>然后进行重新编译，生成动态库如下：</p>
 <p><img src="http://oph0qv0je.bkt.clouddn.com/ffmpeg_so2.png" alt=""></p>
-<p>我们就可以在我们的android项目中应用这些库啦。</p>
+<p>我们就可以在我们的android项目中应用这些库啦（使用的时候我们用大版本号的.so库）。</p>
+<p><img src="http://oph0qv0je.bkt.clouddn.com/big_version.png" alt=""></p>
 
       
     </div>
