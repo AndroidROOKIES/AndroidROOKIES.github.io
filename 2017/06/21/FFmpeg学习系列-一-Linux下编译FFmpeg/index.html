@@ -103,7 +103,7 @@ Linux下编译FFmpeg步骤1.如果不是Linux操作系统，需要购买阿里�
 点击XShell客户端 文件-&amp;g">
 <meta property="og:image" content="http://oph0qv0je.bkt.clouddn.com/linux_ndk.png">
 <meta property="og:image" content="http://oph0qv0je.bkt.clouddn.com/linux_ndk2.png">
-<meta property="og:updated_time" content="2017-06-21T09:22:06.874Z">
+<meta property="og:updated_time" content="2017-06-22T02:49:40.641Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="FFmpeg学习系列(一)Linux下编译FFmpeg">
 <meta name="twitter:description" content="在android中进行FFmpeg开发时，我们需要用到编译好的.so库，这些.so需要在Linux环境下进行编译。
@@ -377,12 +377,12 @@ Linux下编译FFmpeg步骤1.如果不是Linux操作系统，需要购买阿里�
 
       
         <p>在android中进行FFmpeg开发时，我们需要用到编译好的.so库，这些.so需要在Linux环境下进行编译。</p>
-<h2 id="Linux下编译FFmpeg步骤"><a href="#Linux下编译FFmpeg步骤" class="headerlink" title="Linux下编译FFmpeg步骤"></a>Linux下编译FFmpeg步骤</h2><p>1.如果不是Linux操作系统，需要购买阿里云主机，镜像可以选择ubuntu 14.04 64位。</p>
-<p>2.安装XShell（内含Xftp）、Xftp来对服务器进行操作、文件传输</p>
+<h2 id="Linux下编译FFmpeg步骤"><a href="#Linux下编译FFmpeg步骤" class="headerlink" title="Linux下编译FFmpeg步骤"></a>Linux下编译FFmpeg步骤</h2><p><strong>1.如果不是Linux操作系统，需要购买阿里云主机，镜像可以选择ubuntu 14.04 64位。</strong></p>
+<p><strong>2.安装XShell（内含Xftp）、Xftp来对服务器进行操作、文件传输</strong></p>
 <p>需要配置Xshell来连接阿里云服务器：</p>
 <p>点击XShell客户端 文件-&gt;打开，弹出会话对话框，点击 “新建”，在对话框中填写“名称”（可随便起一个），主机处填写公网地址点击确认进行连接，然后填写用户，密码。</p>
 <p>连接成功之后，点击Xshell客户端的“新建文件传输”，弹出Xftp,一般在usr下新建一个ndk文件，把我们的ndk拖入ndk文件中。</p>
-<p>3.安装VIM  sudo apt-get install vim-gtk</p>
+<p><strong>3.安装VIM</strong>  sudo apt-get install vim-gtk</p>
 <p>安装后如果输入vim不能使用,提示No such file or directory, 更新一下apt-get update</p>
 <p>3.1通过vim编辑一个文本：</p>
 <pre><code>vim isen.txt 进入命令模式。
@@ -396,7 +396,7 @@ Linux下编译FFmpeg步骤1.如果不是Linux操作系统，需要购买阿里�
 <pre><code>按Esc键
 </code></pre><p>在命令模式中：</p>
 <pre><code>x删除，dd删除行
-</code></pre><p>4.vim配置(高亮显示，行号之类的)</p>
+</code></pre><p><strong>4.vim配置(高亮显示，行号之类的)</strong></p>
 <p>一般vim正常安装在/etc/vim/中。</p>
 <pre><code>通过vim打开vimrc
 
@@ -407,7 +407,7 @@ set nu
 set tabstop
 set cursorline
 set ruler
-</code></pre><p>5.NDK安装</p>
+</code></pre><p><strong>5.NDK安装</strong></p>
 <p>cd进入ndk目录中，输入ls命令</p>
 <p><img src="http://oph0qv0je.bkt.clouddn.com/linux_ndk.png" alt=""></p>
 <p>发现ndk字体是白色的，表示没有权限不可执行，绿色表示可执行，我们需要给权限让其可执行</p>
@@ -423,14 +423,65 @@ export NDKROOT=/usr/ndk/android-ndk-r10e
 export PATH=$NDKROOT:$PATH
 </code></pre><p>更新环境变量：</p>
 <pre><code>source ~/.bashrc
-</code></pre><p>6.准备FFmpeg</p>
+</code></pre><p><strong>6.准备FFmpeg</strong></p>
 <p>我们需要去FFmpeg官网下载FFmpeg的Linux源码，版本不需要太新：</p>
 <pre><code>ffmpeg-2.6.9.zip
 </code></pre><p>然后执行解压缩命令：</p>
 <pre><code>unzip ffmpeg-2.6.9.zip
-</code></pre><p>7.编译FFmpeg</p>
-<p>1）编写shell脚本文件</p>
+</code></pre><p><strong>7.编译FFmpeg</strong></p>
+<p>1）编写shell脚本文件build_android.sh：</p>
+<pre><code>#!/bin/bash
+make clean
+export NDK=/usr/ndk/android-ndk-r10e
+export SYSROOT=$NDK/platforms/android-9/arch-arm/
+export TOOLCHAIN=$NDK/toolchains/arm-linux-androideabi-4.8/prebuilt/linux-x86_64
+export CPU=arm
+export PREFIX=$(pwd)/android/$CPU
+export ADDI_CFLAGS=&quot;-marm&quot;
 
+./configure --target-os=linux \
+--prefix=$PREFIX --arch=arm \
+--disable-doc \
+--enable-shared \
+--disable-static \
+--disable-yasm \
+--disable-symver \
+--enable-gpl \
+--disable-ffmpeg \
+--disable-ffplay \
+--disable-ffprobe \
+--disable-ffserver \
+--disable-doc \
+--disable-symver \
+--cross-prefix=$TOOLCHAIN/bin/arm-linux-androideabi- \
+--enable-cross-compile \
+--sysroot=$SYSROOT \
+--extra-cflags=&quot;-Os -fpic $ADDI_CFLAGS&quot; \
+--extra-ldflags=&quot;$ADDI_LDFLAGS&quot; \
+$ADDITIONAL_CONFIGURE_FLAG
+make clean
+make
+make install
+</code></pre><p>shell脚本中指定NDK的一些路径（export NDK=/usr/ndk/android-ndk-r10e），配置CPU架构类型（export CPU=arm），PREFIX是指定动态库输出的路径，然后disable一些不需要的库（可减小输出的动态库的大小）等等。enable-shared是生成共享库的意思。</p>
+<p>关于shell脚本需要注意：</p>
+<ol>
+<li><p>换行的时候需要有\，注意不要有额外的空格，否则编译出错</p>
+</li>
+<li><p>脚本文件统一转为UTF-8无BOM格式。可以通过note pad++进行转码，这样子Windows和Linux都通用了。也可以通过dos2unix命令进行转码后在Linux中使用。或者先由Linux创建文件再由Windows编辑。</p>
+</li>
+<li><p>NDK尽量不要使用太新的版本，一般使用Android-9即可。新版本会出现不兼容的问题，比如LOG2的问题等等。</p>
+</li>
+</ol>
+<p>2）将编写好的shell脚本放在解压后的ffmpeg-2.6.9文件夹中。</p>
+<pre><code>然后ffmpeg-2.6.9文件给权限
+chmod 777 -R ffmpeg-2.6.9
+</code></pre><p>3) cd进入ffmpeg-2.6.9文件夹中</p>
+<pre><code>执行 ./android_build.sh
+</code></pre><p>如果出现问题bad interpreter : No such file or directory,需要将文件转成Linux编码格式<br>有两种方式：</p>
+<pre><code>1，在Linux下创建这个文件touch android_build.sh，从Linux传出到桌面把脚本命令拷入这个文件中，在上传上Linux中去给权限就可以啦
+
+2，使用 dos2unix android_build.sh 转成Linux编码格式
+</code></pre>
       
     </div>
 
