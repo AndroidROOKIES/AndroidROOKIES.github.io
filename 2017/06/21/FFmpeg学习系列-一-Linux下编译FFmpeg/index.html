@@ -103,7 +103,9 @@ Linux下编译FFmpeg步骤1.如果不是Linux操作系统，需要购买阿里�
 点击XShell客户端 文件-&amp;g">
 <meta property="og:image" content="http://oph0qv0je.bkt.clouddn.com/linux_ndk.png">
 <meta property="og:image" content="http://oph0qv0je.bkt.clouddn.com/linux_ndk2.png">
-<meta property="og:updated_time" content="2017-06-22T02:49:40.641Z">
+<meta property="og:image" content="http://oph0qv0je.bkt.clouddn.com/ffmpeg_so.png">
+<meta property="og:image" content="http://oph0qv0je.bkt.clouddn.com/ffmpeg_so2.png">
+<meta property="og:updated_time" content="2017-06-22T06:58:28.914Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="FFmpeg学习系列(一)Linux下编译FFmpeg">
 <meta name="twitter:description" content="在android中进行FFmpeg开发时，我们需要用到编译好的.so库，这些.so需要在Linux环境下进行编译。
@@ -429,6 +431,7 @@ export PATH=$NDKROOT:$PATH
 </code></pre><p>然后执行解压缩命令：</p>
 <pre><code>unzip ffmpeg-2.6.9.zip
 </code></pre><p><strong>7.编译FFmpeg</strong></p>
+<p>我们需要编写shell脚本传参调用ffmpeg-2.6.9下的configure脚本进行编译。</p>
 <p>1）编写shell脚本文件build_android.sh：</p>
 <pre><code>#!/bin/bash
 make clean
@@ -481,7 +484,26 @@ chmod 777 -R ffmpeg-2.6.9
 <pre><code>1，在Linux下创建这个文件touch android_build.sh，从Linux传出到桌面把脚本命令拷入这个文件中，在上传上Linux中去给权限就可以啦
 
 2，使用 dos2unix android_build.sh 转成Linux编码格式
-</code></pre>
+</code></pre><p><strong>8.编译完成之后生成如下动态库：</strong></p>
+<p><img src="http://oph0qv0je.bkt.clouddn.com/ffmpeg_so.png" alt=""></p>
+<p>我们可以看到生成的有.56,.5之类的库，对于这种库android很难加载到，因此要把这个名字加载到前面，以.so结尾，因此，我们需要修改configure文件。</p>
+<p><strong>9.修改configure文件</strong></p>
+<p>ffmpeg-2.6.9根目录下有个configure文件，这个文件比较重要。我们自己写的脚本文件就是依据这个文件来写的。</p>
+<p>这里我们需要修改一下输出的动态库的命名规则：</p>
+<pre><code>#修改前
+#SLIBNAME_WITH_MAJOR=&apos;$(SLIBNAME).$(LIBMAJOR)&apos;
+#LIB_INSTALL_EXTRA_CMD=&apos;$$(RANLIB) &quot;$(LIBDIR)/$(LIBNAME)&quot;&apos;
+#SLIB_INSTALL_NAME=&apos;$(SLIBNAME_WITH_VERSION)&apos;
+#SLIB_INSTALL_LINKS=&apos;$(SLIBNAME_WITH_MAJOR) $(SLIBNAME)&apos;
+#修改后
+SLIBNAME_WITH_MAJOR=&apos;$(SLIBPREF)$(FULLNAME)-$(LIBMAJOR)$(SLIBSUF)&apos;
+LIB_INSTALL_EXTRA_CMD=&apos;$$(RANLIB)&quot;$(LIBDIR)/$(LIBNAME)&quot;&apos;
+SLIB_INSTALL_NAME=&apos;$(SLIBNAME_WITH_MAJOR)&apos;
+SLIB_INSTALL_LINKS=&apos;$(SLIBNAME)&apos;
+</code></pre><p>然后进行重新编译，生成动态库如下：</p>
+<p><img src="http://oph0qv0je.bkt.clouddn.com/ffmpeg_so2.png" alt=""></p>
+<p>我们就可以在我们的android项目中应用这些库啦。</p>
+
       
     </div>
 
