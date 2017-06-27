@@ -270,6 +270,564 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/14/c语言学习系列-一-基本数据类型/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Feng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Feng's Notes">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/04/14/c语言学习系列-一-基本数据类型/" itemprop="url">
+                  c语言学习系列(一)基本数据类型
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-14T11:18:29+08:00">
+                2017-04-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/c语言/" itemprop="url" rel="index">
+                    <span itemprop="name">c语言</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>最近在学习c语言 ， 所以就跟着动脑学院的视频课程来进行一个简单的学习 ， 下面贴出自己在视频中学习的代码用于记录学习的过程 ：</p>
+<pre><code>#define _CRT_SECURE_NO_WARNINGS //宏定义
+//引入头文件，相当于Java的导包
+//只有函数的声明，编译时会去找到函数的实现
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;Windows.h&gt;
+
+
+/*
+void main(){
+    printf(&quot;hello world\n&quot;);    
+    system(&quot;pause&quot;);
+}
+*/
+//1.基本数据类型
+//int short long float double char
+/*
+占位符
+int %d
+short %d
+long %ld
+float %f
+double %lf
+char %c
+%x 十六进制
+%o 八进制
+%s 字符串
+*/
+/*
+void main(){
+    int i = 1;
+    printf(&quot;%d\n&quot;,i);
+
+    float f = 23.3;
+    printf(&quot;%f\n&quot;,f);
+
+    //基本数据类型所占的字节数
+    printf(&quot;int占%d字节\n&quot;,sizeof(int));
+    printf(&quot;char占%d字节\n&quot;, sizeof(char));
+    printf(&quot;float占%d字节\n&quot;, sizeof(float));
+
+    //循环(以下为标准格式，否则在不同的开发平台有的编译不通过，例如在window下可以编译通过在linux下就可能编译不通过)
+    int n = 0;
+    for (; n &lt; 10; n++){
+        printf(&quot;%d\n&quot;,n);
+    }
+
+    //等待输入
+    system(&quot;pause&quot;);
+}
+*/
+
+//2.输入输出函数
+/*
+void main(){
+    int i;
+    printf(&quot;请输入一个整数：&quot;);
+    //赋值
+    scanf(&quot;%d&quot;,&amp;i);  //控制台输入，&amp;表示取地址符
+    //打印
+    printf(&quot;i的值为：%d\n&quot;,i);
+
+    system(&quot;pause&quot;);
+}
+*/
+
+//指针
+//指针存储的是变量的内存地址
+//内存地址：系统给数据分配的编号（相当于门牌号）
+/*void main(){
+    int i = 90;
+    //指针变量，创建一个int类型的指针(可以写成int* p,也可以写成int *p)，指针的值只能是变量的内存地址
+    int* p = &amp;i; //p的值就是i这个变量的内存地址
+    printf(&quot;%#x\n&quot;,p);
+
+    float f = 89.5f;
+    //创建一个float类型的指针
+    float *fp = &amp;f;
+    printf(&quot;%#x\n&quot;, fp);
+
+    system(&quot;pause&quot;);
+}*/
+
+/*
+void change(int* p){
+    *p = 300;
+}
+
+//变量名，对内存空间上的一段数据的抽象
+void main(){
+    int i = 90;
+    //i = 89;
+    //创建一个int类型的指针
+    int *p = &amp;i;
+    //输出地址
+    printf(&quot;p的地址：%#x\n&quot;,&amp;p);
+    printf(&quot;i的地址：%#x\n&quot;,&amp;i);
+
+    printf(&quot;i的值为：%d\n&quot;, i);
+    //间接赋值 i = 200;
+
+    //对p存的地址指向的变量进行操作
+    //*p = 200;
+    //change(p);
+    change(&amp;i);  // int *p = &amp;i;
+    printf(&quot;i的值为：%d\n&quot;,i);
+
+    system(&quot;pause&quot;);
+}
+*/
+
+void main(){
+    int time = 600;
+    printf(&quot;time:%#x\n&quot;,&amp;time);
+    while (time &gt; 0){
+        time--;
+        printf(&quot;游戏时间剩余%d秒\n&quot;,time);
+        //睡眠
+        Sleep(1000);
+    }
+    system(&quot;pause&quot;);
+}
+</code></pre><p>##关于c中数组的定义</p>
+<p>c中定义数组，例如：int ids[] = { 78, 90, 23, 65, 19 };</p>
+<p>java中定义数组有两种方式：int ids[] = { 78, 90, 23, 65, 19 }，或者int[] ids = { 78, 90, 23, 65, 19 };</p>
+<h1 id="指针"><a href="#指针" class="headerlink" title="指针"></a>指针</h1><pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;Windows.h&gt;
+#include &lt;math.h&gt;
+#include &lt;time.h&gt;
+
+//1.指针为什么要有类型？
+//指针有类型，地址没有类型
+//地址只是开始的位置，类型表示读取到什么位置结束
+/*
+void main(){
+    int i = 89;
+    //int 类型的指针
+    int *p = &amp;i;
+    double j = 78.9;
+    //赋值为double类型变量的地址
+    p = &amp;j;
+    printf(&quot;double size:%d\n&quot;, sizeof(double));
+    printf(&quot;%#x,%lf\n&quot;,p,*p); //想通过4字节读取8字节变量的值，是不行的    
+
+    getchar();
+}
+*/
+
+//2.NULL空指针
+/*
+void main(){
+    int i = 9;
+    int *p = NULL;
+    //p = &amp;i;
+
+    //空指针的默认值为0
+    printf(&quot;%#x\n&quot;,p);
+    //访问内存地址0x000000操作系统不允许
+    //p = 100; //操作系统不允许访问
+    printf(&quot;%d\n&quot;,*p);
+    getchar();
+}
+*/
+
+//3.多级指针（二级指针）
+//指针保存的是变量的地址，保存的这个变量还可以是一个指针变量
+//动态内存分配给二维数组
+/*
+void main(){
+    int a = 50;
+    //p1上保存的a的地址
+    int* p1 = &amp;a;
+
+    //p2上保存的p1的地址
+    int** p2 = &amp;p1;
+
+    //int*** p3 = &amp;p2;
+
+    printf(&quot;p1:%#x,p2:%#x\n&quot;,p1,p2);
+    **p2 = 90;
+
+    printf(&quot;%d\n&quot;,a);
+
+    getchar();
+}
+*/
+
+//4.指针的运算
+//指针的运算，一般在数组遍历时才有意义，基于数组在内存中线性排列的方式
+/*
+void main(){
+    //数组在内存中连续存储
+    int ids[] = { 78, 90, 23, 65, 19 };
+    //数组变量名：ids就是数组的首地址，下面三个输出结果是一样的
+    printf(&quot;%#x\n&quot;,ids);
+    printf(&quot;%#x\n&quot;,&amp;ids);
+    printf(&quot;%#x\n&quot;,&amp;ids[0]);
+    //指针变量
+    int *p = ids;
+    printf(&quot;%d\n&quot;,*p);
+    //指针的加法
+    p++; //p++向前移动sizeof(数据类型)个字节
+    printf(&quot;p的值:%#x\n&quot;, p);
+    //p--;
+    printf(&quot;%d\n&quot;, *p);
+    getchar();
+}
+*/
+//5.通过指针给数组赋值
+/*
+void main(){
+    int uids[5];
+    //高级写法
+    //int i = 0;
+    //for (; i &lt; 5; i++){
+    //    uids[i] = i;
+    //}
+    //早些版本的写法
+    int* p = uids;
+    printf(&quot;%#x\n&quot;,p);
+    int i = 0; //i是数组元素的值
+    for (; p &lt; uids + 5; p++){
+        *p = i;
+        i++;
+    }
+
+    getchar();
+}
+*/
+</code></pre><h1 id="动态内存分配"><a href="#动态内存分配" class="headerlink" title="动态内存分配"></a>动态内存分配</h1><p>关于动态内存分配的函数介绍：</p>
+<p>Malloc()函数是在内存的动态存储区中分配一个长度为size字节的连续空间。其参数是一个无符号整型数，返回一个指向所分配的连续存储域的起始地址的指针。当函数未能成功分配存储空间时（如内存不足）则返回一个NULL指针。</p>
+<pre><code>#define _CRT_SECURE_NO_WARNINGS
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;Windows.h&gt;
+
+//动态内存分配
+/*
+void main(){
+    //40M
+    //stack overflow错误，栈溢出
+    //静态内存分配
+    int a[1024 * 1024 * 10];
+    //栈内存
+
+    //C语言内存分配：
+    //1.栈区(stack)
+    //windows下，栈内存分配2M（确定的常数），超出了限制，提示stack overflow错误
+    //栈内存自动分配，自动释放
+    //2.堆区(heap)
+    //程序员手动分配释放，占有操作系统80%内存
+    //3.全局区或静态区
+    //4.字符常量区
+    //5.程序代码区
+
+    getchar();
+}
+*/
+
+/*
+//栈内存
+void stackFun(){
+    int a[1024];
+    //栈内存自动释放
+}
+
+//堆内存
+void heapFun(){
+    //40M内存
+    //字节
+    //void *任意类型的指针
+    int* p = malloc(1024 * 1024 * 10 * sizeof(int));
+
+    //释放
+    free(p);
+}
+
+void main(){    
+    //在堆内存上，分配40M的内存
+    while (1){
+        Sleep(1000);    
+        stackFun();
+    }
+
+    getchar();
+}
+*/
+
+//创建一个数组，动态指定数组的大小
+//（在程序运行过程中，可以随意的开辟指定大小的内存，以供使用，相当于Java中的集合）
+//静态内存分配，分配内存的大小是事先固定好的，因此容易造成两个问题：1.很容易超出栈内存的最大值 2.为了防止内存不够用会开辟更多的内存，容易浪费内存
+//动态内存分配，在程序运行过程中，动态指定需要使用的内存大小，手动释放，释放之后这些内存还可以被重新使用（活水）
+/*
+void main(){
+    //静态内存分配创建数组，数组的大小是固定的
+    //int i = 10;
+    //int a[i];
+
+    //动态内存分配，自己手动输入内存大小
+    int len;
+    printf(&quot;输入数组的长度：&quot;);
+    scanf(&quot;%d&quot;,&amp;len);
+
+    //开辟内存，大小len*4字节
+    int* p = malloc(len * sizeof(int));
+    //p是数组的首地址，p就是数组的名称
+    //给数组元素赋值（使用这一块刚刚开辟出来的内存区域）
+    int i = 0;
+    for (; i &lt; len - 1; i++){
+        p[i] = rand() % 100;
+        printf(&quot;%d,%#x\n&quot;, p[i], &amp;p[i]);
+    }
+
+    //手动释放内存
+    free(p);
+
+    getchar();
+}
+*/
+
+//realloc 重新分配内存
+/*
+void main(){
+    int len;
+    printf(&quot;第一次输入数组的长度：&quot;);
+    scanf(&quot;%d&quot;, &amp;len);
+
+    //malloc与calloc都可以开辟内存
+    //int* p = malloc(len * sizeof(int));    
+    int* p = calloc(len, sizeof(int));
+    int i = 0;
+    for (; i &lt; len; i++){
+        p[i] = rand() % 100;
+        printf(&quot;%d,%#x\n&quot;, p[i], &amp;p[i]);
+    }
+
+    int addLen;
+    printf(&quot;输入数组增加的长度：&quot;);
+    scanf(&quot;%d&quot;, &amp;addLen);
+    //realloc（扩大或缩小内存）内存不够用，扩大刚刚分配的内存空间，需要传递下面两个参数
+    //1.原来内存的指针 2.内存扩大之后的总大小        
+    int* p2 = realloc(p, sizeof(int) * (len + addLen));
+    if (p2 == NULL){
+        printf(&quot;重新分配失败，世界那么大，容不下我。。。&quot;);
+    }
+    //重新分配内存的两种情况：
+    //缩小，缩小的那一部分数据会丢失
+    //扩大（扩大后的内存必须是连续的），有下面三种情况：
+    //1.如果当前内存段后面有需要的内存空间，直接扩展这段内存空间，realloc返回原指针（相同的内存地址）
+    //2.如果当前内存段后面的空闲字节不够，那么就使用堆中的第一个能够满足这一要求的内存块，将目前的数据复制到新的位置，并将原来的数据块释放掉，返回新的内存地址
+    //3.如果申请失败，返回NULL，原来的指针仍然有效
+
+    //重新赋值
+    i = 0;
+    printf(&quot;--------------------------\n&quot;);
+    for (; i &lt; len + addLen; i++){
+        p2[i] = rand() % 200;
+        printf(&quot;%d,%#x\n&quot;, p2[i], &amp;p2[i]);
+    }
+
+    //手动释放内存
+    if (p != NULL){
+        free(p);
+        p = NULL;
+    }    
+    if (p2 != NULL){
+        free(p2);
+        p2 = NULL;
+    }
+
+    getchar();
+}
+*/
+
+//内存分配的几个注意细节
+//1.不能多次释放（否则会产生中断）
+//2.释放完之后（指针仍然有值），给指针置NULL，标志释放完成
+//3.内存泄露（p重新赋值之后，再free，并没有真正释放内存（之前的内存））
+/*
+void main(){
+    int len;
+    printf(&quot;输入数组的长度：&quot;);
+    scanf(&quot;%d&quot;, &amp;len);
+
+    int* p = malloc(len * sizeof(int));        
+    int i = 0;
+    for (; i &lt; len; i++){
+        p[i] = rand() % 100;
+        printf(&quot;%d,%#x\n&quot;, p[i], &amp;p[i]);
+    }
+
+    if (p != NULL){
+        free(p);
+        p = NULL;
+    }
+
+    getchar();
+}
+*/
+
+//内存泄漏的例子,p1重新赋值之后，再free，并没有真正释放内存，容易造成内存泄漏，所以在重新赋值之前要先free，如下：
+void main(){
+    //40M
+    int* p1 = malloc(1024 * 1024 * 10 * sizeof(int));
+    free(p1);
+    p1 = NULL;
+    printf(&quot;%#x\n&quot;,p1);
+
+    //80M
+    p1 = malloc(1024 * 1024 * 10 * sizeof(int) * 2);
+
+    free(p1);
+    p1 = NULL;
+
+    getchar();
+}
+</code></pre>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/11/记一次Java关于金额计算的问题/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -787,7 +1345,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-count">24</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
