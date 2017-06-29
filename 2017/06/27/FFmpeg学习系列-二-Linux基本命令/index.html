@@ -123,7 +123,7 @@ cp src.txt dest.txt
 cp -i src.txt dest.txt 询问
 cp src.txt . 复制到当前目录
 cp -R 目录 dest 复制整个目录到指定路径">
-<meta property="og:updated_time" content="2017-06-27T06:14:20.774Z">
+<meta property="og:updated_time" content="2017-06-29T06:03:35.428Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="FFmpeg学习系列(二)Linux基本命令">
 <meta name="twitter:description" content="Linux相关命令清空命令行：reset
@@ -442,6 +442,12 @@ sudo apt remove vim
 </code></pre><p>创建用户</p>
 <pre><code>useradd -m jack 创建用户的同时，创建了home目录
 userdel -r jack 删除用户
+</code></pre><p>切换用户 </p>
+<pre><code>su jack
+</code></pre><p>修改用户密码</p>
+<pre><code>sudo passwd 123456abc
+</code></pre><p>退出</p>
+<pre><code>exit
 </code></pre><p>创建组</p>
 <pre><code>groupadd androidgroup
 </code></pre><p>分配用户到组</p>
@@ -473,12 +479,26 @@ rwx         111         7
 <pre><code>创建出来的权限就是 777 - 022 = 755权限
 umask 022（默认是026）
 </code></pre><p>改变文件的所属</p>
-<pre><code>更改用户
+<pre><code>更改用户，使file文件在user用户下
 chown user file
 更改用户组
 chown user.group file
 chown .group file
-</code></pre>
+</code></pre><p>每一个用户的Hmoe目录都会有bash、bashrc文件，bash、bashrc是每一个用户登录的时候会加载的文件，里面配置的是全局的配置，例如环境变量。</p>
+<h2 id="vim的使用"><a href="#vim的使用" class="headerlink" title="vim的使用"></a>vim的使用</h2><p>vim有两种模式，命令模式、插入模式</p>
+<p><strong>命令模式中的一些基本操作：</strong></p>
+<ol>
+<li>删除一行：dd ， 删除一个字符x</li>
+<li>撤销：u，重做：ctrl+r</li>
+<li>进入插入模式：i</li>
+<li>翻页：ctrl + f（上一页） ctrl + b（下一页）</li>
+<li>复制行：yy , 粘贴：p</li>
+<li>文本搜索： ?正则enter 搜索n或者N控制方向</li>
+<li>保存： :w</li>
+<li>保存退出： :wq</li>
+<li>不保存强制退出： q!</li>
+</ol>
+
       
     </div>
 
@@ -653,7 +673,7 @@ chown .group file
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux相关命令"><span class="nav-number">1.</span> <span class="nav-text">Linux相关命令</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux相关命令"><span class="nav-number">1.</span> <span class="nav-text">Linux相关命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vim的使用"><span class="nav-number">2.</span> <span class="nav-text">vim的使用</span></a></li></ol></div>
             
 
           </div>
