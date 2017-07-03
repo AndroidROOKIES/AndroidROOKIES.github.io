@@ -270,6 +270,309 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/15/JNI系列-六-Eclipse下NDK开发/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Feng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Feng's Notes">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/05/15/JNI系列-六-Eclipse下NDK开发/" itemprop="url">
+                  JNI系列(六)Eclipse下NDK开发
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-15T14:00:21+08:00">
+                2017-05-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JNI/" itemprop="url" rel="index">
+                    <span itemprop="name">JNI</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Eclipse-NDK开发流程"><a href="#Eclipse-NDK开发流程" class="headerlink" title="Eclipse NDK开发流程"></a>Eclipse NDK开发流程</h2><ol>
+<li>编写Java层Native方法</li>
+<li>javah命令生成头文件</li>
+<li>创建jni目录</li>
+<li>配置NDK路径，添加本地支持add native support，配置ADT需要包含的头文件</li>
+<li>实现头文件中定义的函数</li>
+<li>编译生成.so动态库</li>
+<li>加载动态库</li>
+</ol>
+<p>下面以文件加密解密的app为例：</p>
+<h3 id="编写Java层Native方法："><a href="#编写Java层Native方法：" class="headerlink" title="编写Java层Native方法："></a>编写Java层Native方法：</h3><p>创建Cryptor类，实现两个native方法，加密，解密</p>
+<pre><code>package com.dongnaoedu.ndkfilecrypt;
+
+public class Cryptor {
+
+
+    public native static void crypt(String normal_path, String crypt_path);
+
+
+    public native static void decrypt(String crypt_path, String decrypt_path);
+
+    static{
+        System.loadLibrary(&quot;ndk_file_crypt&quot;);
+    }
+}
+</code></pre><h3 id="javah命令生成头文件"><a href="#javah命令生成头文件" class="headerlink" title="javah命令生成头文件"></a>javah命令生成头文件</h3><p>在命令行下，通过cd命令转到工程的src目录，执行以下命令生成头文件：</p>
+<pre><code>javah 完整类名
+</code></pre><h3 id="创建jni目录"><a href="#创建jni目录" class="headerlink" title="创建jni目录"></a>创建jni目录</h3><p>在Eclipse的项目中创建jni文件，把生成的头文件放入jni中</p>
+<h3 id="配置NDK路径，添加本地支持add-native-support，配置ADT需要包含的头文件"><a href="#配置NDK路径，添加本地支持add-native-support，配置ADT需要包含的头文件" class="headerlink" title="配置NDK路径，添加本地支持add native support，配置ADT需要包含的头文件"></a>配置NDK路径，添加本地支持add native support，配置ADT需要包含的头文件</h3><p>首先，需要设置NDK的路径：</p>
+<p>Window-&gt;Preferences-&gt;Android-&gt;NDK:</p>
+<p><img src="http://oph0qv0je.bkt.clouddn.com/eclipse-ndk.png" alt=""></p>
+<p>如果出现“Not a valid NDK directory”，则在你安装的ndk的主目录下创建一个ndk-build空文件，然后重新打开对话框选择就可以了。</p>
+<p><img src="http://oph0qv0je.bkt.clouddn.com/ndk.png" alt=""></p>
+<p>添加Add Native Support:</p>
+<p>选择项目，点击右键，Android Tools-&gt;Add Native Support弹出下面的界面，输入lib的名字，前缀系统默认为lib</p>
+<p><img src="http://oph0qv0je.bkt.clouddn.com/ndk2.png" alt=""></p>
+<p>在工程目录会生成下面的一些文件</p>
+<p><img src="http://oph0qv0je.bkt.clouddn.com/ndk3.png" alt=""></p>
+<p>我们可以把.cpp改成.c(c语言文件，cpp为c++,也可不修改)，修改的话就是用c语言来写，不修改就是c++,如果修改的话，Android.mk文件中也要修改LOCAL_SRC_FILES := crypt.c</p>
+<p>其中Application.mk是我们自己添加的，用于指定输出什么架构的so动态库文件，Application.mk如下：</p>
+<pre><code># armeabi armeabi-v7a arm64-v8a mips mips64 x86 x86_64
+APP_ABI := armeabi armeabi-v7a
+APP_PLATFORM := android-8
+</code></pre><p>配置ADT中需要包含的NDK头文件：右击工程–&gt;属性–&gt;C/C++常规–&gt;路径和符号，添加NDK的以下目录：</p>
+<pre><code>E:\eclipse\android-ndk-r14b\toolchains\arm-linux-androideabi-4.9\prebuilt\windows-x86_64\lib\gcc\arm-linux-androideabi\4.9.x\include
+
+E:\eclipse\android-ndk-r14b\toolchains\arm-linux-androideabi-4.9\prebuilt\windows-x86_64\lib\gcc\arm-linux-androideabi\4.9.x\include-fixed
+
+E:\eclipse\android-ndk-r14b\platforms\android-18\arch-arm\usr\include
+</code></pre><p><img src="http://oph0qv0je.bkt.clouddn.com/ndk4.png" alt=""></p>
+<p>配置后如下：</p>
+<p><img src="http://oph0qv0je.bkt.clouddn.com/ndk5.png" alt=""></p>
+<h3 id="实现头文件中定义的函数"><a href="#实现头文件中定义的函数" class="headerlink" title="实现头文件中定义的函数"></a>实现头文件中定义的函数</h3><p>在crpty.c中实现函数：</p>
+<pre><code>#include &quot;com_example_firstndk_Cryptor.h&quot;
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+char password[] = &quot;love you&quot;;
+
+//加密
+JNIEXPORT void JNICALL Java_com_example_firstndk_Cryptor_crypt
+  (JNIEnv *env, jclass jcls, jstring normal_path_jstr, jstring crypt_path_jstr){
+
+    //jstring -&gt; char*
+        const char* normal_path = (*env)-&gt;GetStringUTFChars(env,normal_path_jstr,JNI_FALSE);
+        const char* crypt_path = (*env)-&gt;GetStringUTFChars(env,crypt_path_jstr,JNI_FALSE);
+
+        //打开文件
+        FILE *normal_fp = fopen(normal_path, &quot;rb&quot;);
+        FILE *crypt_fp = fopen(crypt_path, &quot;wb&quot;);
+        //一次读取一个字符
+        int ch;
+        int i = 0; //循环使用密码中的字母进行异或运算
+        int pwd_len = strlen(password); //密码的长度
+        while ((ch = fgetc(normal_fp)) != EOF) { //End of File
+            //写入（异或运算）
+            fputc(ch ^ password[i % pwd_len], crypt_fp);
+            i++;
+        }
+        //关闭
+        fclose(crypt_fp);
+        fclose(normal_fp);
+}
+
+//解密
+JNIEXPORT void JNICALL Java_com_example_firstndk_Cryptor_decrypt
+  (JNIEnv *env, jclass jcls, jstring crypt_path_jstr, jstring decrypt_path_jstr){
+
+        const char* crypt_path = (*env)-&gt;GetStringUTFChars(env,crypt_path_jstr,JNI_FALSE);
+        const char* decrypt_path = (*env)-&gt;GetStringUTFChars(env,decrypt_path_jstr,JNI_FALSE);
+
+        //打开文件
+        FILE *normal_fp = fopen(crypt_path, &quot;rb&quot;);
+        FILE *crypt_fp = fopen(decrypt_path, &quot;wb&quot;);
+        //一次读取一个字符
+        int ch;
+        int i = 0; //循环使用密码中的字母进行异或运算
+        int pwd_len = strlen(password); //密码的长度
+        while ((ch = fgetc(normal_fp)) != EOF) { //End of File
+            //写入（异或运算）
+            fputc(ch ^ password[i % pwd_len], crypt_fp);
+            i++;
+        }
+        //关闭
+        fclose(crypt_fp);
+        fclose(normal_fp);
+
+}
+</code></pre><h3 id="编译生成-so动态库"><a href="#编译生成-so动态库" class="headerlink" title="编译生成.so动态库"></a>编译生成.so动态库</h3><p>直接make project（Build Project）一下即可。</p>
+<h3 id="加载动态库"><a href="#加载动态库" class="headerlink" title="加载动态库"></a>加载动态库</h3><p>通过System.loadLibrary方法加载.so动态库文件，不用写lib前缀，系统会默认添加。</p>
+<pre><code>package com.example.firstndk;
+
+public class Cryptor {
+    public native static void crypt(String normal_path, String crypt_path);
+    public native static void decrypt(String crypt_path, String decrypt_path);
+
+    static{
+        System.loadLibrary(&quot;crypt&quot;);
+    }
+}
+</code></pre><p>接下来，我们就需要写android代码来测试调用我们的动态库啦，书写两个按钮，在按钮点击时分别调用加密和解密功能，记得添加SD卡读写权限。</p>
+<pre><code>package com.example.firstndk;
+
+import java.io.File;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+
+public class MainActivity extends Activity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+    }
+
+    public void mCrypt(View v) {
+        String normal_path = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separatorChar
+                + &quot;liuyan.png&quot;;
+        String crypt_path = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separatorChar
+                + &quot;liuyan_crypt.png&quot;;
+        Cryptor.crypt(normal_path, crypt_path);
+        Log.d(&quot;isen&quot;, &quot;加密完成&quot;);
+    }
+
+    public void mDecrypt(View v) {
+        String crypt_path = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separatorChar
+                + &quot;liuyan_crypt.png&quot;;
+        String decrypt_path = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separatorChar
+                + &quot;liuyan_decrypt.png&quot;;
+        Cryptor.decrypt(crypt_path, decrypt_path);
+        Log.d(&quot;isen&quot;, &quot;解密完成&quot;);
+    }
+
+}
+</code></pre><p>如果要适配所有平台，需要修改Application.mk为：</p>
+<pre><code>APP_ABI := armeabi armeabi-v7a arm64-v8a mips mips64 x86 x86_64
+</code></pre>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/15/JNI系列-五-JNI缓存策略/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2984,179 +3287,6 @@ void main(void){
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/17/自定义view基础知识/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Feng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/uploads/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Feng's Notes">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/04/17/自定义view基础知识/" itemprop="url">
-                  自定义view基础知识
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-17T16:32:11+08:00">
-                2017-04-17
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/android/" itemprop="url" rel="index">
-                    <span itemprop="name">android</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>关于自定义组件有三种定义方式：</p>
-<ol>
-<li>完全自己自定义去写，组件类继承View;</li>
-<li>从已经有的组件扩展；</li>
-<li>将多个组件组合成一个组件；</li>
-</ol>
-<p>首先看一下继承自View的组件类的实现：</p>
-<pre><code>public class MyView extends View{
-
-    public MyView(Context context) {
-        super(context);
-    }
-
-    public MyView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
-
-    public MyView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-    }
-
-    @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-    }
-
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-    }
-
-}
-</code></pre><p>需要重写两个方法和三个构造方法，对于三个构造方法的调用场景是不一样的，第一个只有一个参数，在代码中创建组件时会调用该构造方法，比如创建一个按钮：TextView tv = new TextView(this)，this 是指当前的 Activity，Activity 是 Context 的子类。第二个方法在 layout 布局文件中使用时调用，参数 attrs 表示当前配置中的属性集合，例如在要 layout.xml 中定义一个TextView：<textview android:layout_width="match_parent" android:layout_height="wrap_co-ntent" android:text="hello">，Android 会调用第二个构造方法 Inflate 出 TextView 对象。而第三个构造方法是不会自动调用的，当我们在 Theme 中定义了 Style 属性时通常在第二个构造方法中手动调用。</textview></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -3206,7 +3336,7 @@ void main(void){
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-count">25</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

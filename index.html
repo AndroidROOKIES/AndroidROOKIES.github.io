@@ -270,6 +270,363 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/03/FFmpeg学习系列-三-Linux之shell脚本/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Feng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Feng's Notes">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/07/03/FFmpeg学习系列-三-Linux之shell脚本/" itemprop="url">
+                  FFmpeg学习系列(三)Linux之shell脚本
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-03T10:00:41+08:00">
+                2017-07-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/FFmpeg/" itemprop="url" rel="index">
+                    <span itemprop="name">FFmpeg</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="shell脚本"><a href="#shell脚本" class="headerlink" title="shell脚本"></a>shell脚本</h2><p>为什么使用shell脚本？</p>
+<p>当命令比较复杂的时候，就需要专门写一个脚本文件。</p>
+<p>脚本举例：</p>
+<pre><code>#下面两个是命令可直接执行
+date
+who
+
+#!/bin/bash
+#创建变量，如果是字符串的话，有空格的一定要用双引号，否则会被解析成命令                                                                 
+NDK=10
+text=&quot;i love shell&quot;
+
+#命令的执行结果的输出作为变量的值，其中下面的 ` 是键盘中英文状态下的ESC下面那个键
+text1=`date`
+text2=$(who)
+
+echo $NDK
+echo $text
+#字符串拼接，同理：有空格需要用双引号
+echo &quot;$text very much&quot;
+#\转义字符
+echo &quot;\$NDK&quot;
+echo $text1
+echo $text2
+</code></pre><h2 id="输入输出重定向"><a href="#输入输出重定向" class="headerlink" title="输入输出重定向"></a>输入输出重定向</h2><p>输出重定向:</p>
+<pre><code>命令的执行结果输出到test.txt文件，不再输出到屏幕上
+ls -al &gt; test.txt
+</code></pre><p><img src="http://oph0qv0je.bkt.clouddn.com/shell1.png" alt=""></p>
+<p>输入重定向:</p>
+<pre><code>wc命令是输出test.txt文本中的行数，单词数，字节数,显示在屏幕上
+wc &lt; test.txt
+</code></pre><p><img src="http://oph0qv0je.bkt.clouddn.com/shell2.png" alt=""></p>
+<p>wc命令在命令行中的使用</p>
+<pre><code>wc &lt;&lt; EOF 然后输入一些文本，最后输入一个EOF结束
+</code></pre><h2 id="基本运算"><a href="#基本运算" class="headerlink" title="基本运算"></a>基本运算</h2><pre><code>#1、使用命令，输出的结果作为c的值
+#注意除号左右两边要有空格
+c=$(expr $b / $a)
+#2、使用方括号运算符代替expr命令
+d=$[$b/$a]
+
+echo &quot;c:$c&quot;
+echo &quot;d:$d&quot;
+</code></pre><h3 id="浮点数的处理"><a href="#浮点数的处理" class="headerlink" title="浮点数的处理"></a>浮点数的处理</h3><p>基本运算不支持浮点数，为了支持浮点数，需要用bc命令：</p>
+<pre><code>a=10
+e=$(echo &quot;scale=4; $a / 3&quot; | bc)
+echo &quot;e:$e&quot;
+</code></pre><p>其中|是管道的意思，一个命令的输出作为另外一个命令的输入。</p>
+<p>scale是自带的内建变量:</p>
+<pre><code>#内联输入重定向，多次运算的时候
+f=$(bc &lt;&lt; EOF
+scale=4
+a1=($a * $b)
+a1 / 3
+EOF
+)
+</code></pre><h2 id="命令执行退出的状态："><a href="#命令执行退出的状态：" class="headerlink" title="命令执行退出的状态："></a>命令执行退出的状态：</h2><pre><code>0 成功
+127 没有找到命令
+1 未知错误
+126 命令不可执行
+</code></pre><p>查看与退出状态指定：</p>
+<pre><code>查看上一次命令的执行状态
+echo $?
+
+在shell脚本中，自己指定退出的状态
+exit 状态码
+</code></pre><h2 id="if语句"><a href="#if语句" class="headerlink" title="if语句"></a>if语句</h2><p>只有if命令的退出状态码为0，才会执行then部分</p>
+<pre><code>if 命令
+then 
+   命令
+fi
+</code></pre><p>if语句举例：</p>
+<pre><code>#!/bin/bash
+testuser=lady
+#查找passwd里面是否有对应的目录
+if grep $testuser /etc/passwd 
+then
+    echo &quot;ok&quot;
+    ls -a /home/$testuser/
+#如果passwd中没有目录，再判断是否有这个目录
+elif ls -d /home/$testuser
+then
+    echo &quot;用户不存在，主目录仍然存在&quot;
+#其他情况    
+else
+    #可以继续嵌套if
+    #if 
+    #then
+    echo &quot;$testuser not exist&quot;
+fi
+</code></pre><p>grep命令是查找命令</p>
+<p>可以结合test命令，如果条件成立，test命令以状态为0退出，if条件成立。</p>
+<p>test命令简单形式，用中括号，注意空格要加上，举例如下：</p>
+<pre><code>#!/bin/bash
+a=10
+b=5
+#test命令简单形式
+if [ $a -gt $b ]
+then
+    echo &quot;$a greater than $b&quot;
+else
+    echo &quot;$a smaller than $b&quot;
+fi
+</code></pre><p><strong>test数值比较：</strong></p>
+<pre><code>-gt
+-eq 等于
+-le 
+-ne 不等于
+</code></pre><p>判空：</p>
+<pre><code>#!/bin/bash
+str1=&quot;&quot;
+if [ str1 = &quot;&quot; ]                                                            
+then
+    echo &quot;有内容&quot;
+else
+    echo &quot;没内容&quot;
+fi
+</code></pre><p><strong>test字符串比较：</strong></p>
+<pre><code>str1 == str2
+str1 != str2
+str1 &lt; str2
+-n str1 长度是否非0
+-z str1 长度是否为0
+</code></pre><p><strong>test文件比较：</strong></p>
+<pre><code>-d 检查是否存在，并且是一个目录
+-e 检查file是否存在
+-f 检查是否存在，并且是一个文件
+-r 检查是否存在，并且可读
+-w、-x
+file1 -nt file2 file1比file2新
+file1 -ot file2 file1比file2旧
+</code></pre><p>举例：</p>
+<pre><code>#!/bin/bash
+mydir=/usr/jason
+#-d检查目录是否存在
+if [ -d $mydir ]
+then
+    echo &quot;$mydir exist&quot;
+    cd $mydir
+    ls
+else
+    echo &quot;mydir not exist&quot;
+fi
+</code></pre><p>多个条件的时候：</p>
+<pre><code>#!/bin/bash
+#多个条件 []
+mydir=/usr/jason/shell
+#任意数学赋值或者比较表达式
+#if (( a++ &gt; 90 ))
+if [ -d $HOME ] &amp;&amp; [ -w $mydir ]
+then
+    cd $mydir
+    touch test5
+else
+    echo &quot;no&quot;
+fi
+</code></pre><h2 id="case命令"><a href="#case命令" class="headerlink" title="case命令"></a>case命令</h2><p>格式：</p>
+<pre><code>case 变量 in
+pattern1) 命令;;
+pattern2) 命令;;
+*) 默认命令;;
+esac
+</code></pre><p>举例：</p>
+<pre><code>#!/bin/bash
+testuser=rose
+
+case $testuser in
+rose)
+    echo &quot;hi,$testuser&quot;;;
+ricky)
+    echo &quot;hello, ricky&quot;;;
+*)
+    echo &quot;defaults&quot;;;
+esac
+</code></pre><h2 id="for循环命令"><a href="#for循环命令" class="headerlink" title="for循环命令"></a>for循环命令</h2><p>格式：</p>
+<pre><code>for var in list
+do
+    命令
+done  
+</code></pre><p>举例1：</p>
+<pre><code>#!/bin/bash
+
+for item in 1 2 3 4 5
+do
+    echo $item
+done
+</code></pre><p>举例2：</p>
+<pre><code>#使用字符串的时候一定要注意转义字符，\#、\&apos;等
+list=&quot;windows--linux--macos&quot;
+#IFS字段分隔符
+IFS=$--
+for item in $list
+do
+    echo $item
+done
+</code></pre><h2 id="while命令"><a href="#while命令" class="headerlink" title="while命令"></a>while命令</h2><p>格式：</p>
+<pre><code>while test command（或者[]）
+do
+    命令
+done
+</code></pre><p>举例：</p>
+<pre><code>#!/bin/bash
+
+a=10
+while [ $a -gt 0 ]
+do
+    echo &quot;num:$a&quot;
+    #赋值不用使用$符号
+    a=$[ $a - 1 ]
+    if [ $a -eq 5 ]
+    then
+        echo &quot;break&quot;
+        break
+    fi
+done
+</code></pre><p><strong>注意：</strong></p>
+<p><strong>编译ffmpeg</strong></p>
+<p><strong>编写shell脚本之前，要执行./configure –disable-yasm，主要目的进行一系列的准备工作，比如说检查gcc的版本，会生成config.mak等文件</strong></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/27/FFmpeg学习系列-二-Linux基本命令/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3828,309 +4185,6 @@ JNIEXPORT void JNICALL Java_com_dongnaoedu_ndkfilepatch_NDKFileUtils_patch
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/15/JNI系列-六-Eclipse下NDK开发/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Feng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/uploads/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Feng's Notes">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/05/15/JNI系列-六-Eclipse下NDK开发/" itemprop="url">
-                  JNI系列(六)Eclipse下NDK开发
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-15T14:00:21+08:00">
-                2017-05-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/JNI/" itemprop="url" rel="index">
-                    <span itemprop="name">JNI</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Eclipse-NDK开发流程"><a href="#Eclipse-NDK开发流程" class="headerlink" title="Eclipse NDK开发流程"></a>Eclipse NDK开发流程</h2><ol>
-<li>编写Java层Native方法</li>
-<li>javah命令生成头文件</li>
-<li>创建jni目录</li>
-<li>配置NDK路径，添加本地支持add native support，配置ADT需要包含的头文件</li>
-<li>实现头文件中定义的函数</li>
-<li>编译生成.so动态库</li>
-<li>加载动态库</li>
-</ol>
-<p>下面以文件加密解密的app为例：</p>
-<h3 id="编写Java层Native方法："><a href="#编写Java层Native方法：" class="headerlink" title="编写Java层Native方法："></a>编写Java层Native方法：</h3><p>创建Cryptor类，实现两个native方法，加密，解密</p>
-<pre><code>package com.dongnaoedu.ndkfilecrypt;
-
-public class Cryptor {
-
-
-    public native static void crypt(String normal_path, String crypt_path);
-
-
-    public native static void decrypt(String crypt_path, String decrypt_path);
-
-    static{
-        System.loadLibrary(&quot;ndk_file_crypt&quot;);
-    }
-}
-</code></pre><h3 id="javah命令生成头文件"><a href="#javah命令生成头文件" class="headerlink" title="javah命令生成头文件"></a>javah命令生成头文件</h3><p>在命令行下，通过cd命令转到工程的src目录，执行以下命令生成头文件：</p>
-<pre><code>javah 完整类名
-</code></pre><h3 id="创建jni目录"><a href="#创建jni目录" class="headerlink" title="创建jni目录"></a>创建jni目录</h3><p>在Eclipse的项目中创建jni文件，把生成的头文件放入jni中</p>
-<h3 id="配置NDK路径，添加本地支持add-native-support，配置ADT需要包含的头文件"><a href="#配置NDK路径，添加本地支持add-native-support，配置ADT需要包含的头文件" class="headerlink" title="配置NDK路径，添加本地支持add native support，配置ADT需要包含的头文件"></a>配置NDK路径，添加本地支持add native support，配置ADT需要包含的头文件</h3><p>首先，需要设置NDK的路径：</p>
-<p>Window-&gt;Preferences-&gt;Android-&gt;NDK:</p>
-<p><img src="http://oph0qv0je.bkt.clouddn.com/eclipse-ndk.png" alt=""></p>
-<p>如果出现“Not a valid NDK directory”，则在你安装的ndk的主目录下创建一个ndk-build空文件，然后重新打开对话框选择就可以了。</p>
-<p><img src="http://oph0qv0je.bkt.clouddn.com/ndk.png" alt=""></p>
-<p>添加Add Native Support:</p>
-<p>选择项目，点击右键，Android Tools-&gt;Add Native Support弹出下面的界面，输入lib的名字，前缀系统默认为lib</p>
-<p><img src="http://oph0qv0je.bkt.clouddn.com/ndk2.png" alt=""></p>
-<p>在工程目录会生成下面的一些文件</p>
-<p><img src="http://oph0qv0je.bkt.clouddn.com/ndk3.png" alt=""></p>
-<p>我们可以把.cpp改成.c(c语言文件，cpp为c++,也可不修改)，修改的话就是用c语言来写，不修改就是c++,如果修改的话，Android.mk文件中也要修改LOCAL_SRC_FILES := crypt.c</p>
-<p>其中Application.mk是我们自己添加的，用于指定输出什么架构的so动态库文件，Application.mk如下：</p>
-<pre><code># armeabi armeabi-v7a arm64-v8a mips mips64 x86 x86_64
-APP_ABI := armeabi armeabi-v7a
-APP_PLATFORM := android-8
-</code></pre><p>配置ADT中需要包含的NDK头文件：右击工程–&gt;属性–&gt;C/C++常规–&gt;路径和符号，添加NDK的以下目录：</p>
-<pre><code>E:\eclipse\android-ndk-r14b\toolchains\arm-linux-androideabi-4.9\prebuilt\windows-x86_64\lib\gcc\arm-linux-androideabi\4.9.x\include
-
-E:\eclipse\android-ndk-r14b\toolchains\arm-linux-androideabi-4.9\prebuilt\windows-x86_64\lib\gcc\arm-linux-androideabi\4.9.x\include-fixed
-
-E:\eclipse\android-ndk-r14b\platforms\android-18\arch-arm\usr\include
-</code></pre><p><img src="http://oph0qv0je.bkt.clouddn.com/ndk4.png" alt=""></p>
-<p>配置后如下：</p>
-<p><img src="http://oph0qv0je.bkt.clouddn.com/ndk5.png" alt=""></p>
-<h3 id="实现头文件中定义的函数"><a href="#实现头文件中定义的函数" class="headerlink" title="实现头文件中定义的函数"></a>实现头文件中定义的函数</h3><p>在crpty.c中实现函数：</p>
-<pre><code>#include &quot;com_example_firstndk_Cryptor.h&quot;
-#include &lt;stdio.h&gt;
-#include &lt;stdlib.h&gt;
-#include &lt;string.h&gt;
-
-char password[] = &quot;love you&quot;;
-
-//加密
-JNIEXPORT void JNICALL Java_com_example_firstndk_Cryptor_crypt
-  (JNIEnv *env, jclass jcls, jstring normal_path_jstr, jstring crypt_path_jstr){
-
-    //jstring -&gt; char*
-        const char* normal_path = (*env)-&gt;GetStringUTFChars(env,normal_path_jstr,JNI_FALSE);
-        const char* crypt_path = (*env)-&gt;GetStringUTFChars(env,crypt_path_jstr,JNI_FALSE);
-
-        //打开文件
-        FILE *normal_fp = fopen(normal_path, &quot;rb&quot;);
-        FILE *crypt_fp = fopen(crypt_path, &quot;wb&quot;);
-        //一次读取一个字符
-        int ch;
-        int i = 0; //循环使用密码中的字母进行异或运算
-        int pwd_len = strlen(password); //密码的长度
-        while ((ch = fgetc(normal_fp)) != EOF) { //End of File
-            //写入（异或运算）
-            fputc(ch ^ password[i % pwd_len], crypt_fp);
-            i++;
-        }
-        //关闭
-        fclose(crypt_fp);
-        fclose(normal_fp);
-}
-
-//解密
-JNIEXPORT void JNICALL Java_com_example_firstndk_Cryptor_decrypt
-  (JNIEnv *env, jclass jcls, jstring crypt_path_jstr, jstring decrypt_path_jstr){
-
-        const char* crypt_path = (*env)-&gt;GetStringUTFChars(env,crypt_path_jstr,JNI_FALSE);
-        const char* decrypt_path = (*env)-&gt;GetStringUTFChars(env,decrypt_path_jstr,JNI_FALSE);
-
-        //打开文件
-        FILE *normal_fp = fopen(crypt_path, &quot;rb&quot;);
-        FILE *crypt_fp = fopen(decrypt_path, &quot;wb&quot;);
-        //一次读取一个字符
-        int ch;
-        int i = 0; //循环使用密码中的字母进行异或运算
-        int pwd_len = strlen(password); //密码的长度
-        while ((ch = fgetc(normal_fp)) != EOF) { //End of File
-            //写入（异或运算）
-            fputc(ch ^ password[i % pwd_len], crypt_fp);
-            i++;
-        }
-        //关闭
-        fclose(crypt_fp);
-        fclose(normal_fp);
-
-}
-</code></pre><h3 id="编译生成-so动态库"><a href="#编译生成-so动态库" class="headerlink" title="编译生成.so动态库"></a>编译生成.so动态库</h3><p>直接make project（Build Project）一下即可。</p>
-<h3 id="加载动态库"><a href="#加载动态库" class="headerlink" title="加载动态库"></a>加载动态库</h3><p>通过System.loadLibrary方法加载.so动态库文件，不用写lib前缀，系统会默认添加。</p>
-<pre><code>package com.example.firstndk;
-
-public class Cryptor {
-    public native static void crypt(String normal_path, String crypt_path);
-    public native static void decrypt(String crypt_path, String decrypt_path);
-
-    static{
-        System.loadLibrary(&quot;crypt&quot;);
-    }
-}
-</code></pre><p>接下来，我们就需要写android代码来测试调用我们的动态库啦，书写两个按钮，在按钮点击时分别调用加密和解密功能，记得添加SD卡读写权限。</p>
-<pre><code>package com.example.firstndk;
-
-import java.io.File;
-
-import android.app.Activity;
-import android.os.Bundle;
-import android.os.Environment;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-
-public class MainActivity extends Activity {
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-    }
-
-    public void mCrypt(View v) {
-        String normal_path = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separatorChar
-                + &quot;liuyan.png&quot;;
-        String crypt_path = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separatorChar
-                + &quot;liuyan_crypt.png&quot;;
-        Cryptor.crypt(normal_path, crypt_path);
-        Log.d(&quot;isen&quot;, &quot;加密完成&quot;);
-    }
-
-    public void mDecrypt(View v) {
-        String crypt_path = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separatorChar
-                + &quot;liuyan_crypt.png&quot;;
-        String decrypt_path = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separatorChar
-                + &quot;liuyan_decrypt.png&quot;;
-        Cryptor.decrypt(crypt_path, decrypt_path);
-        Log.d(&quot;isen&quot;, &quot;解密完成&quot;);
-    }
-
-}
-</code></pre><p>如果要适配所有平台，需要修改Application.mk为：</p>
-<pre><code>APP_ABI := armeabi armeabi-v7a arm64-v8a mips mips64 x86 x86_64
-</code></pre>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -4180,7 +4234,7 @@ public class MainActivity extends Activity {
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-count">25</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
