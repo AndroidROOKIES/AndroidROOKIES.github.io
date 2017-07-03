@@ -71,7 +71,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="JNI," />
+  <meta name="keywords" content="FFmpeg," />
 
 
 
@@ -87,25 +87,16 @@
 
 
 
-<meta name="description" content="缓存策略局部static变量c代码：
-JNIEXPORT void JNICALL Java_com_dongnaoedu_jni_JniTest_cached(JNIEnv *env, jobject jobj){
-    jclass cls = (*env)-&amp;gt;GetObjectClass(env, jobj);    
-    //获取jfieldID只获取一次，作用域只在本方法中">
+<meta name="description" content="每天一小步，人生一大步">
 <meta property="og:type" content="article">
-<meta property="og:title" content="JNI系列(五)JNI缓存策略">
-<meta property="og:url" content="http://yoursite.com/2017/05/15/JNI系列-五-JNI缓存策略/index.html">
+<meta property="og:title" content="FFmpeg学习系列(四)Linux之shell脚本传参及ffmpeg的shell脚本编写">
+<meta property="og:url" content="http://yoursite.com/2017/07/02/FFmpeg学习系列-四-Linux之shell脚本传参及ffmpeg的shell脚本编写/index.html">
 <meta property="og:site_name" content="Feng's Notes">
-<meta property="og:description" content="缓存策略局部static变量c代码：
-JNIEXPORT void JNICALL Java_com_dongnaoedu_jni_JniTest_cached(JNIEnv *env, jobject jobj){
-    jclass cls = (*env)-&amp;gt;GetObjectClass(env, jobj);    
-    //获取jfieldID只获取一次，作用域只在本方法中">
-<meta property="og:updated_time" content="2017-05-15T03:01:07.956Z">
+<meta property="og:description" content="每天一小步，人生一大步">
+<meta property="og:updated_time" content="2017-07-03T07:57:22.375Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="JNI系列(五)JNI缓存策略">
-<meta name="twitter:description" content="缓存策略局部static变量c代码：
-JNIEXPORT void JNICALL Java_com_dongnaoedu_jni_JniTest_cached(JNIEnv *env, jobject jobj){
-    jclass cls = (*env)-&amp;gt;GetObjectClass(env, jobj);    
-    //获取jfieldID只获取一次，作用域只在本方法中">
+<meta name="twitter:title" content="FFmpeg学习系列(四)Linux之shell脚本传参及ffmpeg的shell脚本编写">
+<meta name="twitter:description" content="每天一小步，人生一大步">
 
 
 
@@ -133,13 +124,13 @@ JNIEXPORT void JNICALL Java_com_dongnaoedu_jni_JniTest_cached(JNIEnv *env, jobje
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/05/15/JNI系列-五-JNI缓存策略/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/07/02/FFmpeg学习系列-四-Linux之shell脚本传参及ffmpeg的shell脚本编写/"/>
 
 
 
 
 
-  <title> JNI系列(五)JNI缓存策略 | Feng's Notes </title>
+  <title> FFmpeg学习系列(四)Linux之shell脚本传参及ffmpeg的shell脚本编写 | Feng's Notes </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -278,7 +269,7 @@ JNIEXPORT void JNICALL Java_com_dongnaoedu_jni_JniTest_cached(JNIEnv *env, jobje
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/15/JNI系列-五-JNI缓存策略/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/02/FFmpeg学习系列-四-Linux之shell脚本传参及ffmpeg的shell脚本编写/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Feng">
@@ -299,7 +290,7 @@ JNIEXPORT void JNICALL Java_com_dongnaoedu_jni_JniTest_cached(JNIEnv *env, jobje
             
             
               
-                JNI系列(五)JNI缓存策略
+                FFmpeg学习系列(四)Linux之shell脚本传参及ffmpeg的shell脚本编写
               
             
           </h1>
@@ -314,8 +305,8 @@ JNIEXPORT void JNICALL Java_com_dongnaoedu_jni_JniTest_cached(JNIEnv *env, jobje
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-15T10:46:24+08:00">
-                2017-05-15
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-02T15:55:53+08:00">
+                2017-07-02
               </time>
             
 
@@ -337,8 +328,8 @@ JNIEXPORT void JNICALL Java_com_dongnaoedu_jni_JniTest_cached(JNIEnv *env, jobje
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/JNI/" itemprop="url" rel="index">
-                    <span itemprop="name">JNI</span>
+                  <a href="/categories/FFmpeg/" itemprop="url" rel="index">
+                    <span itemprop="name">FFmpeg</span>
                   </a>
                 </span>
 
@@ -370,53 +361,7 @@ JNIEXPORT void JNICALL Java_com_dongnaoedu_jni_JniTest_cached(JNIEnv *env, jobje
       
 
       
-        <h2 id="缓存策略"><a href="#缓存策略" class="headerlink" title="缓存策略"></a>缓存策略</h2><h3 id="局部static变量"><a href="#局部static变量" class="headerlink" title="局部static变量"></a>局部static变量</h3><p>c代码：</p>
-<pre><code>JNIEXPORT void JNICALL Java_com_dongnaoedu_jni_JniTest_cached(JNIEnv *env, jobject jobj){
-    jclass cls = (*env)-&gt;GetObjectClass(env, jobj);    
-    //获取jfieldID只获取一次，作用域只在本方法中
-    //局部静态变量
-    static jfieldID key_id = NULL;
-    if (key_id == NULL){
-        key_id = (*env)-&gt;GetFieldID(env, cls, &quot;key&quot;, &quot;Ljava/lang/String;&quot;);
-        printf(&quot;--------GetFieldID-------\n&quot;);
-    }
-}
-</code></pre><p>测试：</p>
-<pre><code>public native void cache();
-
-public static void main(String[] args) {
-
-    JniTest test = new JniTest();
-    for (int i = 0; i &lt; 100; i++) {
-        test.cache();
-    }
-}
-</code></pre><p>局部静态变量生命周期：</p>
-<p>函数第一次执行的时候初始化。</p>
-<p>结束，作用域被销毁了，但是这个变量还会存在内存当中，直到程序结束。</p>
-<h2 id="初始化全局变量，动态库加载完成之后，立刻缓存起来"><a href="#初始化全局变量，动态库加载完成之后，立刻缓存起来" class="headerlink" title="初始化全局变量，动态库加载完成之后，立刻缓存起来"></a>初始化全局变量，动态库加载完成之后，立刻缓存起来</h2><p>在动态库加载的时候初始化全局变量</p>
-<pre><code>public static native void initIds();
-
-static {
-    System.loadLibrary(&quot;JniTest&quot;);
-    initIds();
-}
-
-public static void main(String[] args) {
-
-    JniTest test = new JniTest();
-    for (int i = 0; i &lt; 100; i++) {
-        test.cache();
-    }
-}
-</code></pre><p>c代码：</p>
-<pre><code>jfieldID key_fid;
-jmethodID random_mid;
-JNIEXPORT void JNICALL Java_com_dongnaoedu_jni_JniTest_initIds(JNIEnv *env, jclass jcls){    
-    key_fid = (*env)-&gt;GetFieldID(env, jcls, &quot;key&quot;, &quot;Ljava/lang/String;&quot;);
-    random_mid = (*env)-&gt;GetMethodID(env, jcls, &quot;genRandomInt&quot;, &quot;(I)I&quot;);
-}
-</code></pre>
+        
       
     </div>
 
@@ -445,7 +390,7 @@ JNIEXPORT void JNICALL Java_com_dongnaoedu_jni_JniTest_initIds(JNIEnv *env, jcla
       
         <div class="post-tags">
           
-            <a href="/tags/JNI/" rel="tag"># JNI</a>
+            <a href="/tags/FFmpeg/" rel="tag"># FFmpeg</a>
           
         </div>
       
@@ -458,8 +403,8 @@ JNIEXPORT void JNICALL Java_com_dongnaoedu_jni_JniTest_initIds(JNIEnv *env, jcla
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/05/15/JNI系列-四-JNI引用与异常处理/" rel="next" title="JNI系列(四)JNI引用与异常处理">
-                <i class="fa fa-chevron-left"></i> JNI系列(四)JNI引用与异常处理
+              <a href="/2017/07/01/FFmpeg学习系列-三-Linux之shell脚本/" rel="next" title="FFmpeg学习系列(三)Linux之shell脚本">
+                <i class="fa fa-chevron-left"></i> FFmpeg学习系列(三)Linux之shell脚本
               </a>
             
           </div>
@@ -467,10 +412,6 @@ JNIEXPORT void JNICALL Java_com_dongnaoedu_jni_JniTest_initIds(JNIEnv *env, jcla
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/05/15/JNI系列-六-Eclipse下NDK开发/" rel="prev" title="JNI系列(六)Eclipse下NDK开发">
-                JNI系列(六)Eclipse下NDK开发 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -513,17 +454,8 @@ JNIEXPORT void JNICALL Java_com_dongnaoedu_jni_JniTest_initIds(JNIEnv *env, jcla
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview sidebar-panel">
+      <section class="site-overview sidebar-panel sidebar-panel-active">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/uploads/avatar.png"
@@ -585,22 +517,6 @@ JNIEXPORT void JNICALL Java_com_dongnaoedu_jni_JniTest_initIds(JNIEnv *env, jcla
 
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#缓存策略"><span class="nav-number">1.</span> <span class="nav-text">缓存策略</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#局部static变量"><span class="nav-number">1.1.</span> <span class="nav-text">局部static变量</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#初始化全局变量，动态库加载完成之后，立刻缓存起来"><span class="nav-number">2.</span> <span class="nav-text">初始化全局变量，动态库加载完成之后，立刻缓存起来</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
