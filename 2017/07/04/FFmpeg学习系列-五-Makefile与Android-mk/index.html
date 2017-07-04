@@ -71,7 +71,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="FFmpeg," />
 
 
 
@@ -87,15 +87,24 @@
 
 
 
-<meta name="description" content="每天一小步，人生一大步">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Feng's Notes">
-<meta property="og:url" content="http://yoursite.com/tags/FFmpeg/index.html">
+<meta name="description" content="MakefileMakefile 构建工具，只需通过make一句命令就可以构建一个可执行程序。相当于Maven、ANT、Gradle构建工具。
+gcc是一个编译工具，Makefile是一个构建工具，Makefile中会用到gcc。
+在Linux中要把test.c得到一个可执行程序，我们需要编译它，通过 gcc -c test.c 编译生成 test.o 目标文件，这个目标文件不能去执行，需要继续执">
+<meta property="og:type" content="article">
+<meta property="og:title" content="FFmpeg学习系列(五)Makefile与Android.mk">
+<meta property="og:url" content="http://yoursite.com/2017/07/04/FFmpeg学习系列-五-Makefile与Android-mk/index.html">
 <meta property="og:site_name" content="Feng's Notes">
-<meta property="og:description" content="每天一小步，人生一大步">
+<meta property="og:description" content="MakefileMakefile 构建工具，只需通过make一句命令就可以构建一个可执行程序。相当于Maven、ANT、Gradle构建工具。
+gcc是一个编译工具，Makefile是一个构建工具，Makefile中会用到gcc。
+在Linux中要把test.c得到一个可执行程序，我们需要编译它，通过 gcc -c test.c 编译生成 test.o 目标文件，这个目标文件不能去执行，需要继续执">
+<meta property="og:image" content="http://oph0qv0je.bkt.clouddn.com/shell4.png">
+<meta property="og:updated_time" content="2017-07-04T08:03:26.168Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Feng's Notes">
-<meta name="twitter:description" content="每天一小步，人生一大步">
+<meta name="twitter:title" content="FFmpeg学习系列(五)Makefile与Android.mk">
+<meta name="twitter:description" content="MakefileMakefile 构建工具，只需通过make一句命令就可以构建一个可执行程序。相当于Maven、ANT、Gradle构建工具。
+gcc是一个编译工具，Makefile是一个构建工具，Makefile中会用到gcc。
+在Linux中要把test.c得到一个可执行程序，我们需要编译它，通过 gcc -c test.c 编译生成 test.o 目标文件，这个目标文件不能去执行，需要继续执">
+<meta name="twitter:image" content="http://oph0qv0je.bkt.clouddn.com/shell4.png">
 
 
 
@@ -123,13 +132,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/tags/FFmpeg/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/07/04/FFmpeg学习系列-五-Makefile与Android-mk/"/>
 
 
 
 
 
-  <title> 标签: FFmpeg | Feng's Notes </title>
+  <title> FFmpeg学习系列(五)Makefile与Android.mk | Feng's Notes </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -154,7 +163,7 @@
     
   
 
-  <div class="container sidebar-position-left  ">
+  <div class="container sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -258,158 +267,187 @@
           <div id="content" class="content">
             
 
-  <div id="posts" class="posts-collapse">
-    <div class="collection-title">
-      <h2 >
-        FFmpeg
-        <small>标签</small>
-      </h2>
-    </div>
-
+  <div id="posts" class="posts-expand">
     
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2017/07/04/FFmpeg学习系列-五-Makefile与Android-mk/" itemprop="url">
-              
-                <span itemprop="name">FFmpeg学习系列(五)Makefile与Android.mk</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-07-04T15:03:53+08:00"
-              content="2017-07-04" >
-          07-04
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-    
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2017/07/02/FFmpeg学习系列-四-Linux之shell脚本传参及ffmpeg的shell脚本编写/" itemprop="url">
-              
-                <span itemprop="name">FFmpeg学习系列(四)Linux之shell脚本传参及ffmpeg的shell脚本编写</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-07-02T15:55:53+08:00"
-              content="2017-07-02" >
-          07-02
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-    
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2017/07/01/FFmpeg学习系列-三-Linux之shell脚本/" itemprop="url">
-              
-                <span itemprop="name">FFmpeg学习系列(三)Linux之shell脚本</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-07-01T10:00:41+08:00"
-              content="2017-07-01" >
-          07-01
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-    
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2017/06/27/FFmpeg学习系列-二-Linux基本命令/" itemprop="url">
-              
-                <span itemprop="name">FFmpeg学习系列(二)Linux基本命令</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-06-27T13:45:49+08:00"
-              content="2017-06-27" >
-          06-27
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-    
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2017/06/21/FFmpeg学习系列-一-Linux下编译FFmpeg/" itemprop="url">
-              
-                <span itemprop="name">FFmpeg学习系列(一)Linux下编译FFmpeg</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-06-21T14:48:55+08:00"
-              content="2017-06-21" >
-          06-21
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-    
-  </div>
 
   
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/04/FFmpeg学习系列-五-Makefile与Android-mk/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Feng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Feng's Notes">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                FFmpeg学习系列(五)Makefile与Android.mk
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-04T15:03:53+08:00">
+                2017-07-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/FFmpeg/" itemprop="url" rel="index">
+                    <span itemprop="name">FFmpeg</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Makefile"><a href="#Makefile" class="headerlink" title="Makefile"></a>Makefile</h2><p>Makefile 构建工具，只需通过make一句命令就可以构建一个可执行程序。相当于Maven、ANT、Gradle构建工具。</p>
+<p>gcc是一个编译工具，Makefile是一个构建工具，Makefile中会用到gcc。</p>
+<p>在Linux中要把test.c得到一个可执行程序，我们需要编译它，通过 gcc -c test.c 编译生成 test.o 目标文件，这个目标文件不能去执行，需要继续执行 gcc -o test test.o 得到test可执行文件 。</p>
+<p>在Java中使用ANT得到apk:</p>
+<p>java源文件-&gt;javac编译(相当于gcc)-&gt;class文件-&gt;通过ANT打包得到apk</p>
+<p>在c中使用gcc得到可执行文件：</p>
+<p>.c源文件-&gt;gcc编译-&gt;.o目标文件-&gt;链接得到二进制可执行文件</p>
+<p>如图：</p>
+<p><img src="http://oph0qv0je.bkt.clouddn.com/shell4.png" alt=""></p>
+<p>Makefile里面就是包含一系列的这些过程。</p>
+<p>在很多C/C++开源项目中，configrue文件用来检查系统配置生成配置文件（这些配置文件会在接下来的Makefile文件中被使用到）<br>Makefile文件用来生成我们需要的动态库文件(.so)。</p>
+<h3 id="为什么要写Makefile文件？"><a href="#为什么要写Makefile文件？" class="headerlink" title="为什么要写Makefile文件？"></a>为什么要写Makefile文件？</h3><p>1.当项目非常庞大时，让构建过程，自动化，简单<br>2.依赖文件比目标更新，会重建目标文件</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/FFmpeg/" rel="tag"># FFmpeg</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/02/FFmpeg学习系列-四-Linux之shell脚本传参及ffmpeg的shell脚本编写/" rel="next" title="FFmpeg学习系列(四)Linux之shell脚本传参及ffmpeg的shell脚本编写">
+                <i class="fa fa-chevron-left"></i> FFmpeg学习系列(四)Linux之shell脚本传参及ffmpeg的shell脚本编写
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -436,8 +474,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/uploads/avatar.png"
@@ -499,6 +546,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Makefile"><span class="nav-number">1.</span> <span class="nav-text">Makefile</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么要写Makefile文件？"><span class="nav-number">1.1.</span> <span class="nav-text">为什么要写Makefile文件？</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -613,6 +676,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
 
   
 

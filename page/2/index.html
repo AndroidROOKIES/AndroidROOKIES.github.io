@@ -270,6 +270,536 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/17/C++学习系列-一-命名空间与引用/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Feng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Feng's Notes">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/05/17/C++学习系列-一-命名空间与引用/" itemprop="url">
+                  C++学习系列(一)命名空间与引用
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-17T14:44:14+08:00">
+                2017-05-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index">
+                    <span itemprop="name">C++</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="C与C-的关系"><a href="#C与C-的关系" class="headerlink" title="C与C++的关系"></a>C与C++的关系</h2><ol>
+<li>C++可以与C代码进行混编，即表示C++里面可以写C，但是反过来却不可以</li>
+<li>C++是面向对象编程语言、C是面向过程的编程</li>
+<li>C++是对C的一个增强，C++有class、引用的概念，堆内存的分配释放除了C语言的malloc、free，还有new、delete关键字</li>
+</ol>
+<h2 id="C-的命名空间"><a href="#C-的命名空间" class="headerlink" title="C++的命名空间"></a>C++的命名空间</h2><h3 id="C-的命名空间-1"><a href="#C-的命名空间-1" class="headerlink" title="C++的命名空间"></a>C++的命名空间</h3><p>命名空间，也叫名字空间，类似于Java中包（归类）。当项目比较大的时候，用于区分不同人写的代码、不同库的代码。不同命名空间下面，函数名、变量名、类名等都可以重复。</p>
+<p>举例：</p>
+<pre><code>#include &lt;iostream&gt;
+
+//标准命名空间(包含很多标准的定义)
+//standard
+//命名空间类似于Java中包（归类）    
+using namespace std;
+
+void main(){
+    //运算符重载
+    //std::cout &lt;&lt; &quot;this is c plus plus&quot; &lt;&lt; std::endl;
+    cout &lt;&lt; &quot;this is c plus plus&quot; &lt;&lt; endl;
+    system(&quot;pause&quot;);
+}
+</code></pre><p>通过using namespace来使用std这个命名空间。也可以通过std::的方式来用命名空间，::叫做访问修饰符。</p>
+<p>在C++中用cout来输出，它是头文件iostream的输出函数，由于C++可以与C代码进行混编也可以用printf()输出，其中&lt;&lt;是运算符重载，endl是换行的意思。</p>
+<h3 id="自定义命名空间"><a href="#自定义命名空间" class="headerlink" title="自定义命名空间"></a>自定义命名空间</h3><pre><code>#include &lt;iostream&gt;
+
+//标准命名空间
+using namespace std;
+
+//自定义命名空间
+namespace NSP_A{
+    int a = 9;
+}
+
+namespace NSP_B{
+    int a = 12;
+    //命名空间嵌套
+    namespace NSP_C{
+        int c = 90;        
+    }
+}
+
+void main(){
+    //使用命名空间
+    //::访问修饰符
+    cout &lt;&lt; NSP_A::a &lt;&lt; endl;
+    cout &lt;&lt; NSP_B::a &lt;&lt; endl;
+
+    cout &lt;&lt; NSP_B::NSP_C::c &lt;&lt; endl;    
+    system(&quot;pause&quot;);
+}
+</code></pre><h3 id="C-命名空间中的结构体"><a href="#C-命名空间中的结构体" class="headerlink" title="C++命名空间中的结构体"></a>C++命名空间中的结构体</h3><p>说明一下：结构体不能被继承，类可以被继承</p>
+<pre><code>include &lt;iostream&gt;
+
+//自定义命名空间
+namespace NSP_A{
+    int a = 9;
+    struct Teacher{
+        char name[20];
+        int age;
+    };
+    struct Student{
+        char name[20];
+        int age;
+    };
+
+}
+
+void main(){
+    //使用命名空间中的结构体
+    using NSP_A::Student;
+    Student t;
+    t.age = 90;
+
+    system(&quot;pause&quot;);
+}
+</code></pre><p>注意：C++中通过using使用了命名空间中的结构体，在使用结构体的时候，struct关键字可以省略。</p>
+<h3 id="C-中的结构体"><a href="#C-中的结构体" class="headerlink" title="C++中的结构体"></a>C++中的结构体</h3><pre><code>//结构体
+
+struct MyTeacher{
+public:
+    char name[20];
+    int age;
+public:
+    void say(){
+        cout &lt;&lt; this-&gt;age &lt;&lt; &quot;岁&quot; &lt;&lt; endl;
+    }
+};
+void main(){
+    MyTeacher t1;
+    t1.age = 10;
+    t1.say();
+    system(&quot;pause&quot;);
+}
+</code></pre><p>C++是C的增强，C++中的结构体可以有访问修饰符，一个修饰符可以修饰多个变量或者函数。</p>
+<p>C++中的结构体与Java中的类非常类似，在C语言中只能用函数指针当作成员函数，在C++中直接类似Java中的方法当做函数。</p>
+<p>C++中的结构体有一个this指针，指向自身。</p>
+<h3 id="C-中的类（class）"><a href="#C-中的类（class）" class="headerlink" title="C++中的类（class）"></a>C++中的类（class）</h3><pre><code>#define PI 3.14
+//圆
+class MyCircle{
+//属性（共用权限访问修饰符）
+private:
+    double r;
+    double s;
+public:
+    void setR(double r){
+        this-&gt;r = r;
+    }
+    //获取面积
+    double getS(){
+        return PI * r * r;
+    }
+};
+
+void main(){
+    MyCircle c1;
+    c1.setR(4);
+
+    cout &lt;&lt; &quot;圆的面积：&quot; &lt;&lt; c1.getS() &lt;&lt; endl;
+
+    system(&quot;pause&quot;);
+}
+</code></pre><p>与Java类似，有一个tihs指针指向自身。</p>
+<p>类的定义末尾需要有分号。</p>
+<h3 id="C-中布尔类型"><a href="#C-中布尔类型" class="headerlink" title="C++中布尔类型"></a>C++中布尔类型</h3><p>C++中有布尔类型bool，C语言没有</p>
+<pre><code>void main(){
+    //bool isSingle = true;
+    bool isSingle = 17;
+    //false -17
+
+    if (isSingle){
+        cout &lt;&lt; &quot;单身&quot; &lt;&lt; endl;
+        cout &lt;&lt; sizeof(bool) &lt;&lt; endl;
+    }
+    else{
+        cout &lt;&lt; &quot;有对象&quot; &lt;&lt; endl;
+    }
+
+    int a = 10, b = 20;
+    //三目预算符，C++中可以左值，Java中不可以
+    ((a &gt; b) ? a : b) = 30;
+    cout &lt;&lt; b &lt;&lt; endl;
+
+    system(&quot;pause&quot;);
+}
+</code></pre><h2 id="C-中的引用"><a href="#C-中的引用" class="headerlink" title="C++中的引用"></a>C++中的引用</h2><p>变量名相当于内存的“门牌号”，人为地取名字，因此可以有多个别名，而这种别名就是引用。</p>
+<p>引用的主要作用：作为函数的参数或者返回值，代替指针，使得程序可读性加强。</p>
+<p>1.单纯给变量取别名没有任何意义，作为函数参数传递，能保证参数传递过程中不产生副本。</p>
+<p>2.引用可以直接操作变量，指针要通过取值(*p)，间接操作变量，指针的可读性差</p>
+<pre><code>void main(){
+    //变量名-门牌号(内存空间0x00001的别名，可不可以有多个名字？)
+    int a = 10;
+    //b就这个内存空间另外一个别名\
+    //“&amp;”表示C++中的引用，与取地址符要区分开
+    int &amp;b = a;    
+    cout &lt;&lt; b &lt;&lt; endl;
+
+    system(&quot;pause&quot;);
+}
+</code></pre><p>上例中引用变量b与变量a操作的是同一个内存地址。</p>
+<p>值交换的例子：</p>
+<pre><code>//指针值交换
+void swap_1(int *a, int *b){
+    int c = 0;
+    c = *a;
+    *a = *b;
+    *b = c;
+}
+
+//引用值交换
+void swap_2(int &amp;a, int &amp;b){
+    int c = 0;
+    c = a;
+    a = b;
+    b = c;
+}
+
+void main(){
+    int x = 10;
+    int y = 20;
+
+    printf(&quot;%d,%d\n&quot;,x,y);
+    //swap_1(&amp;x, &amp;y);
+
+    //a成了x的别名（&amp;a = x &amp;b = y）
+    swap_2(x,y);
+    printf(&quot;%d,%d\n&quot;, x, y);
+
+    system(&quot;pause&quot;);
+}
+</code></pre><p>引用的主要功能：作为函数的参数或返回值，例子如下：</p>
+<pre><code>struct Teacher{
+    char* name;
+    int age;
+};
+
+void myprint(Teacher &amp;t){
+    cout &lt;&lt; t.name &lt;&lt; &quot;,&quot; &lt;&lt; t.age &lt;&lt; endl;
+    t.age = 21;
+}
+
+void myprint2(Teacher *t){
+    cout &lt;&lt; t-&gt;name &lt;&lt; &quot;,&quot; &lt;&lt; t-&gt;age &lt;&lt; endl;    
+    //(*t).name 
+}
+
+//引用的主要功能：作为函数的参数或返回值
+void main(){
+    Teacher t;
+    t.name = &quot;Jason&quot;;
+    t.age = 20;
+    myprint(t);
+
+    myprint2(&amp;t);
+
+    system(&quot;pause&quot;);
+}
+</code></pre><p>指针的引用，代替二级指针，举例如下：</p>
+<pre><code>struct Teacher{
+    char* name;
+    int age;
+};
+
+void getTeacher(Teacher **p){
+    Teacher *tmp = (Teacher*)malloc(sizeof(Teacher));
+    tmp-&gt;age = 20;
+    *p = tmp;
+}
+
+//指针的引用，代替二级指针
+//Teacher* &amp;p = (Teacher * *p)
+void getTeacher(Teacher* &amp;p){
+    p = (Teacher*)malloc(sizeof(Teacher));
+    p-&gt;age = 20;
+}
+
+void main(){
+    Teacher *t = NULL;
+
+    getTeacher(&amp;t);
+
+    system(&quot;pause&quot;);
+}
+</code></pre><h3 id="指针常量与常量指针"><a href="#指针常量与常量指针" class="headerlink" title="指针常量与常量指针"></a>指针常量与常量指针</h3><p>指针常量：指针的常量，不改变地址的指针，但是可以修改它指向的内容</p>
+<p>常量指针：指向常量的指针，指向的内容不能修改，可以改变地址</p>
+<pre><code>void main(){
+    //指针常量，指针的常量，不改变地址的指针，但是可以修改它指向的内容
+    int a = 2, b = 3;
+    int *const p1 = &amp;a;
+    //p1 = &amp;b;  //NO，不能再次赋值
+    *p1 = 4;
+
+    //常量指针，指向常量的指针，内容不能修改
+    const int *p2 = &amp;a;
+    p2 = &amp;b;
+    //*p2 = 9;  //NO，内容不能修改
+}
+</code></pre><h3 id="常引用"><a href="#常引用" class="headerlink" title="常引用"></a>常引用</h3><p>常引用类似于java中final，不能再进行赋值。</p>
+<p>引用必须有值，不为空，指针就不一定。使用指针的时候要注意非空判断。</p>
+<pre><code>void myprintf(const int &amp;a){
+    cout &lt;&lt; a &lt;&lt; endl;    
+}
+
+void main(){    
+    //const int a;
+    //引用必须要有值，不能为空
+    //int &amp;a = NULL;
+
+    //常引用
+    int a = 10, b = 9;
+    const int &amp;c = a;
+
+    //字面量
+    const int &amp;d = 70;
+
+    //c = b;
+    myprintf(c);
+
+    system(&quot;pause&quot;);
+}
+</code></pre><h3 id="引用的大小"><a href="#引用的大小" class="headerlink" title="引用的大小"></a>引用的大小</h3><pre><code>struct Teacher{
+    char name[20];
+    int age;
+};
+
+void main(){
+    Teacher t;
+
+    Teacher &amp;t1 = t;
+    Teacher *p = &amp;t;
+
+    cout &lt;&lt; sizeof(t1) &lt;&lt; endl;
+    cout &lt;&lt; sizeof(p) &lt;&lt; endl;
+    system(&quot;pause&quot;);
+}
+</code></pre><p>输出结果是：引用的大小为24（20+4（int）），指针的大小为8</p>
+<p>引用不能为空，没法传进去，举例如下：</p>
+<pre><code>struct Teacher{
+    char name[20];
+    int age;
+};
+
+void myprint(Teacher *t){
+    cout &lt;&lt; t-&gt;name &lt;&lt; &quot;,&quot; &lt;&lt; t-&gt;age &lt;&lt; endl;
+}
+
+void myprint2(Teacher &amp;t){
+    cout &lt;&lt; t.name &lt;&lt; &quot;,&quot; &lt;&lt; t.age &lt;&lt; endl;
+    t.age = 21;
+}
+
+void main(){
+    Teacher t;
+
+    Teacher *p = NULL;
+    //报错，防止不报错，进行非空判断
+    myprint(p);
+
+    //引用不能为空，没法传进去
+    Teacher &amp;t2 = NULL;
+    myprint2(t2);
+
+    system(&quot;pause&quot;);
+}
+</code></pre><h2 id="C-中的函数"><a href="#C-中的函数" class="headerlink" title="C++中的函数"></a>C++中的函数</h2><h3 id="函数参数可以有默认值，与Java不同"><a href="#函数参数可以有默认值，与Java不同" class="headerlink" title="函数参数可以有默认值，与Java不同"></a>函数参数可以有默认值，与Java不同</h3><pre><code>void myprint(int x, int y = 9, int z = 8){
+    cout &lt;&lt; x &lt;&lt; endl;
+}
+//重载
+void myprint(int x,bool ret){
+    cout &lt;&lt; x &lt;&lt; endl;
+}
+
+void main(){
+    myprint(20);
+
+    system(&quot;pause&quot;);
+}
+</code></pre><p>注意：如果函数参数y有默认值，那么y之后的参数都要有默认值。</p>
+<h3 id="函数的可变参数"><a href="#函数的可变参数" class="headerlink" title="函数的可变参数"></a>函数的可变参数</h3><p>需要使用头文件stdarg.h</p>
+<ol>
+<li>通过va_start开始读取可变参数，其中形参i是最后一个固定参数。</li>
+<li>通过va_arg读取，需要指定类型。</li>
+<li><p>通过va_end结束读取。</p>
+<pre><code>#include &lt;stdarg.h&gt;
+void func(int i,...)
+{
+    //可变参数指针
+    va_list args_p;
+    //开始读取可变参数，i是最后一个固定参数
+    va_start(args_p,i);
+    int a = va_arg(args_p,int);
+    char b = va_arg(args_p, char);
+    int c = va_arg(args_p, int);
+    cout &lt;&lt; a &lt;&lt; endl;
+    cout &lt;&lt; b &lt;&lt; endl;
+    cout &lt;&lt; c &lt;&lt; endl;
+    //结束
+    va_end(args_p);
+}
+
+void main(){
+    func(9,20,&apos;b&apos;,30);
+
+    system(&quot;pause&quot;);
+}
+</code></pre></li>
+</ol>
+<p>也可以循环读取，需要有条件限制（比如可变参数都大于0），且可变参数的类型都一样，否则读取的结果不正确，例子：</p>
+<pre><code>void func(int i,...)
+{
+    //可变参数指针
+    va_list args_p;
+    //开始读取可变参数，i是最后一个固定参数
+    va_start(args_p,i);
+    int value;
+    while (1){
+        value = va_arg(args_p,int);
+        if (value &lt;= 0){
+            break;
+        }
+        cout &lt;&lt; value &lt;&lt; endl;
+    }
+
+    //结束
+    va_end(args_p);
+}
+
+void main(){
+    func(9, 20, 40, 30);
+
+    system(&quot;pause&quot;);
+}
+</code></pre>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/17/JNI系列-七-文件的拆分与合并案例/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2923,415 +3453,6 @@ void main(){
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/25/C语言学习系列-三-结构体/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Feng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/uploads/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Feng's Notes">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/04/25/C语言学习系列-三-结构体/" itemprop="url">
-                  C语言学习系列(三)结构体
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-25T10:59:26+08:00">
-                2017-04-25
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/c语言/" itemprop="url" rel="index">
-                    <span itemprop="name">c语言</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>结构体是一种构造数据类型(类似Java中的类)，把不同的数据类型整合起来成为一个自定义的数据类型。</p>
-<p> 举例</p>
-<pre><code>/*
-struct Man{
-    char name[20];
-    int age;
-};
-
-
-void main(){
-    //初始化结构体变量
-    //结构体初始化方法一
-    //struct Man m1 = {&quot;jack&quot;,19};
-
-    //结构体初始化方法二
-    struct Man m1;
-    m1.age = 30;
-    strcpy(m1.name,&quot;rose&quot;);
-
-    printf(&quot;%d\n&quot;,m1.age);
-    printf(&quot;%s\n&quot;,m1.name);
-    system(&quot;pause&quot;);
-};
-*/
-</code></pre><p>结构体的几种写法</p>
-<pre><code>struct Man{
-    char name[20];
-    int age;
-}m1, m2 = { &quot;jack&quot;, 20 };//m1结构体变量名
-
-void main(){
-    m1.age = 35;
-    strcpy(m1.name,&quot;isen&quot;);
-    printf(&quot;%d\n&quot;, m1.age);
-    printf(&quot;%s\n&quot;, m1.name);
-    system(&quot;pause&quot;);
-};
-</code></pre><p>匿名结构体：控制结构体变量的个数（限量版），相当于单例。</p>
-<pre><code>struct{
-    char name[20];
-    int age;
-}m1;
-</code></pre><p>结构体嵌套</p>
-<pre><code>/*
-struct Teacher{
-    char name[20];
-};
-
-struct Student{
-    char name[20];
-    int age;
-    struct Teacher t;
-};
-
-void main(){
-    //字面量的方式
-    //struct Student s1 = { &quot;jack&quot;, 21, {&quot;Jason&quot;} };
-    struct Student s1;
-    s1.age = 10;
-    strcpy(s1.t.name, &quot;Jason&quot;);
-    system(&quot;pause&quot;);
-}
-*/
-</code></pre><p>结构体嵌套2</p>
-<pre><code>/*
-struct Student{
-    char name[20];
-    int age;
-    struct Teacher{
-        char name[20];
-    } t;
-};
-
-void main(){
-    struct Student s1;
-    strcpy(s1.t.name, &quot;Jason&quot;);
-    //struct Teacher t;
-
-
-    system(&quot;pause&quot;);
-}
-*/
-</code></pre><p>结构体与指针</p>
-<pre><code>struct Man{
-    char name[20];
-    int age;
-};
-
-void main(){
-    struct Man m1 = {&quot;isen&quot;,20};
-    //结构体指针
-    struct Man *p = &amp;m1;
-    printf(&quot;%s,%d\n&quot;, m1.name, m1.age);
-    printf(&quot;%s,%d\n&quot;, (*p).name, (*p).age);
-
-    //“-&gt;”（箭头）是“(*p).”简写形式
-    printf(&quot;%s,%d\n&quot;,p-&gt;name,p-&gt;age);
-
-    system(&quot;pause&quot;);
-}
-</code></pre><p>指针与结构体数组</p>
-<pre><code>struct Man{
-    char name[20];
-    int age;
-};
-
-void main(){
-    struct Man mans[] = { { &quot;isen&quot;, 26 }, { &quot;yahui&quot;, 25 } };
-    //求出结构体数组的大小
-    int size = sizeof(mans) / sizeof(struct Man);
-
-    //遍历结构体数组方法一，通过指针遍历,mams可以表示数组的首地址，也可以是数组变量名
-    struct Man *p = mans;
-    for (; p &lt; mans + 2;p++){
-        printf(&quot;%s,%d\n&quot;,p-&gt;name,p-&gt;age);
-    }
-
-    //遍历方式二，一般的数组方式去遍历
-    int i = 0;
-    for (; i &lt; size;i++){
-        printf(&quot;%s,%d\n&quot;, mans[i].name, mans[i].age);
-    }
-
-    system(&quot;pause&quot;);
-}
-</code></pre><p>结构体的大小（字节对齐）</p>
-<p>结构体变量的大小，必须是最宽基本数据类型的整数倍，通过空间换取时间来提升读取效率，其意义：提升读取的效率。</p>
-<pre><code>struct Man{
-    int age;//4字节
-    double weight;//8字节    
-};
-
-void main(){
-    //结构体变量的大小，必须是最宽基本数据类型的整数倍
-    //提升读取的效率
-    struct Man m1 = {20,89.0};
-    printf(&quot;%#x,%d\n&quot;, &amp;m1,sizeof(m1));//大小应该是16字节
-    getchar();
-}
-</code></pre><p>结构体与动态内存分配</p>
-<pre><code>struct Man{
-    char *name;
-    int age;
-};
-
-void main(){
-    //动态分配10个Man结构体的内存空间
-    struct Man *m_p=(struct Man*)malloc(sizeof(struct Man)*10);
-    struct Man *p = m_p;
-    //赋值
-    p-&gt;name = &quot;isen&quot;;
-    p-&gt;age = 27;
-    p++;
-    p-&gt;name = &quot;rose&quot;;
-    p-&gt;age = 30;
-
-    struct Man *loop_p = m_p;
-    for (; loop_p &lt; m_p + 2; loop_p++){
-        printf(&quot;%s,%d\n&quot;, loop_p-&gt;name, loop_p-&gt;age);
-    }
-
-    free(m_p);
-    system(&quot;pause&quot;);
-}
-</code></pre><p>typedef 表示类型取别名</p>
-<pre><code>//typedef 类型取别名
-//1.不同名称代表在干不同的事情typedef int jint;  
-//2.不同情况下，使用不同的别名
-//#if defined(__cplusplus)
-//typedef _JNIEnv JNIEnv;
-//typedef _JavaVM JavaVM;
-//3.书写简洁
-
-struct Man{
-    char name[20];
-    int age;
-};
-
-//Age int类型的别名
-typedef int Age;
-//Age int类型指针的别名
-typedef int* Ap;
-
-typedef struct Man JavaMan;
-typedef struct Man* JM;
-
-//结构体取别名
-//typedef struct Woman W;
-//typedef struct Woman* WP;
-
-//简写
-typedef struct Woman{
-    char name[20];
-    int age;
-} W, *WP;  //W 是woman结构体的别名, WP 是woman结构体指针的别名
-
-void main(){
-    int i = 5;
-    Ap p = &amp;i;
-
-    //结构体变量
-    W w1 = {&quot;Rose&quot;,20};
-    //结构体指针
-    WP wp1 = &amp;w1;
-    printf(&quot;%s,%d\n&quot;, w1.name, w1.age);
-    printf(&quot;%s,%d\n&quot;, wp1-&gt;name, wp1-&gt;age);
-
-    getchar();
-}
-</code></pre><p>结构体函数指针成员</p>
-<pre><code>struct Girl{
-    char *name;
-    int age;
-    //函数指针
-    void(*sayHi)(char*);
-};
-//Girl结构体类似于Java中的类，name和age类似于属性，sayHi类似于方法
-
-void sayHi(char* text){
-    MessageBoxA(0, text, &quot;title&quot;, 0);
-}
-
-void main(){
-    struct Girl g1;
-    g1.name = &quot;Lucy&quot;;
-    g1.age = 18;
-    g1.sayHi = sayHi;
-
-    g1.sayHi(&quot;hello&quot;);
-
-    getchar();
-}
-</code></pre><p>举例</p>
-<pre><code>#include &lt;stdlib.h&gt;
-#include &lt;stdio.h&gt;
-#include &lt;string.h&gt;
-#include &lt;Windows.h&gt;
-
-//定义一个Girl结构体，包括属性和方法
-typedef struct Girl{
-    char *name;
-    int age;
-    //函数指针
-    void(*sayHi)(char*);
-}Girl;//给结构体取一个别名Girl（别名可以与结构体原本的名字相同）
-
-//Girl结构体指针取别名GirlP
-typedef Girl* GirlP;
-
-//结构体的成员函数
-void sayHi(char* text){
-    MessageBoxA(0, text, &quot;title&quot;, 0);
-}
-
-//自定义的一个改名函数
-void rename(GirlP gp1){
-    gp1-&gt;name = &quot;Lily&quot;;
-}
-
-void main(){
-    Girl g1 = { &quot;Lucy&quot;, 18, sayHi };
-    GirlP gp1 = &amp;g1;
-    gp1-&gt;sayHi(&quot;Byebye!&quot;);
-    //传递指针，改名（只有传递指针才能修改值，所以指针是比较常用的方式）
-    rename(gp1);
-
-    getchar();
-}
-</code></pre><p>完！</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -3381,7 +3502,7 @@ void main(){
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">26</span>
+                <span class="site-state-item-count">27</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
