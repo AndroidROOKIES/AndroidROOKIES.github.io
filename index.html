@@ -367,7 +367,91 @@
       
         
           
-            
+            <h2 id="脚本传参"><a href="#脚本传参" class="headerlink" title="脚本传参"></a>脚本传参</h2><h3 id="在执行脚本时传入参数"><a href="#在执行脚本时传入参数" class="headerlink" title="在执行脚本时传入参数"></a>在执行脚本时传入参数</h3><p><strong>举例如下：</strong></p>
+<pre><code>执行脚本，后面是参数
+./04.sh hello 47 90 76
+</code></pre><p><strong>04.sh脚本：</strong></p>
+<pre><code>#!/bin/bash
+#获取文件名，basename为命令
+filename=$(basename $0)
+# $#内建变量，相当于系统参数
+echo &quot;参数的总数：$#&quot;
+echo $filename
+#获取执行脚本时传入的参数
+#路径
+echo $0
+#传入的第一个参数
+echo $1
+#传入的第二个参数
+echo $2
+echo $3
+
+#使用$@遍历所有传入的参数
+#getopt
+echo &quot;遍历&quot;
+for param in &quot;$@&quot;
+do
+    echo &quot;param:$param&quot;
+done
+</code></pre><p><strong>执行结果</strong></p>
+<p><img src="http://oph0qv0je.bkt.clouddn.com/shell3.png" alt=""></p>
+<h3 id="标准输入输出"><a href="#标准输入输出" class="headerlink" title="标准输入输出"></a>标准输入输出</h3><pre><code>#!/bin/bash
+
+##标准输入输出
+#0 STDIN 
+#1 STDOUT 标准输出
+#2 STDERR 标准错误
+
+#永久重定向
+exec 1&gt;test7
+exec 2&gt;test8
+
+#自定义输出
+exec 7&gt;test9
+#输出到test9中
+echo &quot;cc zz&quot; &gt;&amp;7
+#输出到test7中
+echo &quot;cc yy&quot;
+
+#由于找不到ff文件，所以执行这句是会出现找不到文件的错误，这句错误不会输出在屏幕上而是输出在test8中
+ls -a ./ff
+</code></pre><h3 id="函数传参"><a href="#函数传参" class="headerlink" title="函数传参"></a>函数传参</h3><p>06.sh:</p>
+<pre><code>#!/bin/bash
+
+#函数的传参，返回值
+function myfun
+{
+    echo $[ $1 + $2 ]
+}
+
+value=$(myfun 10 90)
+echo &quot;value:$value&quot;
+</code></pre><h3 id="函数引入"><a href="#函数引入" class="headerlink" title="函数引入"></a>函数引入</h3><p>08.sh:</p>
+<pre><code>#!/bin/bash
+#函数库
+
+function add()
+{
+    echo $[ $1 + $2 ]
+}
+</code></pre><p>07.sh:</p>
+<pre><code>#!/bin/bash
+
+#引入./08.sh
+#source ./08.sh
+#.表示source的快捷别名
+. ./08.sh
+
+function myfun()
+{
+    echo $value
+}
+
+value=20
+myfun
+
+echo &quot;add value:$(add 10 30)&quot;
+</code></pre>
           
         
       
