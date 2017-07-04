@@ -451,6 +451,59 @@ value=20
 myfun
 
 echo &quot;add value:$(add 10 30)&quot;
+</code></pre><h2 id="ffmpeg编译脚本"><a href="#ffmpeg编译脚本" class="headerlink" title="ffmpeg编译脚本"></a>ffmpeg编译脚本</h2><p>通过shell脚本的学习来编写一个ffmpeg的编译脚本</p>
+<p>build_android.sh：</p>
+<pre><code>#!/bin/bash
+
+#export表示全局变量，多个shell脚本都可以使用
+export ANDROID_NDK_HOME=/usr/ndk/android-ndk-r10e
+export PLATFORM_VERSION=android-9
+
+function build_ffmpeg
+{
+    echo &quot;start build ffmpeg $ARCH&quot;
+    #./configure表示执行configure文件，后面一系列的是传入的参数
+    ./configure --target-os=linux \
+    --prefix=$PREFIX \
+    --arch=$ARCH \
+    --enable-shared \
+    --disable-static \
+    --disable-yasm \
+    --disable-ffmpeg \
+    --disable-ffplay \
+    --disable-ffprobe \
+    --disable-ffserver \
+    --disable-doc \
+    --enable-cross-compile \
+    --cross-prefix=$CROSS_COMPILE \
+    --sysroot=$PLATFORM \
+    --extra-cflags=&quot;-fpic&quot;
+    make clean
+    make
+    make install
+
+    echo &quot;build finished $ARCH&quot;
+}
+
+#exec 1&gt;jason_build_stdout.txt
+#exec 2&gt;jason_build_stdout.txt
+#arm
+ARCH=arm
+CPU=arm
+PREFIX=$(pwd)/android/$CPU
+TOOLCHAIN=$ANDROID_NDK_HOME/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64
+CROSS_COMPILE=$TOOLCHAIN/bin/arm-linux-androideabi-
+PLATFORM=$ANDROID_NKD_HOME/platforms/$PLATFORM_VERSION/arch-$ARCH
+build_ffmpeg
+
+#x86
+ARCH=x86
+CPU=x86
+PREFIX=$(pwd)/android/$CPU
+TOOLCHAIN=$ANDROID_NDK_HOME/toolchains/x86-4.9/prebuilt/linux-x86_64
+CROSS_COMPILE=$TOOLCHAIN/bin/i686-linux-android-
+PLATFORM=$ANDROID_NKD_HOME/platforms/$PLATFORM_VERSION/arch-$ARCH
+build_ffmpeg
 </code></pre>
           
         
