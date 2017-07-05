@@ -1,0 +1,1039 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="FFmpeg," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="POSIXPOSIX是一种标准，有多线程编程标准、网络编程标准等。
+POSIX多线程Linux下，一般多线程的实现由POSIX多线程编程实现。Android系统属于Linux系统，因此NDK原生支持POSIX多线程编程。
+Windows平台一般用Windows自带的API。
+POSIX的编译：
+在Linux平台中采用gcc编译（先编译生成目标文件然后链接生成可执行程序）：gcc test.c -o">
+<meta property="og:type" content="article">
+<meta property="og:title" content="FFmpeg学习系列(六)Linux之POSIX线程原语">
+<meta property="og:url" content="http://yoursite.com/2017/07/05/FFmpeg学习系列-六-Linux之POSIX线程原语/index.html">
+<meta property="og:site_name" content="Feng's Notes">
+<meta property="og:description" content="POSIXPOSIX是一种标准，有多线程编程标准、网络编程标准等。
+POSIX多线程Linux下，一般多线程的实现由POSIX多线程编程实现。Android系统属于Linux系统，因此NDK原生支持POSIX多线程编程。
+Windows平台一般用Windows自带的API。
+POSIX的编译：
+在Linux平台中采用gcc编译（先编译生成目标文件然后链接生成可执行程序）：gcc test.c -o">
+<meta property="og:updated_time" content="2017-07-05T09:01:20.502Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="FFmpeg学习系列(六)Linux之POSIX线程原语">
+<meta name="twitter:description" content="POSIXPOSIX是一种标准，有多线程编程标准、网络编程标准等。
+POSIX多线程Linux下，一般多线程的实现由POSIX多线程编程实现。Android系统属于Linux系统，因此NDK原生支持POSIX多线程编程。
+Windows平台一般用Windows自带的API。
+POSIX的编译：
+在Linux平台中采用gcc编译（先编译生成目标文件然后链接生成可执行程序）：gcc test.c -o">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/07/05/FFmpeg学习系列-六-Linux之POSIX线程原语/"/>
+
+
+
+
+
+  <title> FFmpeg学习系列(六)Linux之POSIX线程原语 | Feng's Notes </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Feng's Notes</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/05/FFmpeg学习系列-六-Linux之POSIX线程原语/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Feng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Feng's Notes">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                FFmpeg学习系列(六)Linux之POSIX线程原语
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-05T10:16:59+08:00">
+                2017-07-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/FFmpeg/" itemprop="url" rel="index">
+                    <span itemprop="name">FFmpeg</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="POSIX"><a href="#POSIX" class="headerlink" title="POSIX"></a>POSIX</h2><p>POSIX是一种标准，有多线程编程标准、网络编程标准等。</p>
+<h3 id="POSIX多线程"><a href="#POSIX多线程" class="headerlink" title="POSIX多线程"></a>POSIX多线程</h3><p>Linux下，一般多线程的实现由POSIX多线程编程实现。Android系统属于Linux系统，因此NDK原生支持POSIX多线程编程。</p>
+<p>Windows平台一般用Windows自带的API。</p>
+<p><strong>POSIX的编译：</strong></p>
+<p>在Linux平台中采用gcc编译（先编译生成目标文件然后链接生成可执行程序）：gcc test.c -o test -lpthread，执行：./test。</p>
+<p><strong>POSIX帮助文档的查看：</strong></p>
+<ol>
+<li>在Linux系统中，安装POSIX帮助文档：sudo apt-get install manpages-posix-dev</li>
+<li>列出所有函数man -k pthread；查看某个函数：man pthread_create</li>
+</ol>
+<h2 id="创建线程与结束线程"><a href="#创建线程与结束线程" class="headerlink" title="创建线程与结束线程"></a>创建线程与结束线程</h2><p>01.c:</p>
+<pre><code>#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;unistd.h&gt;
+//必须引入的头文件
+#include &lt;pthread.h&gt;
+
+//一个相当于Java的run方法
+void* thr_fun(void* arg){
+
+    //得到线程创建的参数
+    char* no = (char*)arg;
+    int i = 0;
+    for(; i &lt; 10; i++){
+        printf(&quot;%s thread, i:%d\n&quot;,no,i);
+        if(i==5){
+            //线程退出（自杀）
+            pthread_exit(2);
+            //他杀pthread_cancel          
+        }
+    }  
+    //run方法执行完，线程结束，返回 
+    return 1;
+}
+
+void main(){
+    printf(&quot;main thread\n&quot;);
+    //线程id
+    pthread_t tid;
+    //线程的属性，NULL默认属性
+    //thr_fun，线程创建之后执行的函数,可以传入参数，在thr_fun方法的arg中可以取出
+    pthread_create(&amp;tid,NULL,thr_fun,&quot;1&quot;);
+    void* rval;
+    //等待tid线程结束
+    //thr_fun在线程退出时传入的参数，都作为第二个参数的内容
+    pthread_join(tid,&amp;rval);
+    printf(&quot;rval:%d\n&quot;,(int)rval);
+}
+</code></pre><p>书写完成编译gcc 01.c -o 01 -lpthread，执行./01,输出结果如下：</p>
+<pre><code>main thread
+1 thread,i:0
+1 thread,i:1
+1 thread,i:2
+1 thread,i:3
+1 thread,i:4
+1 thread,i:5
+rval:2
+</code></pre><p>在代码中：</p>
+<p>通过pthread_create创建线程，需要传入一个函数指针，相当于Java线程中的run方法。然后还需要传参，参数可以在run方法中取出。</p>
+<p>线程被创建以后，就会执行“run”方法，该方法中可以拿到线程创建的参数，可以自杀掉线程。线程的结束需要参数。</p>
+<p>可以通过pthread_join方法等待线程结束，并且可获取线程结束的参数。</p>
+<h2 id="线程加锁"><a href="#线程加锁" class="headerlink" title="线程加锁"></a>线程加锁</h2><p>在多线程中我们需要一个线程执行完再执行另一个线程就需要给线程加锁。</p>
+<p>02.c:</p>
+<pre><code>#include &lt;stdlib.h&gt;                                                         
+#include &lt;stdio.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;pthread.h&gt;
+
+int i = 0;
+//互斥锁
+pthread_mutex_t mutex;
+
+void* thr_fun(void* arg){
+    //加锁
+    pthread_mutex_lock(&amp;mutex);
+    char* no = (char*)arg;
+    for(;i &lt; 5; i++){
+        printf(&quot;%s thread, i:%d\n&quot;,no,i);
+        sleep(1);
+    }
+    i=0;
+    //解锁
+    pthread_mutex_unlock(&amp;mutex);
+}
+
+void main(){
+    pthread_t tid1, tid2;
+    //初始化互斥锁
+    pthread_mutex_init(&amp;mutex,NULL);
+
+    pthread_create(&amp;tid1,NULL,thr_fun,&quot;No1&quot;);
+    pthread_create(&amp;tid2,NULL,thr_fun,&quot;No2&quot;);
+
+    pthread_join(tid1,NULL);
+    pthread_join(tid2,NULL);
+
+    //销毁互斥锁
+    pthread_mutex_destroy(&amp;mutex);
+}
+</code></pre><p>书写完成编译gcc 02.c -o 02 -lpthread，执行./02,输出结果如下：</p>
+<pre><code>No2 thread, i:0
+No2 thread, i:1
+No2 thread, i:2
+No2 thread, i:3
+No2 thread, i:4
+No1 thread, i:0
+No1 thread, i:1
+No1 thread, i:2
+No1 thread, i:3
+No1 thread, i:4
+</code></pre><p>在代码中：</p>
+<p>我们通过pthread_mutex_init初始化了一把互斥锁，最后通过pthread_mutex_destroy进行销毁。</p>
+<p>在线程执行的时候，我们可以通过pthread_mutex_lock、pthread_mutex_unlock进行加锁和解锁。</p>
+<p>使用互斥锁可以解决线程死锁（ABBA）的问题。</p>
+<p>互斥锁是先让一个线程做完，然后另外一个线程做。还有一种情况就是，一个线程先执行生产，然后另外一个线程就会去消费。</p>
+<p>其实视频解码的绘制使用的就是生产者–消费者的模式。图片的下载显示也是基于这种模式。比如说我们生产者生成的产品，放到一个队列里面，当生产者生产出产品的时候就会发送信号通知消费者去消费，例如RTMP推流的时候，我们本地采集音视频的时候就需要一种队列，因为本地的压缩比网络上传要快。</p>
+<p>使用这一种模式，就需要条件变量。举例：</p>
+<pre><code>#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;pthread.h&gt;
+#include &lt;unistd.h&gt;
+
+//模拟产品队列
+int productNum = 0;
+
+//互斥锁
+pthread_mutex_t m;
+//条件变量
+pthread_cond_t c;
+
+void *produce(void* arg){
+
+    char* no = (char*)arg;
+
+    for (;;){
+        //加锁
+        pthread_mutex_lock(&amp;m);
+
+        //生产者生产产品
+        productNum++;
+        printf(&quot;%s生产产品：%d\n&quot;, no, productNum);
+        //通知消费者进行消费
+        pthread_cond_signal(&amp;c);
+
+        //解锁
+        pthread_mutex_unlock(&amp;m);
+
+        sleep(1);
+    }
+    return (void*)1;
+}
+
+void *comsume(void* arg){
+
+    char* no = (char*)arg;
+
+    for (;;){
+        pthread_mutex_lock(&amp;m);
+        //使用while是为了防止惊群效应唤醒条件变量
+        while (productNum == 0){
+            //1.没有产品可以消费，等待生产者生产，即等待条件变量被唤醒
+            //2.释放互斥锁，使得其他消费者可以进来等待
+            //3.被唤醒的时候，解除阻塞，重新申请获得互斥锁，保证只有一个消费者消费
+            pthread_cond_wait(&amp;c, &amp;m);
+        }
+        productNum--;
+        printf(&quot;%s消费者消费产品：%d\n&quot;, no, productNum);
+        pthread_mutex_unlock(&amp;m);
+        sleep(1);
+    }
+    return (void*)1;
+}
+
+void main(){
+
+    printf(&quot;main thread\n&quot;);
+
+    //初始化互斥锁
+    pthread_mutex_init(&amp;m, NULL);
+    //初始化条件变量
+    pthread_cond_init(&amp;c, NULL);
+
+    pthread_t thread_producer;
+    pthread_t thread_comsumer;
+    //创建线程，指定run方法，并且可以传入参数，在run方法的arg中可以取出
+    pthread_create(&amp;thread_producer, NULL, produce, &quot;producer&quot;);
+    pthread_create(&amp;thread_comsumer, NULL, comsume, &quot;comsumer&quot;);
+
+    //等待线程结束，获取线程返回参数
+    pthread_join(thread_producer, NULL);
+    pthread_join(thread_comsumer, NULL);
+
+    //销毁互斥锁
+    pthread_mutex_destroy(&amp;m);
+    //销毁条件变量
+    pthread_cond_destroy(&amp;c);
+}
+</code></pre><p>书写完成编译gcc 03.c -o 03 -lpthread，执行./03,输出结果如下：</p>
+<pre><code>main thread
+producer生产产品：1
+comsumer消费者消费产品：0
+producer生产产品：1
+comsumer消费者消费产品：0
+producer生产产品：1
+comsumer消费者消费产品：0
+producer生产产品：1
+comsumer消费者消费产品：0
+producer生产产品：1
+comsumer消费者消费产品：0
+producer生产产品：1
+comsumer消费者消费产品：0
+producer生产产品：1
+comsumer消费者消费产品：0
+</code></pre><p>这里我通过sleep的方式控制了生产者与消费者的效率，一般来说生产的速度要比消费的速度快。</p>
+<p>上面是只有一个生产者和一个消费者的示例代码。一般来说，生产者和消费者都会有多个。这里我们通过线程数组的方式来实现。</p>
+<p>举例如下：</p>
+<pre><code>#include &lt;stdlib.h&gt;                                                      
+#include &lt;stdio.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;pthread.h&gt;
+
+//消费者数量
+#define CONSUMER_NUM 2
+//生产者数量
+#define PRODUCER_NUM 1
+
+pthread_t pids[CONSUMER_NUM+PRODUCER_NUM];
+
+//产品队列
+int ready = 0;
+
+//互斥锁
+pthread_mutex_t mutex;
+//条件变量
+pthread_cond_t has_product;
+
+//生产
+void* producer(void* arg){
+    int no = (int)arg;
+    //条件变量
+    for(;;){
+        pthread_mutex_lock(&amp;mutex);
+        //往队列中添加产品
+        ready++;
+        printf(&quot;producer %d, produce product\n&quot;,no);
+        //fflush(NULL);
+        //通知消费者，有新的产品可以消费了
+        //会阻塞输出
+        pthread_cond_signal(&amp;has_product);
+        printf(&quot;producer %d, singal\n&quot;,no);
+        pthread_mutex_unlock(&amp;mutex);
+        sleep(1);
+    }
+}
+
+//消费者
+void* consumer(void* arg){
+    int num = (int)arg;
+    for(;;){
+        pthread_mutex_lock(&amp;mutex);
+        //while?
+        //superious wake ‘惊群效应’
+        while(ready==0){
+            //没有产品，继续等待
+            //1.阻塞等待has_product被唤醒
+            //2.释放互斥锁，pthread_mutex_unlock
+            //3.被唤醒时，解除阻塞，重新申请获得互斥锁pthread_mutex_lock
+            printf(&quot;%d consumer wait\n&quot;,num);
+            pthread_cond_wait(&amp;has_product,&amp;mutex);
+        }
+        //有产品，消费产品
+        ready--;
+        printf(&quot;%d consume product\n&quot;,num);
+        pthread_mutex_unlock(&amp;mutex);
+        sleep(1);
+    }
+}
+
+
+void main(){
+    //初始化互斥锁和条件变量                                                
+    pthread_mutex_init(&amp;mutex,NULL);
+    pthread_cond_init(&amp;has_product,NULL);
+    printf(&quot;init\n&quot;);
+
+    int i;
+    for(i=0; i&lt;PRODUCER_NUM;i++){
+        //生产者线程
+        printf(&quot;%d\n&quot;,i);
+        pthread_create(&amp;pids[i],NULL,producer,(void*)i);
+    }
+
+    for(i=0; i&lt;CONSUMER_NUM;i++){
+        //消费者线程
+        pthread_create(&amp;pids[PRODUCER_NUM+i],NULL,consumer,(void*)i);
+    }
+
+    //等待
+    sleep(10);
+    for(i=0; i&lt;PRODUCER_NUM+CONSUMER_NUM;i++){
+        pthread_join(pids[i],NULL);
+    }
+
+    //销毁互斥锁和条件变量
+    pthread_mutex_destroy(&amp;mutex);
+    pthread_cond_destroy(&amp;has_product);
+
+}
+</code></pre>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/FFmpeg/" rel="tag"># FFmpeg</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/04/FFmpeg学习系列-五-Makefile与Android-mk/" rel="next" title="FFmpeg学习系列(五)Makefile与Android.mk">
+                <i class="fa fa-chevron-left"></i> FFmpeg学习系列(五)Makefile与Android.mk
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar.png"
+               alt="Feng" />
+          <p class="site-author-name" itemprop="name">Feng</p>
+           
+              <p class="site-description motion-element" itemprop="description">每天一小步，人生一大步</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">28</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#POSIX"><span class="nav-number">1.</span> <span class="nav-text">POSIX</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#POSIX多线程"><span class="nav-number">1.1.</span> <span class="nav-text">POSIX多线程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建线程与结束线程"><span class="nav-number">2.</span> <span class="nav-text">创建线程与结束线程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线程加锁"><span class="nav-number">3.</span> <span class="nav-text">线程加锁</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Feng</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

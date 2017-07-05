@@ -270,6 +270,454 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/05/FFmpeg学习系列-六-Linux之POSIX线程原语/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Feng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Feng's Notes">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/07/05/FFmpeg学习系列-六-Linux之POSIX线程原语/" itemprop="url">
+                  FFmpeg学习系列(六)Linux之POSIX线程原语
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-05T10:16:59+08:00">
+                2017-07-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/FFmpeg/" itemprop="url" rel="index">
+                    <span itemprop="name">FFmpeg</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="POSIX"><a href="#POSIX" class="headerlink" title="POSIX"></a>POSIX</h2><p>POSIX是一种标准，有多线程编程标准、网络编程标准等。</p>
+<h3 id="POSIX多线程"><a href="#POSIX多线程" class="headerlink" title="POSIX多线程"></a>POSIX多线程</h3><p>Linux下，一般多线程的实现由POSIX多线程编程实现。Android系统属于Linux系统，因此NDK原生支持POSIX多线程编程。</p>
+<p>Windows平台一般用Windows自带的API。</p>
+<p><strong>POSIX的编译：</strong></p>
+<p>在Linux平台中采用gcc编译（先编译生成目标文件然后链接生成可执行程序）：gcc test.c -o test -lpthread，执行：./test。</p>
+<p><strong>POSIX帮助文档的查看：</strong></p>
+<ol>
+<li>在Linux系统中，安装POSIX帮助文档：sudo apt-get install manpages-posix-dev</li>
+<li>列出所有函数man -k pthread；查看某个函数：man pthread_create</li>
+</ol>
+<h2 id="创建线程与结束线程"><a href="#创建线程与结束线程" class="headerlink" title="创建线程与结束线程"></a>创建线程与结束线程</h2><p>01.c:</p>
+<pre><code>#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;unistd.h&gt;
+//必须引入的头文件
+#include &lt;pthread.h&gt;
+
+//一个相当于Java的run方法
+void* thr_fun(void* arg){
+
+    //得到线程创建的参数
+    char* no = (char*)arg;
+    int i = 0;
+    for(; i &lt; 10; i++){
+        printf(&quot;%s thread, i:%d\n&quot;,no,i);
+        if(i==5){
+            //线程退出（自杀）
+            pthread_exit(2);
+            //他杀pthread_cancel          
+        }
+    }  
+    //run方法执行完，线程结束，返回 
+    return 1;
+}
+
+void main(){
+    printf(&quot;main thread\n&quot;);
+    //线程id
+    pthread_t tid;
+    //线程的属性，NULL默认属性
+    //thr_fun，线程创建之后执行的函数,可以传入参数，在thr_fun方法的arg中可以取出
+    pthread_create(&amp;tid,NULL,thr_fun,&quot;1&quot;);
+    void* rval;
+    //等待tid线程结束
+    //thr_fun在线程退出时传入的参数，都作为第二个参数的内容
+    pthread_join(tid,&amp;rval);
+    printf(&quot;rval:%d\n&quot;,(int)rval);
+}
+</code></pre><p>书写完成编译gcc 01.c -o 01 -lpthread，执行./01,输出结果如下：</p>
+<pre><code>main thread
+1 thread,i:0
+1 thread,i:1
+1 thread,i:2
+1 thread,i:3
+1 thread,i:4
+1 thread,i:5
+rval:2
+</code></pre><p>在代码中：</p>
+<p>通过pthread_create创建线程，需要传入一个函数指针，相当于Java线程中的run方法。然后还需要传参，参数可以在run方法中取出。</p>
+<p>线程被创建以后，就会执行“run”方法，该方法中可以拿到线程创建的参数，可以自杀掉线程。线程的结束需要参数。</p>
+<p>可以通过pthread_join方法等待线程结束，并且可获取线程结束的参数。</p>
+<h2 id="线程加锁"><a href="#线程加锁" class="headerlink" title="线程加锁"></a>线程加锁</h2><p>在多线程中我们需要一个线程执行完再执行另一个线程就需要给线程加锁。</p>
+<p>02.c:</p>
+<pre><code>#include &lt;stdlib.h&gt;                                                         
+#include &lt;stdio.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;pthread.h&gt;
+
+int i = 0;
+//互斥锁
+pthread_mutex_t mutex;
+
+void* thr_fun(void* arg){
+    //加锁
+    pthread_mutex_lock(&amp;mutex);
+    char* no = (char*)arg;
+    for(;i &lt; 5; i++){
+        printf(&quot;%s thread, i:%d\n&quot;,no,i);
+        sleep(1);
+    }
+    i=0;
+    //解锁
+    pthread_mutex_unlock(&amp;mutex);
+}
+
+void main(){
+    pthread_t tid1, tid2;
+    //初始化互斥锁
+    pthread_mutex_init(&amp;mutex,NULL);
+
+    pthread_create(&amp;tid1,NULL,thr_fun,&quot;No1&quot;);
+    pthread_create(&amp;tid2,NULL,thr_fun,&quot;No2&quot;);
+
+    pthread_join(tid1,NULL);
+    pthread_join(tid2,NULL);
+
+    //销毁互斥锁
+    pthread_mutex_destroy(&amp;mutex);
+}
+</code></pre><p>书写完成编译gcc 02.c -o 02 -lpthread，执行./02,输出结果如下：</p>
+<pre><code>No2 thread, i:0
+No2 thread, i:1
+No2 thread, i:2
+No2 thread, i:3
+No2 thread, i:4
+No1 thread, i:0
+No1 thread, i:1
+No1 thread, i:2
+No1 thread, i:3
+No1 thread, i:4
+</code></pre><p>在代码中：</p>
+<p>我们通过pthread_mutex_init初始化了一把互斥锁，最后通过pthread_mutex_destroy进行销毁。</p>
+<p>在线程执行的时候，我们可以通过pthread_mutex_lock、pthread_mutex_unlock进行加锁和解锁。</p>
+<p>使用互斥锁可以解决线程死锁（ABBA）的问题。</p>
+<p>互斥锁是先让一个线程做完，然后另外一个线程做。还有一种情况就是，一个线程先执行生产，然后另外一个线程就会去消费。</p>
+<p>其实视频解码的绘制使用的就是生产者–消费者的模式。图片的下载显示也是基于这种模式。比如说我们生产者生成的产品，放到一个队列里面，当生产者生产出产品的时候就会发送信号通知消费者去消费，例如RTMP推流的时候，我们本地采集音视频的时候就需要一种队列，因为本地的压缩比网络上传要快。</p>
+<p>使用这一种模式，就需要条件变量。举例：</p>
+<pre><code>#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;pthread.h&gt;
+#include &lt;unistd.h&gt;
+
+//模拟产品队列
+int productNum = 0;
+
+//互斥锁
+pthread_mutex_t m;
+//条件变量
+pthread_cond_t c;
+
+void *produce(void* arg){
+
+    char* no = (char*)arg;
+
+    for (;;){
+        //加锁
+        pthread_mutex_lock(&amp;m);
+
+        //生产者生产产品
+        productNum++;
+        printf(&quot;%s生产产品：%d\n&quot;, no, productNum);
+        //通知消费者进行消费
+        pthread_cond_signal(&amp;c);
+
+        //解锁
+        pthread_mutex_unlock(&amp;m);
+
+        sleep(1);
+    }
+    return (void*)1;
+}
+
+void *comsume(void* arg){
+
+    char* no = (char*)arg;
+
+    for (;;){
+        pthread_mutex_lock(&amp;m);
+        //使用while是为了防止惊群效应唤醒条件变量
+        while (productNum == 0){
+            //1.没有产品可以消费，等待生产者生产，即等待条件变量被唤醒
+            //2.释放互斥锁，使得其他消费者可以进来等待
+            //3.被唤醒的时候，解除阻塞，重新申请获得互斥锁，保证只有一个消费者消费
+            pthread_cond_wait(&amp;c, &amp;m);
+        }
+        productNum--;
+        printf(&quot;%s消费者消费产品：%d\n&quot;, no, productNum);
+        pthread_mutex_unlock(&amp;m);
+        sleep(1);
+    }
+    return (void*)1;
+}
+
+void main(){
+
+    printf(&quot;main thread\n&quot;);
+
+    //初始化互斥锁
+    pthread_mutex_init(&amp;m, NULL);
+    //初始化条件变量
+    pthread_cond_init(&amp;c, NULL);
+
+    pthread_t thread_producer;
+    pthread_t thread_comsumer;
+    //创建线程，指定run方法，并且可以传入参数，在run方法的arg中可以取出
+    pthread_create(&amp;thread_producer, NULL, produce, &quot;producer&quot;);
+    pthread_create(&amp;thread_comsumer, NULL, comsume, &quot;comsumer&quot;);
+
+    //等待线程结束，获取线程返回参数
+    pthread_join(thread_producer, NULL);
+    pthread_join(thread_comsumer, NULL);
+
+    //销毁互斥锁
+    pthread_mutex_destroy(&amp;m);
+    //销毁条件变量
+    pthread_cond_destroy(&amp;c);
+}
+</code></pre><p>书写完成编译gcc 03.c -o 03 -lpthread，执行./03,输出结果如下：</p>
+<pre><code>main thread
+producer生产产品：1
+comsumer消费者消费产品：0
+producer生产产品：1
+comsumer消费者消费产品：0
+producer生产产品：1
+comsumer消费者消费产品：0
+producer生产产品：1
+comsumer消费者消费产品：0
+producer生产产品：1
+comsumer消费者消费产品：0
+producer生产产品：1
+comsumer消费者消费产品：0
+producer生产产品：1
+comsumer消费者消费产品：0
+</code></pre><p>这里我通过sleep的方式控制了生产者与消费者的效率，一般来说生产的速度要比消费的速度快。</p>
+<p>上面是只有一个生产者和一个消费者的示例代码。一般来说，生产者和消费者都会有多个。这里我们通过线程数组的方式来实现。</p>
+<p>举例如下：</p>
+<pre><code>#include &lt;stdlib.h&gt;                                                      
+#include &lt;stdio.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;pthread.h&gt;
+
+//消费者数量
+#define CONSUMER_NUM 2
+//生产者数量
+#define PRODUCER_NUM 1
+
+pthread_t pids[CONSUMER_NUM+PRODUCER_NUM];
+
+//产品队列
+int ready = 0;
+
+//互斥锁
+pthread_mutex_t mutex;
+//条件变量
+pthread_cond_t has_product;
+
+//生产
+void* producer(void* arg){
+    int no = (int)arg;
+    //条件变量
+    for(;;){
+        pthread_mutex_lock(&amp;mutex);
+        //往队列中添加产品
+        ready++;
+        printf(&quot;producer %d, produce product\n&quot;,no);
+        //fflush(NULL);
+        //通知消费者，有新的产品可以消费了
+        //会阻塞输出
+        pthread_cond_signal(&amp;has_product);
+        printf(&quot;producer %d, singal\n&quot;,no);
+        pthread_mutex_unlock(&amp;mutex);
+        sleep(1);
+    }
+}
+
+//消费者
+void* consumer(void* arg){
+    int num = (int)arg;
+    for(;;){
+        pthread_mutex_lock(&amp;mutex);
+        //while?
+        //superious wake ‘惊群效应’
+        while(ready==0){
+            //没有产品，继续等待
+            //1.阻塞等待has_product被唤醒
+            //2.释放互斥锁，pthread_mutex_unlock
+            //3.被唤醒时，解除阻塞，重新申请获得互斥锁pthread_mutex_lock
+            printf(&quot;%d consumer wait\n&quot;,num);
+            pthread_cond_wait(&amp;has_product,&amp;mutex);
+        }
+        //有产品，消费产品
+        ready--;
+        printf(&quot;%d consume product\n&quot;,num);
+        pthread_mutex_unlock(&amp;mutex);
+        sleep(1);
+    }
+}
+
+
+void main(){
+    //初始化互斥锁和条件变量                                                
+    pthread_mutex_init(&amp;mutex,NULL);
+    pthread_cond_init(&amp;has_product,NULL);
+    printf(&quot;init\n&quot;);
+
+    int i;
+    for(i=0; i&lt;PRODUCER_NUM;i++){
+        //生产者线程
+        printf(&quot;%d\n&quot;,i);
+        pthread_create(&amp;pids[i],NULL,producer,(void*)i);
+    }
+
+    for(i=0; i&lt;CONSUMER_NUM;i++){
+        //消费者线程
+        pthread_create(&amp;pids[PRODUCER_NUM+i],NULL,consumer,(void*)i);
+    }
+
+    //等待
+    sleep(10);
+    for(i=0; i&lt;PRODUCER_NUM+CONSUMER_NUM;i++){
+        pthread_join(pids[i],NULL);
+    }
+
+    //销毁互斥锁和条件变量
+    pthread_mutex_destroy(&amp;mutex);
+    pthread_cond_destroy(&amp;has_product);
+
+}
+</code></pre>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/04/FFmpeg学习系列-五-Makefile与Android-mk/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3125,773 +3573,6 @@ protected:
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/21/C++学习系列-二-C++中的类/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Feng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/uploads/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Feng's Notes">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/05/21/C++学习系列-二-C++中的类/" itemprop="url">
-                  C++学习系列(二)C++中的类
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-21T11:20:12+08:00">
-                2017-05-21
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/C/" itemprop="url" rel="index">
-                    <span itemprop="name">C++</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>C++与Java一样，也是一种面向对象的编程语言。</p>
-<h2 id="C-类的普遍写法"><a href="#C-类的普遍写法" class="headerlink" title="C++类的普遍写法"></a>C++类的普遍写法</h2><p>类的定义是在头文件中（MyTeacher.h）：</p>
-<pre><code>#pragma once
-
-class MyTeacher{
-//属性
-public:
-    int age;
-    char* name;
-//方法
-public:
-    void setAge(int age);
-    int getAge();
-    void setName(char* name);
-    char* getName();
-};
-</code></pre><p>实现在源文件中(MyTeacher.cpp):</p>
-<pre><code>#include &quot;MyTeacher.h&quot;
-
-void MyTeacher::setAge(int age){
-    this-&gt;age = age;
-}
-
-int MyTeacher::getAge(){
-    return this-&gt;age;
-}
-
-void MyTeacher::setName(char* name){
-    this-&gt;name = name;
-}
-
-char* MyTeacher::getName(){
-    return this-&gt;name;
-}
-</code></pre><p>类的使用（01.cpp）：</p>
-<pre><code>#include &quot;MyTeacher.h&quot;
-
-void main(){
-    MyTeacher t1;
-    t1.name = &quot;Jack&quot;;
-    t1.age = 20;
-
-    cout &lt;&lt; t1.getName() &lt;&lt; endl;
-
-    system(&quot;pause&quot;);
-}
-</code></pre><p>这就是一个c++类的普遍写法，下面为了方便，都写在源文件（01.cpp)中。</p>
-<h2 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h2><p>构造函数分为有参构造和无参构造两种，无参构造函数是系统默认的，一旦提供啦有参构造就会覆盖无参构造。</p>
-<p>举例：</p>
-<pre><code>class Teacher{
-private:
-    char *name;
-    int age;
-public:
-    //无参构造函数（写了，就会覆盖默认的无参构造函数）
-    Teacher(){
-        cout &lt;&lt; &quot;无参构造函数&quot; &lt;&lt; endl;
-    }
-    //有参构造函数会覆盖默认的构造函数
-    Teacher(char *name, int age){
-        this-&gt;name = name;
-        this-&gt;age = age;
-        cout &lt;&lt; &quot;有参构造函数&quot; &lt;&lt; endl;
-    }    
-};
-
-void main(){
-    //两种初始化对象的方法
-    //Teacher t1;
-    Teacher t2(&quot;yuehan&quot;,20);
-
-    //另外一种调用方式
-    Teacher t3 = Teacher(&quot;jack&quot;,21);
-
-    system(&quot;pause&quot;);
-}
-</code></pre><h2 id="析构函数"><a href="#析构函数" class="headerlink" title="析构函数"></a>析构函数</h2><p>析构函数：当对象要被系统释放时，析构函数被调用</p>
-<p>作用：善后处理，例如释放动态分配的内存。</p>
-<p>举例：</p>
-<pre><code>class Teacher{
-private:
-    char *name;
-    int age;
-public:
-    //无参构造函数赋默认值
-    Teacher(){
-        this-&gt;name = (char*)malloc(100);
-        strcpy(name,&quot;jack walson&quot;);
-        age = 20;
-        cout &lt;&lt; &quot;无参构造函数&quot; &lt;&lt; endl;
-    }
-    //析构函数
-    //当对象要被系统释放时，析构函数被调用
-    //作用：善后处理
-    ~Teacher(){
-        cout &lt;&lt; &quot;析构&quot; &lt;&lt; endl;
-        //释放内存
-        free(this-&gt;name);
-    }
-};
-
-void func(){
-    Teacher t1;
-}
-
-void main(){
-    func();
-
-    system(&quot;pause&quot;);
-}
-</code></pre><h2 id="拷贝构造函数"><a href="#拷贝构造函数" class="headerlink" title="拷贝构造函数"></a>拷贝构造函数</h2><p>拷贝构造函数被调用的场景：</p>
-<ol>
-<li>声明时赋值</li>
-<li>作为参数传入，实参给形参赋值</li>
-<li>作为函数返回值返回，给变量初始化赋值</li>
-</ol>
-<p>系统默认的拷贝构造函数就是拷贝值的，实例如下：</p>
-<pre><code>class Teacher{
-private:
-    char *name;
-    int age;
-public:
-    Teacher(char *name, int age){
-        this-&gt;name = name;
-        this-&gt;age = age;
-        cout &lt;&lt; &quot;有参构造函数&quot; &lt;&lt; endl;
-    }
-    //拷贝构造函数（值拷贝）
-    //默认拷贝构造函数，就是值拷贝
-    Teacher(const Teacher &amp;obj){
-        this-&gt;name = obj.name;
-        this-&gt;age = obj.age;
-        cout &lt;&lt; &quot;拷贝构造函数&quot; &lt;&lt; endl;
-    }
-    void myprint(){
-        cout &lt;&lt; name &lt;&lt; &quot;,&quot; &lt;&lt; age &lt;&lt; endl;
-    }
-};
-
-Teacher func1(Teacher t){
-    t.myprint();
-    return t;
-}
-
-void main(){
-    Teacher t1(&quot;rose&quot;,20);
-
-    //拷贝构造函数被调用的场景
-    //1.声明时赋值
-    //Teacher t2 = t1;
-    //t2.myprint();
-    //2.作为参数传入，实参给形参赋值
-    func1(t1);
-    //3.作为函数返回值返回，给变量初始化赋值
-    //Teacher t3 = func1(t1);
-
-    //这里不会被调用
-    //Teacher t1 ;
-    //Teacher t2;
-    //t1 = t2;
-
-    system(&quot;pause&quot;);
-}
-</code></pre><h3 id="浅拷贝（值拷贝）问题"><a href="#浅拷贝（值拷贝）问题" class="headerlink" title="浅拷贝（值拷贝）问题"></a>浅拷贝（值拷贝）问题</h3><pre><code>class Teacher{
-private:
-    char *name;
-    int age;
-public:
-    Teacher(char *name, int age){
-        this-&gt;name = (char*)malloc(100);
-        strcpy(this-&gt;name,name);
-        this-&gt;age = age;
-        cout &lt;&lt; &quot;有参构造函数&quot; &lt;&lt; endl;
-    }    
-    ~Teacher(){
-        cout &lt;&lt; &quot;析构&quot; &lt;&lt; endl;
-        //释放内存
-        free(this-&gt;name);
-    }
-    void myprint(){
-        cout &lt;&lt; name &lt;&lt; &quot;,&quot; &lt;&lt; age &lt;&lt; endl;
-    }
-};
-
-void func(){
-    Teacher t1(&quot;rose&quot;, 20);
-
-    Teacher t2 = t1;
-    t2.myprint();
-}
-
-void main(){
-    func();
-
-    system(&quot;pause&quot;);
-}
-</code></pre><p>以上代码，默认的拷贝构造函数实现是浅拷贝，即值拷贝，会带来一些问题：</p>
-<p>如果有动态内存分配的时候，如果单纯是值拷贝，析构的时候就会析构两次。</p>
-<p>上面代码中的char* name，t1、t2都指向了同一个地址，如下图，那么析构的时候就会free两次，因为一个内存地址不能释放两次，因此会触发异常中断。</p>
-<p><img src="http://oph0qv0je.bkt.clouddn.com/copy01.png" alt=""></p>
-<h3 id="深拷贝"><a href="#深拷贝" class="headerlink" title="深拷贝"></a>深拷贝</h3><p>通过深拷贝来解决浅拷贝这个问题</p>
-<pre><code>class Teacher{
-private:
-    char *name;
-    int age;
-public:
-    Teacher(char *name, int age){
-        int len = strlen(name);
-        this-&gt;name = (char*)malloc(len+1);
-        strcpy(this-&gt;name, name);
-        this-&gt;age = age;
-        cout &lt;&lt; &quot;有参构造函数&quot; &lt;&lt; endl;
-    }
-    ~Teacher(){
-        cout &lt;&lt; &quot;析构&quot; &lt;&lt; endl;
-        //释放内存
-        free(this-&gt;name);
-    }
-    //深拷贝
-    Teacher(const Teacher &amp;obj){
-        //复制name属性
-        int len = strlen(obj.name);
-        this-&gt;name = (char*)malloc(len+1);
-        strcpy(this-&gt;name,obj.name);
-        this-&gt;age = obj.age;
-    }
-    void myprint(){
-        cout &lt;&lt; name &lt;&lt; &quot;,&quot; &lt;&lt; age &lt;&lt; endl;
-    }
-};
-
-void func(){
-    Teacher t1(&quot;rose&quot;, 20);
-
-    Teacher t2 = t1;
-    t2.myprint();
-}
-
-void main(){
-    func();
-
-    system(&quot;pause&quot;);
-}
-</code></pre><p>重写覆盖默认的浅拷贝，自己写一个深拷贝。</p>
-<p>t1、t2都指向了不同的内存地址。</p>
-<p><img src="http://oph0qv0je.bkt.clouddn.com/copy02.png" alt=""></p>
-<h2 id="构造函数的属性初始化列表"><a href="#构造函数的属性初始化列表" class="headerlink" title="构造函数的属性初始化列表"></a>构造函数的属性初始化列表</h2><p>作用：在Student类中有两个Teacher的私有属性对象。在Student构造的时候需要初始化Teacher，但是又不能直接访问Teacher类的私有属性。因此只能通过初始化列表的方式来调用。相当于Java利用super(…)调用父类的构造函数初始化父类。</p>
-<p>举例：</p>
-<pre><code>class Teacher{
-private:
-    char* name;
-public:
-    Teacher(char* name){
-        this-&gt;name = name;
-        cout &lt;&lt; &quot;Teacher有参构造函数&quot; &lt;&lt; endl;
-    }
-    ~Teacher(){
-        cout &lt;&lt; &quot;Teacher析构函数&quot; &lt;&lt; endl;
-    }
-    char* getName(){
-        return this-&gt;name;
-    }
-
-};
-
-class Student{
-private:
-    int id;
-    //属性对象
-    //Teacher t = Teacher(&quot;miss cang&quot;);
-    Teacher t1;
-    Teacher t2;
-public:
-    Student(int id,char *t1_n, char* t2_n) : t1(t1_n), t2(t2_n){
-        this-&gt;id = id;
-        cout &lt;&lt; &quot;Student有参构造函数&quot; &lt;&lt; endl;
-    }
-    void myprint(){
-        cout &lt;&lt; id &lt;&lt; &quot;,&quot; &lt;&lt; t1.getName() &lt;&lt;&quot;,&quot; &lt;&lt; t2.getName() &lt;&lt; endl;
-    }
-    ~Student(){
-        cout &lt;&lt; &quot;Student析构函数&quot; &lt;&lt; endl;
-    }
-};
-
-void func(){
-    Student s1(10, &quot;miss bo&quot;, &quot;mrs liu&quot;);
-    //Student s2(20, &quot;miss cang&quot;, &quot;jason&quot;);
-    s1.myprint();
-    //s2.myprint();
-}
-
-void main(){
-    func();
-
-    system(&quot;pause&quot;);
-}
-</code></pre><h2 id="C-动态内存分配"><a href="#C-动态内存分配" class="headerlink" title="C++动态内存分配"></a>C++动态内存分配</h2><p>C++ 通过new(delete)动态内存分配，调用构造和析构函数。</p>
-<p>C中通过malloc(free)进行动态内存分配，不会调用构造和析构函数。</p>
-<p>举例：</p>
-<pre><code>class Teacher{
-private:
-    char* name;
-public:
-    Teacher(char* name){
-        this-&gt;name = name;
-        cout &lt;&lt; &quot;Teacher有参构造函数&quot; &lt;&lt; endl;
-    }
-    ~Teacher(){
-        cout &lt;&lt; &quot;Teacher析构函数&quot; &lt;&lt; endl;
-    }
-    void setName(char* name){
-        this-&gt;name = name;
-    }
-    char* getName(){
-        return this-&gt;name;
-    }
-};
-
-void func(){
-    //C++    
-    //会调用构造和析构函数
-    Teacher *t1 = new Teacher(&quot;jack&quot;);
-    cout &lt;&lt; t1-&gt;getName() &lt;&lt; endl;
-    //释放
-    delete t1;
-
-    //C
-    //Teacher *t2 = (Teacher*)malloc(sizeof(Teacher));
-    //t2-&gt;setName(&quot;jack&quot;);
-    //free(t2);
-
-}
-
-void main(){
-
-    func();
-
-
-    //关于C与C++中数组类型比较
-    //C
-    //int *p1 = (int*)malloc(sizeof(int) * 10);
-    //p1[0] = 9;
-    //free(p1);
-
-    //C++数组与Java类似
-    int *p2 = new int[10];
-    p2[0] = 2;
-    //释放数组 []
-    delete[] p2;
-
-    system(&quot;pause&quot;);
-}
-</code></pre><p>注意：C++中数组的话，delete的时候需要加上[]</p>
-<h2 id="static-静态属性和方法"><a href="#static-静态属性和方法" class="headerlink" title="static 静态属性和方法"></a>static 静态属性和方法</h2><p>C++类的静态属性必须放在全局的地方初始化。</p>
-<p>非静态、静态函数可以访问静态属性，但是静态函数只能访问静态属性，这点与Java类似。</p>
-<p>静态的属性和方法可以直接通过 类名来访问，也可以通过对象来访问。</p>
-<p>举例：</p>
-<pre><code>class Teacher{
-public:
-    char* name;
-    //计数器
-    static int total;
-public:
-    Teacher(char* name){
-        this-&gt;name = name;        
-        cout &lt;&lt; &quot;Teacher有参构造函数&quot; &lt;&lt; endl;
-    }
-    ~Teacher(){
-        cout &lt;&lt; &quot;Teacher析构函数&quot; &lt;&lt; endl;
-    }
-    void setName(char* name){
-        this-&gt;name = name;
-    }
-    char* getName(){
-        return this-&gt;name;
-    }
-    //计数，静态函数
-    static void count(){
-        total++;        
-        cout &lt;&lt; total &lt;&lt; endl;
-    }
-};
-
-//静态属性初始化赋值
-int Teacher::total = 9;
-
-void main(){
-    Teacher::total++;
-    cout &lt;&lt; Teacher::total &lt;&lt; endl;
-    //直接通过类名访问
-    Teacher::count();
-
-    //也可以通过对象名访问
-    Teacher t1(&quot;yuehang&quot;);
-    t1.count();
-
-    system(&quot;pause&quot;);
-}
-</code></pre><h2 id="C-中类的大小"><a href="#C-中类的大小" class="headerlink" title="C++中类的大小"></a>C++中类的大小</h2><p>先来了解一下C++的内存分区：<br>分为：栈、堆、全局（静态、全局）、常量区（字符串）、程序代码区五个区域</p>
-<p>结构体有字节对齐的概念，C++类的普通属性与结构体有相同的内存布局。</p>
-<pre><code>class A{
-public:
-    int i;
-    int j;
-    int k;
-    static int m;//存在于全局静态区
-};
-
-class B{
-public:
-    int i;
-    int j;
-    int k;
-    void myprintf(){//相当于函数指针的写法，存放在代码区
-        cout &lt;&lt; &quot;打印&quot; &lt;&lt; endl;
-    }
-};
-
-
-void main(){
-    cout &lt;&lt; sizeof(A) &lt;&lt; endl;
-    cout &lt;&lt; sizeof(B) &lt;&lt; endl;
-
-    //C/C++ 内存分区：栈、堆、全局（静态、全局）、常量区（字符串）、程序代码区
-    //普通属性与结构体相同的内存布局
-
-    system(&quot;pause&quot;);
-}
-</code></pre><h2 id="C-中的this"><a href="#C-中的this" class="headerlink" title="C++中的this"></a>C++中的this</h2><p>this表示当前对象的指针。</p>
-<p>C++函数是共享的（多个对象共享代码区中的一个函数），必须要有能够标识当前对象是谁的办法，于是就用this指针。</p>
-<p>举例：</p>
-<pre><code>class Teacher{
-private:
-    char* name;
-    int age;
-public:
-    Teacher(char* name,int age){
-        this-&gt;name = name;
-        this-&gt;age = age;
-        cout &lt;&lt; &quot;Teacher有参构造函数&quot; &lt;&lt; endl;
-    }
-    ~Teacher(){
-        cout &lt;&lt; &quot;Teacher析构函数&quot; &lt;&lt; endl;
-    }
-    //常函数（const写在函数后面），修饰的是this
-    //既不能改变指针的值，又不能改变指针指向的内容
-    //const Teacher* const this
-    void myprint() const{
-        printf(&quot;%#x\n&quot;,this);
-        //改变属性的值
-        //this-&gt;name = &quot;yuehang&quot;;
-        //改变this指针的值
-        //this = (Teacher*)0x00009;
-        cout &lt;&lt; this-&gt;name &lt;&lt; &quot;,&quot; &lt;&lt; this-&gt;age &lt;&lt; endl;
-    }
-    void myprint2(){        
-        cout &lt;&lt; this-&gt;name &lt;&lt; &quot;,&quot; &lt;&lt; this-&gt;age &lt;&lt; endl;        
-    }
-};
-
-void main(){
-    Teacher t1(&quot;jack&quot;,20);
-    const Teacher t2(&quot;rose&quot;, 18);
-    //t2.myprint2(); 常量对象只能调用常量函数，不能调用非常量函数
-    //常函数，当前对象不能被修改，防止数据成员被非法访问
-    printf(&quot;%#x\n&quot;, &amp;t1);
-    t1.myprint();
-
-    printf(&quot;%#x\n&quot;, &amp;t2);
-    t2.myprint();
-
-    system(&quot;pause&quot;);
-}
-</code></pre><h2 id="友元函数"><a href="#友元函数" class="headerlink" title="友元函数"></a>友元函数</h2><p>在友元函数中可以访问类的私有的属性。</p>
-<p>举例：modify_i是类A的友元函数，因此modify_i中可以访问A的私有属性</p>
-<pre><code>class A{
-    //友元函数
-    friend void modify_i(A *p, int a);
-private:
-    int i;
-public:
-    A(int i){
-        this-&gt;i = i;
-    }
-    void myprint(){
-        cout &lt;&lt; i &lt;&lt; endl;
-    }
-
-};
-
-//友元函数的实现，在友元函数中可以访问私有的属性
-void modify_i(A *p, int a){
-    p-&gt;i = a;
-}
-
-void main(){
-    A* a = new A(10);
-    a-&gt;myprint();
-
-    modify_i(a,20);
-    a-&gt;myprint();
-
-    system(&quot;pause&quot;);
-}
-</code></pre><h2 id="友元类"><a href="#友元类" class="headerlink" title="友元类"></a>友元类</h2><pre><code>class A{        
-    //友元类
-    friend class B;
-private:
-    int i;
-public:
-    A(int i){
-        this-&gt;i = i;
-    }
-    void myprint(){
-        cout &lt;&lt; i &lt;&lt; endl;
-    }    
-};
-
-class B{
-public:
-    //B这个友元类可以访问A类的任何成员
-    void accessAny(){
-        a.i = 30;        
-    }
-private:
-    A a;
-};
-</code></pre><h2 id="运算符重载"><a href="#运算符重载" class="headerlink" title="运算符重载"></a>运算符重载</h2><pre><code>class Point{
-public:
-    int x;
-    int y;
-public:
-    Point(int x = 0, int y = 0){
-        this-&gt;x = x;
-        this-&gt;y = y;
-    }
-    void myprint(){
-        cout &lt;&lt; x &lt;&lt; &quot;,&quot; &lt;&lt; y &lt;&lt; endl;
-    }
-};
-
-//重载+号
-Point operator+(Point &amp;p1, Point &amp;p2){
-    Point tmp(p1.x + p2.x, p1.y + p2.y);
-    return tmp;
-}
-
-//重载-号
-Point operator-(Point &amp;p1, Point &amp;p2){
-    Point tmp(p1.x - p2.x, p1.y - p2.y);
-    return tmp;
-}
-
-void main(){
-    Point p1(10,20);
-    Point p2(20,10);
-
-    Point p3 = p1 + p2;
-
-    p3.myprint();
-
-    system(&quot;pause&quot;);
-}
-</code></pre><h3 id="成员函数，运算符重载"><a href="#成员函数，运算符重载" class="headerlink" title="成员函数，运算符重载"></a>成员函数，运算符重载</h3><pre><code>class Point{
-public:
-    int x;
-    int y;
-public:
-    Point(int x = 0, int y = 0){
-        this-&gt;x = x;
-        this-&gt;y = y;
-    }
-    //成员函数，运算符重载
-    Point operator+(Point &amp;p2){
-        Point tmp(this-&gt;x + p2.x, this-&gt;y + p2.y);
-        return tmp;
-    }
-    void myprint(){
-        cout &lt;&lt; x &lt;&lt; &quot;,&quot; &lt;&lt; y &lt;&lt; endl;
-    }
-};
-
-void main(){
-    Point p1(10, 20);
-    Point p2(20, 10);
-
-    //运算符的重载，本质还是函数调用
-    //p1.operator+(p2)
-    Point p3 = p1 + p2;
-
-    p3.myprint();
-
-    system(&quot;pause&quot;);
-}
-</code></pre><h3 id="当属性私有时，通过友元函数完成运算符重载"><a href="#当属性私有时，通过友元函数完成运算符重载" class="headerlink" title="当属性私有时，通过友元函数完成运算符重载"></a>当属性私有时，通过友元函数完成运算符重载</h3><pre><code>class Point{
-    friend Point operator+(Point &amp;p1, Point &amp;p2);
-private:
-    int x;
-    int y;
-public:
-    Point(int x = 0, int y = 0){
-        this-&gt;x = x;
-        this-&gt;y = y;
-    }    
-    void myprint(){
-        cout &lt;&lt; x &lt;&lt; &quot;,&quot; &lt;&lt; y &lt;&lt; endl;
-    }
-};
-
-Point operator+(Point &amp;p1, Point &amp;p2){
-    Point tmp(p1.x + p2.x, p1.y + p2.y);
-    return tmp;
-}
-
-void main(){
-    Point p1(10, 20);
-    Point p2(20, 10);
-
-    //运算符的重载，本质还是函数调用
-    //p1.operator+(p2)
-    Point p3 = p1 + p2;
-
-    p3.myprint();
-
-    system(&quot;pause&quot;);
-}
-</code></pre>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -3941,7 +3622,7 @@ void main(){
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">27</span>
+                <span class="site-state-item-count">28</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
