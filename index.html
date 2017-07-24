@@ -367,11 +367,61 @@
       
         
           
-            <p>直播客户端与服务器端架构</p>
+            <p>直播客户端与服务器端架构图：</p>
+<p><img src="http://oph0qv0je.bkt.clouddn.com/rtmp_zhibo.png" alt=""></p>
 <p>Nginx服务器支持RTMP协议（有rtmp-module模块），因此我们把它作为流媒体服务器。高性能反向代理的服务器。</p>
 <p>首先创建一个Nginx目录</p>
 <pre><code>mkdir nginx
 chmod +x nginx/
+</code></pre><p>搭建流媒体服务器的环境步骤：</p>
+<p>1.先下载安装  nginx 和 nginx-rtmp 编译依赖工具</p>
+<pre><code>sudo apt-get install build-essential libpcre3 libpcre3-dev libssl-dev
+</code></pre><ol>
+<li><p>创建一个工作目录，并切换到工作目录</p>
+<p> mkdir /usr/jason/nginx<br> cd /usr/jason/nginx</p>
+</li>
+</ol>
+<p>3.下载 nginx 和 nginx-rtmp源码（wget是一个从网络上自动下载文件的自由工具）</p>
+<pre><code>wget http://nginx.org/download/nginx-1.8.1.tar.gz
+wget https://github.com/arut/nginx-rtmp-module/archive/master.zip
+</code></pre><ol>
+<li><p>安装unzip工具，解压下载的安装包</p>
+<p> sudo apt-get install unzip</p>
+</li>
+</ol>
+<p>5.解压 nginx 和 nginx-rtmp安装包</p>
+<pre><code>tar -zxvf nginx-1.8.1.tar.gz
+-zxvf分别是四个参数
+x : 从 tar 包中把文件提取出来
+z : 表示 tar 包是被 gzip 压缩过的，所以解压时需要用 gunzip 解压
+v : 显示详细信息
+f xxx.tar.gz :  指定被处理的文件是 xxx.tar.gz
+
+unzip master.zip
+</code></pre><ol>
+<li><p>切换到 nginx-目录</p>
+<p> cd nginx-1.8.1</p>
+</li>
+</ol>
+<p>7.添加 nginx-rtmp 模板编译到 nginx</p>
+<pre><code>./configure --with-http_ssl_module --add-module=../nginx-rtmp-module-master
+</code></pre><p>8.编译安装 </p>
+<pre><code>make
+sudo make install
+</code></pre><p>9.安装nginx init 脚本(开机启动，执行Nginx脚本文件)</p>
+<pre><code>下载init脚本到/etc/init.d/nginx目录中，其中/etc/init.d目录放是Linux进程启动的时候会执行的一些脚本
+sudo wget https://raw.github.com/JasonGiedymin/nginx-init-ubuntu/master/nginx -O /etc/init.d/nginx
+
+cd /etc/init.d/
+chmod u+x nginx
+//开机启动，去执行脚本文件
+update-rc.d nginx defaults
+</code></pre><p>开机启动也可手动启动：</p>
+<p>手动启动一下：</p>
+<pre><code>service nginx start
+</code></pre><p>但是这里默认的是80的端口，可以修改端口，在下面目录修改：</p>
+<pre><code>cd /usr/local/nginx/conf
+vim nginx.conf
 </code></pre>
           
         
