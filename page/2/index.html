@@ -270,6 +270,627 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/30/C++学习系列-三-继承与多态/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Feng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Feng's Notes">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/05/30/C++学习系列-三-继承与多态/" itemprop="url">
+                  C++学习系列(三)继承与多态
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-30T11:12:10+08:00">
+                2017-05-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index">
+                    <span itemprop="name">C++</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>C++是面向对象的编程语言，因此具有继承和多态的基本特征。</p>
+<h2 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h2><p>继承主要是提高代码的重用性。</p>
+<p>举例：</p>
+<pre><code>//人类
+class Human{
+public:
+    void say(){
+        cout &lt;&lt; &quot;说话&quot; &lt;&lt; endl;
+    }
+protected:
+    char* name;
+    int age;
+};
+
+//男人
+class Man : public Human{
+public:
+    //泡妞
+    void chasing(){
+        cout &lt;&lt; &quot;泡妞&quot; &lt;&lt; endl;        
+    }
+private:
+    //兄弟
+    char* brother;
+};
+
+void work(Human&amp; h){
+    h.say();
+}
+
+void main(){
+    Man m1;
+    m1.say();
+
+    //1.父类类型的引用或指针
+    Human* h_p = &amp;m1;
+    h_p-&gt;say();
+
+    Human &amp;h1 = m1;
+    h1.say();
+
+    //子类对象初始化父类类型的对象
+    Human h2 = m1;
+
+    system(&quot;pause&quot;);
+}
+</code></pre><p>上面代码我们可以看出，通过:public来继承Human。</p>
+<h3 id="向父类构造方法传参"><a href="#向父类构造方法传参" class="headerlink" title="向父类构造方法传参"></a>向父类构造方法传参</h3><pre><code>class Human{
+public:
+    Human(char* name, int age){
+        this-&gt;name = name;
+        this-&gt;age = age;
+    }
+    void say(){
+        cout &lt;&lt; &quot;说话&quot; &lt;&lt; endl;
+    }
+protected:
+    char* name;
+    int age;
+};
+
+//男人
+class Man : public Human{
+public:
+    //给父类构造函数传参，同时给属性对象赋值
+    Man(char *brother, char *s_name, int s_age, char *h_name, int h_age) : Human(s_name, s_age), h(h_name,h_age){
+        this-&gt;brother = brother;
+    }
+    //泡妞
+    void chasing(){
+        cout &lt;&lt; &quot;泡妞&quot; &lt;&lt; endl;
+    }
+private:
+    //兄弟
+    char* brother;
+    Human h;
+};
+
+void main(){
+    Man m1(&quot;danny&quot;,&quot;jack&quot;,18,&quot;jason&quot;,18);
+
+    system(&quot;pause&quot;);
+}
+</code></pre><p>通过在自身构造的时候给父类构造函数传参。子类构造的时候，会先构造父类。</p>
+<h3 id="子类与父类构造函数与析构函数调用的顺序"><a href="#子类与父类构造函数与析构函数调用的顺序" class="headerlink" title="子类与父类构造函数与析构函数调用的顺序"></a>子类与父类构造函数与析构函数调用的顺序</h3><pre><code>class Human{
+public:
+    Human(char* name, int age){
+        this-&gt;name = name;
+        this-&gt;age = age;
+        cout &lt;&lt; &quot;Human 构造函数&quot; &lt;&lt; endl;
+    }
+    ~Human(){
+        cout &lt;&lt; &quot;Human 析构函数&quot; &lt;&lt; endl;
+    }
+    void say(){
+        cout &lt;&lt; &quot;说话&quot; &lt;&lt; endl;
+    }
+protected:
+    char* name;
+    int age;
+};
+
+//男人
+class Man : public Human{
+public:
+    //给父类构造函数传参，同时给属性对象赋值
+    Man(char *brother, char *s_name,int s_age) : Human(s_name, s_age){
+        this-&gt;brother = brother;
+        cout &lt;&lt; &quot;Man 构造函数&quot; &lt;&lt; endl;
+    }
+    ~Man(){
+        cout &lt;&lt; &quot;Man 析构函数&quot; &lt;&lt; endl;
+    }
+    //泡妞
+    void chasing(){
+        cout &lt;&lt; &quot;泡妞&quot; &lt;&lt; endl;
+    }
+private:
+    //兄弟
+    char* brother;    
+};
+
+void func(){
+    //父类构造函数先调用
+    //子类的析构函数先调用
+    Man m1(&quot;danny&quot;, &quot;jack&quot;, 18);
+}
+
+void main(){
+    func();
+
+    system(&quot;pause&quot;);
+}
+</code></pre><p>构造的时候先调用父类的构造函数，然后调用子类的构造函数。析构的时候相反。总结就是，先构造，先释放。</p>
+<h3 id="子类对象调用父类的成员"><a href="#子类对象调用父类的成员" class="headerlink" title="子类对象调用父类的成员"></a>子类对象调用父类的成员</h3><pre><code>class Human{
+public:
+    Human(char* name, int age){
+        this-&gt;name = name;
+        this-&gt;age = age;
+        cout &lt;&lt; &quot;Human 构造函数&quot; &lt;&lt; endl;
+    }
+    ~Human(){
+        cout &lt;&lt; &quot;Human 析构函数&quot; &lt;&lt; endl;
+    }
+    void say(){
+        cout &lt;&lt; &quot;说话&quot; &lt;&lt; endl;
+    }
+public:
+    char* name;
+    int age;
+};
+
+//男人
+class Man : public Human{
+public:
+    //给父类构造函数传参，同时给属性对象赋值
+    Man(char *brother, char *s_name, int s_age) : Human(s_name, s_age){
+        this-&gt;brother = brother;
+        cout &lt;&lt; &quot;Man 构造函数&quot; &lt;&lt; endl;
+    }
+    ~Man(){
+        cout &lt;&lt; &quot;Man 析构函数&quot; &lt;&lt; endl;
+    }
+    //泡妞
+    void chasing(){
+        cout &lt;&lt; &quot;泡妞&quot; &lt;&lt; endl;
+    }
+    void say(){
+        cout &lt;&lt; &quot;男人喜欢装逼&quot; &lt;&lt; endl;
+    }
+private:
+    //兄弟
+    char* brother;
+};
+
+void main(){
+    //是覆盖，并非动态
+    Man m1(&quot;alan&quot;,&quot;john&quot;,18);
+    m1.say();
+    //调用父类的say方法
+    m1.Human::say();
+
+    m1.Human::age = 10;
+
+    system(&quot;pause&quot;);
+}
+</code></pre><p>注意：Java中就无法使用被覆盖的父类方法，可以通过JNI的方式访问。</p>
+<h3 id="多继承"><a href="#多继承" class="headerlink" title="多继承"></a>多继承</h3><pre><code>//人
+class Person{
+
+};
+
+//公民
+class Citizen{
+
+};
+
+//学生，既是人，又是公民
+class Student : public Person, public Citizen{
+
+};
+</code></pre><h3 id="继承的访问修饰符"><a href="#继承的访问修饰符" class="headerlink" title="继承的访问修饰符"></a>继承的访问修饰符</h3><pre><code>基类中      继承方式             子类中
+public     ＆ public继承        =&gt; public
+public     ＆ protected继承     =&gt; protected   
+public     ＆ private继承       =&gt; private
+
+protected  ＆ public继承        =&gt; protected
+protected  ＆ protected继承     =&gt; protected   
+protected  ＆ private继承       =&gt; private
+
+private    ＆ public继承        =&gt; 子类无权访问
+private    ＆ protected继承     =&gt; 子类无权访问
+private    ＆ private继承       =&gt; 子类无权访问
+</code></pre><h3 id="继承的二义性"><a href="#继承的二义性" class="headerlink" title="继承的二义性"></a>继承的二义性</h3><pre><code>class A{
+public:
+    char* name;
+};
+
+class A1 : public A{
+
+};
+
+class A2 : public A{
+
+};
+
+class B : public A1, public A2{
+
+};
+
+void main(){
+    B b;
+
+    //这句话编译不通过，因为存在二义性
+    b.name = &quot;jason&quot;;
+
+    //B中有两个name的副本，我们可以指定使用哪个父类的name
+    b.A1::name = &quot;jason&quot;;
+    b.A2::name = &quot;jason&quot;;
+
+    system(&quot;pause&quot;);
+}
+</code></pre><p>如图：</p>
+<p><img src="http://oph0qv0je.bkt.clouddn.com/virtual.png" alt=""></p>
+<p>解决方法：虚继承，不同路径继承来的同名成员只有一份拷贝，解决不明确的问题</p>
+<p>如果某个类B的两个父类（A1、A2）都继承于同一父类（A），那么这两个父类（A1、A2）可以通过在继承的时候加上virtual关键字来解决二义性问题。</p>
+<pre><code>class A{
+public:
+    char* name;
+};
+
+class A1 : virtual public A{
+
+};
+
+class A2 : virtual public A{
+
+};
+
+class B : public A1, public A2{
+
+};
+
+void main(){
+    B b;    
+    b.name = &quot;jason&quot;;
+    //指定父类显示调用
+    //b.A1::name = &quot;jason&quot;;
+    //b.A2::name = &quot;jason&quot;;
+    system(&quot;pause&quot;);
+}
+</code></pre><h2 id="多态"><a href="#多态" class="headerlink" title="多态"></a>多态</h2><p>多态作用：程序的扩展性</p>
+<p>动态多态：程序运行过程中，觉得哪一个函数被调用（重写）。</p>
+<p>静态多态：重载。</p>
+<p>发生动态多态的条件：</p>
+<ol>
+<li>继承</li>
+<li>父类的引用或者指针指向子类的对象</li>
+<li>函数的重写(需要增加virtual关键字，否则的话就是覆盖)</li>
+</ol>
+<p>举例：</p>
+<p>Plane.h</p>
+<pre><code>#pragma once
+
+//普通飞机
+class Plane{
+public:
+    virtual void fly();
+    virtual void land();
+};
+</code></pre><p>Plane.cpp</p>
+<pre><code>#include &quot;Plane.h&quot;
+
+#include &lt;iostream&gt;
+using namespace std;
+
+void Plane::fly(){
+    cout &lt;&lt; &quot;起飞&quot; &lt;&lt; endl;
+}
+
+void Plane::land(){
+    cout &lt;&lt; &quot;着陆&quot; &lt;&lt; endl;
+}
+</code></pre><p>Jet.h</p>
+<pre><code>#pragma once
+
+#include &quot;Plane.h&quot;
+
+//直升飞机
+class Jet : public Plane{
+    virtual void fly();
+    virtual void land();
+};
+</code></pre><p>Jet.cpp</p>
+<pre><code>#include &quot;Jet.h&quot;
+#include &lt;iostream&gt;
+using namespace std;
+
+void Jet::fly(){
+    cout &lt;&lt; &quot;直升飞机在原地起飞...&quot; &lt;&lt; endl;
+}
+
+void Jet::land(){
+    cout &lt;&lt; &quot;直升飞机降落在女神的屋顶...&quot; &lt;&lt; endl;
+}
+</code></pre><p>Copter.h</p>
+<pre><code>#pragma once
+
+#include &quot;Plane.h&quot;
+
+//普通飞机
+class Copter : public Plane{
+public:
+    virtual void fly();
+    virtual void land();
+};
+</code></pre><p>Copter.cpp</p>
+<pre><code>#include &quot;Copter.h&quot;
+#include &lt;iostream&gt;
+using namespace std;
+
+void Copter::fly(){
+    cout &lt;&lt; &quot;喷气式飞机在跑道上起飞...&quot; &lt;&lt; endl;
+}
+
+void Copter::land(){
+    cout &lt;&lt; &quot;喷气式飞机在跑道上降落...&quot; &lt;&lt; endl;
+}
+</code></pre><p>01.cpp</p>
+<pre><code>#include &quot;Plane.h&quot;
+#include &quot;Jet.h&quot;
+#include &quot;Copter.h&quot;
+//业务函数
+void bizPlay(Plane&amp; p){
+    p.fly();
+    p.land();
+}
+
+void main(){
+    Plane p1;
+    bizPlay(p1);
+
+    //直升飞机
+    Jet p2;
+    bizPlay(p2);
+
+    Copter p3;
+    bizPlay(p3);
+
+    system(&quot;pause&quot;);
+}
+</code></pre><h2 id="纯虚函数-抽象类"><a href="#纯虚函数-抽象类" class="headerlink" title="纯虚函数(抽象类)"></a>纯虚函数(抽象类)</h2><ol>
+<li>当一个类具有一个纯虚函数，这个类就是抽象类</li>
+<li>抽象类不能实例化对象</li>
+<li>子类继承抽象类，必须要实现纯虚函数，如果没有，子类也是抽象类</li>
+</ol>
+<p>抽象类的作用：为了继承约束（新增加的类必须实现父类，提高代码重用性，保证系统的条理性、封闭性），根本不知道未来的实现</p>
+<p>举例：</p>
+<pre><code>class Shape{
+public:
+    //纯虚函数
+    virtual void sayArea() = 0;
+    void print(){
+        cout &lt;&lt; &quot;hi&quot; &lt;&lt; endl;
+    }
+};
+
+//圆
+class Circle : public Shape{
+public:
+    Circle(int r){
+        this-&gt;r = r;
+    }
+    void sayArea(){
+        cout &lt;&lt; &quot;圆的面积：&quot; &lt;&lt; (3.14 * r * r) &lt;&lt; endl;
+    }
+private:
+    int r;
+};
+
+void main(){
+    //Shape s;抽象类不可实例化
+    Circle c(10);
+
+    system(&quot;pause&quot;);
+}
+</code></pre><h2 id="接口（只是逻辑上的划分，语法上跟抽象类的写法没有区别）"><a href="#接口（只是逻辑上的划分，语法上跟抽象类的写法没有区别）" class="headerlink" title="接口（只是逻辑上的划分，语法上跟抽象类的写法没有区别）"></a>接口（只是逻辑上的划分，语法上跟抽象类的写法没有区别）</h2><p>下面代码可以当做一个接口</p>
+<pre><code>class Drawble{
+    virtual void draw();
+};
+</code></pre><h2 id="模板函数（泛型）"><a href="#模板函数（泛型）" class="headerlink" title="模板函数（泛型）"></a>模板函数（泛型）</h2><pre><code>void myswap(int&amp; a,int&amp; b){
+    int tmp = 0;
+    tmp = a;
+    a = b;
+    b = tmp;
+}
+
+void myswap(char&amp; a, char&amp; b){
+    char tmp = 0;
+    tmp = a;
+    a = b;
+    b = tmp;
+}
+</code></pre><p>发现上面这两个函数业务逻辑一样，数据类型不一样，因此可以写成模板函数</p>
+<pre><code>//模板函数
+template &lt;typename T&gt;
+void myswap(T&amp; a, T&amp; b){
+    T tmp = 0;
+    tmp = a;
+    a = b;
+    b = tmp;
+}
+
+void main(){
+    //根据实际类型，自动推导
+    int a = 10, b = 20;
+    myswap&lt;int&gt;(a,b);
+    cout &lt;&lt; a &lt;&lt; &quot;,&quot; &lt;&lt; b &lt;&lt; endl;
+
+    char x = &apos;v&apos;, y = &apos;w&apos;;
+    myswap(x, y);
+    cout &lt;&lt; x &lt;&lt; &quot;,&quot; &lt;&lt; y &lt;&lt; endl;
+
+    system(&quot;pause&quot;);
+}
+</code></pre><h2 id="模板类"><a href="#模板类" class="headerlink" title="模板类"></a>模板类</h2><p>自己定义一个模板类：</p>
+<pre><code>template&lt;class T&gt;
+class A{
+public:
+    A(T a){
+        this-&gt;a = a;
+    }
+protected:
+    T a;
+};
+</code></pre><p>普通类继承模板类</p>
+<pre><code>class B : public A&lt;int&gt;{
+public:
+    B(int a,int b) : A&lt;int&gt;(a){
+        this-&gt;b = b;
+    }
+private:
+    int b;
+};
+</code></pre><p>模板类继承模板类</p>
+<pre><code>template &lt;class T&gt;
+class C : public A&lt;T&gt;{
+public:
+    C(T c, T a) : A&lt;T&gt;(a){
+        this-&gt;c = c;
+    }
+protected:
+    T c;
+};
+</code></pre><p>实例化模板类</p>
+<pre><code>void main(){
+    //实例化模板类对象
+    //List&lt;String&gt; list;
+    A&lt;int&gt; a(6);
+    system(&quot;pause&quot;);
+}
+</code></pre>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/21/C++学习系列-二-C++中的类/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3575,288 +4196,6 @@ public class JniTest {
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/04/C语言学习系列-五-预编译-宏定义/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Feng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/uploads/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Feng's Notes">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/05/04/C语言学习系列-五-预编译-宏定义/" itemprop="url">
-                  C语言学习系列(五)预编译-宏定义
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-04T10:58:06+08:00">
-                2017-05-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/c语言/" itemprop="url" rel="index">
-                    <span itemprop="name">c语言</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="预编译"><a href="#预编译" class="headerlink" title="预编译"></a>预编译</h1><p>C语言执行的流程</p>
-<ol>
-<li>编译：形成目标代码(.obj)</li>
-<li>连接：将目标代码与C函数库连接合并，形成最终的可执行文件</li>
-<li>执行</li>
-</ol>
-<p>预编译（预处理），为编译做准备工作，完成代码文本的替换工作。</p>
-<p>头文件告诉编译器有这样一个函数，连接器负责找到这个函数的实现，通过include引入。(类似android中include标签)。</p>
-<p>举例：</p>
-<p>创建头文件my.txt文件</p>
-<pre><code>printf(&quot;hello&quot;);
-</code></pre><p>主函数中使用：</p>
-<pre><code>#include&lt;stdio.h&gt;
-#include&lt;stdlib.h&gt;
-
-void main(){
-
-    #include &quot;my.txt&quot;//其实就是替换my.txt中的内容（include包含我们自己定义的头文件时用“”，系统中的用&lt;&gt;）
-
-    system(&quot;pause&quot;);
-}
-</code></pre><h1 id="宏定义、宏替换、预编译指令"><a href="#宏定义、宏替换、预编译指令" class="headerlink" title="宏定义、宏替换、预编译指令"></a>宏定义、宏替换、预编译指令</h1><p>define指令</p>
-<ol>
-<li>定义标示</li>
-<li>定义常数（便于修改与阅读）</li>
-<li>定义“宏函数”</li>
-</ol>
-<h2 id="1-定义标示"><a href="#1-定义标示" class="headerlink" title="1. 定义标示"></a>1. 定义标示</h2><p>举例1：</p>
-<pre><code>//表示支持C++语法
-#ifdef __cplusplus
-
-#endif //相当于if(){}后面的括号
-
-//表示支持Android、Windows、苹果平台等等
-#ifdef ANDROID
-
-#endif
-</code></pre><p>举例2：</p>
-<p>防止文件重复引入</p>
-<p>有三个文件A.h、B.h、Test.cpp，分别如下：</p>
-<p>A.h：</p>
-<pre><code>#include &quot;B.h&quot;
-void printfA();
-</code></pre><p>B.h：</p>
-<pre><code>#include &quot;A.h&quot;
-void printfB();
-</code></pre><p>Test.cpp里面引用了A.h</p>
-<pre><code>#include &quot;A.h&quot;
-</code></pre><p>当Test包含a的时候，a又会去包含b，b又会包含a，这样就会造成循环包含。类似于Hibernate里面的SQL循环引用。最终会报如下错误：</p>
-<pre><code>fatal error C1014: 包含文件太多 : 深度 = 1024
-</code></pre><p>通过宏定义判断来解决这个问题（修改A.h）：</p>
-<pre><code>//如果没有定义AH，定义AH
-#ifndef AH
-#define AH
-#include &quot;B.h&quot;
-
-void printfA();
-
-#endif
-</code></pre><p>修改B.h:</p>
-<pre><code>#ifndef BH
-#define BH
-#include &quot;A.h&quot;
-
-void printfB();
-
-#endif
-</code></pre><p>以上为老版本的解决方法，在新版本中可以用：</p>
-<p>修改A.h：</p>
-<pre><code>//该头文件只被包含一次，让编译器自定处理好循环包含问题
-#pragma once
-#include &quot;B.h&quot;
-
-void printfA();
-</code></pre><p>修改B.h:</p>
-<pre><code>#pragma once
-#include &quot;A.h&quot;
-
-void printfB();
-</code></pre><h2 id="2-定义常数（便于修改与阅读）"><a href="#2-定义常数（便于修改与阅读）" class="headerlink" title="2. 定义常数（便于修改与阅读）"></a>2. 定义常数（便于修改与阅读）</h2><p>举例：</p>
-<pre><code>#define MAX 100
-
-void main(){
-
-    int i = 90;
-    if (i &lt; MAX){
-    printf(&quot;比MAX小..&quot;);
-    }
-
-    system(&quot;pause&quot;);
-}
-</code></pre><h2 id="3-定义“宏函数”"><a href="#3-定义“宏函数”" class="headerlink" title="3. 定义“宏函数”"></a>3. 定义“宏函数”</h2><p>就是一个替换的过程</p>
-<pre><code>//普通函数(无参数)
-void dn_com_jni_read(){
-    printf(&quot;read\n&quot;);
-}
-
-void dn_com_jni_write(){
-    printf(&quot;write\n&quot;);
-}
-
-//宏函数
-//NAME是参数（比如代表普通函数的read/write）
-#define jni(NAME)  dn_com_jni_##NAME();
-
-void main(){
-     //调用
-    jni(write);//替换：dn_com_jni_write();
-    getchar();
-}
-</code></pre><p>日志输出：</p>
-<pre><code>//__VA_ARGS__ 代表可变参数
-#define LOG(FORMAT,...) printf(##FORMAT,__VA_ARGS__); 
-
-void main(){
-
-        LOG(&quot;%s%d&quot;,&quot;大小：&quot;,89);//相当于替换成：printf(&quot;%s%d&quot;,&quot;大小：&quot;,89);
-        getchar();
-    }
-</code></pre><p>LOG会有级别，于是进一步升级：</p>
-<pre><code>#define LOG_I(FORMAT,...)  printf(&quot;INFO:&quot;); printf(##FORMAT,__VA_ARGS__); 
-
-#define LOG_E(FORMAT,...)  printf(&quot;ERRO:&quot;); printf(##FORMAT,__VA_ARGS__); 
-
-void main(){
-
-            LOG_I(&quot;%s%d&quot;,&quot;大小：&quot;,89);
-            //替换成：printf(&quot;INFO:&quot;); printf(&quot;%s%d&quot;,&quot;大小：&quot;,89);
-        }
-</code></pre><p>进一步简化重复代码，重复LEVEL日志级别：</p>
-<pre><code>#define LOG(LEVEL,FORMAT,...) printf(##LEVEL); printf(##FORMAT,__VA_ARGS__);
-#define LOG_I(FORMAT,...) LOG(&quot;INFO:&quot;,##FORMAT,__VA_ARGS__);
-#define LOG_E(FORMAT,...) LOG(&quot;ERROR:&quot;,##FORMAT,__VA_ARGS__);
-#define LOG_W(FORMAT,...) LOG(&quot;WARN:&quot;,##FORMAT,__VA_ARGS__);
-</code></pre><p>举例：</p>
-<p>在Android JNI开发的时候，我们打印一句日志是通过__android_log_print函数来实现的，因此我们可以通过宏定义简化代码：</p>
-<pre><code>//Android
-#define LOGI(FORMAT,...) __android_log_print(ANDROID_LOG_INFO,&quot;isen&quot;,FORMAT,##__VA_ARGS__);
-
-LOGI(&quot;%s&quot;,&quot;ok&quot;);
-//替换__android_log_print(ANDROID_LOG_INFO, &quot;isen&quot;, &quot;%s&quot;, &quot;ok&quot;);
-</code></pre><p>C语言系列到此结束，接下来进入JNI系列。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -3906,7 +4245,7 @@ LOGI(&quot;%s&quot;,&quot;ok&quot;);
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">28</span>
+                <span class="site-state-item-count">29</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -3917,7 +4256,7 @@ LOGI(&quot;%s&quot;,&quot;ok&quot;);
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-count">7</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -3928,7 +4267,7 @@ LOGI(&quot;%s&quot;,&quot;ok&quot;);
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-count">8</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
