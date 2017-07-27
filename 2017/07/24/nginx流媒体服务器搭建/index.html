@@ -110,7 +110,9 @@ chmod +x nginx/
 1.先下载安装  nginx 和 nginx-rtmp 编译依赖工具
 sudo apt-get install build-esse">
 <meta property="og:image" content="http://oph0qv0je.bkt.clouddn.com/rtmp_zhibo.png">
-<meta property="og:updated_time" content="2017-07-24T06:43:11.240Z">
+<meta property="og:image" content="http://otqjpx0f1.bkt.clouddn.com/nginxsuccess.png">
+<meta property="og:image" content="http://otqjpx0f1.bkt.clouddn.com/aliyun.png">
+<meta property="og:updated_time" content="2017-07-27T06:32:14.311Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="nginx流媒体服务器搭建">
 <meta name="twitter:description" content="直播客户端与服务器端架构图：
@@ -396,20 +398,15 @@ chmod +x nginx/
 </code></pre><p>搭建流媒体服务器的环境步骤：</p>
 <p>1.先下载安装  nginx 和 nginx-rtmp 编译依赖工具</p>
 <pre><code>sudo apt-get install build-essential libpcre3 libpcre3-dev libssl-dev
-</code></pre><ol>
-<li><p>创建一个工作目录，并切换到工作目录</p>
-<p> mkdir /usr/jason/nginx<br> cd /usr/jason/nginx</p>
-</li>
-</ol>
-<p>3.下载 nginx 和 nginx-rtmp源码（wget是一个从网络上自动下载文件的自由工具）</p>
+</code></pre><p>2.创建一个工作目录，并切换到工作目录</p>
+<pre><code>mkdir /usr/jason/nginx
+cd /usr/jason/nginx
+</code></pre><p>3.下载 nginx 和 nginx-rtmp源码（wget是一个从网络上自动下载文件的自由工具）</p>
 <pre><code>wget http://nginx.org/download/nginx-1.8.1.tar.gz
 wget https://github.com/arut/nginx-rtmp-module/archive/master.zip
-</code></pre><ol>
-<li><p>安装unzip工具，解压下载的安装包</p>
-<p> sudo apt-get install unzip</p>
-</li>
-</ol>
-<p>5.解压 nginx 和 nginx-rtmp安装包</p>
+</code></pre><p>4.安装unzip工具，解压下载的安装包</p>
+<pre><code>sudo apt-get install unzip
+</code></pre><p>5.解压 nginx 和 nginx-rtmp安装包</p>
 <pre><code>tar -zxvf nginx-1.8.1.tar.gz
 -zxvf分别是四个参数
 x : 从 tar 包中把文件提取出来
@@ -418,12 +415,9 @@ v : 显示详细信息
 f xxx.tar.gz :  指定被处理的文件是 xxx.tar.gz
 
 unzip master.zip
-</code></pre><ol>
-<li><p>切换到 nginx-目录</p>
-<p> cd nginx-1.8.1</p>
-</li>
-</ol>
-<p>7.添加 nginx-rtmp 模板编译到 nginx</p>
+</code></pre><p>6.切换到 nginx-目录</p>
+<pre><code>cd nginx-1.8.1
+</code></pre><p>7.添加 nginx-rtmp 模板编译到 nginx</p>
 <pre><code>./configure --with-http_ssl_module --add-module=../nginx-rtmp-module-master
 </code></pre><p>8.编译安装 </p>
 <pre><code>make
@@ -442,7 +436,50 @@ update-rc.d nginx defaults
 </code></pre><p>但是这里默认的是80的端口，可以修改端口，在下面目录修改：</p>
 <pre><code>cd /usr/local/nginx/conf
 vim nginx.conf
-</code></pre>
+</code></pre><p>10.启动和停止nginx 服务，生成配置文件</p>
+<pre><code>sudo service nginx start
+sudo service nginx stop
+</code></pre><p>在nginx启动之后访问你的远程服务器ip地址就会出现如下界面，说明配置成功：</p>
+<p><img src="http://otqjpx0f1.bkt.clouddn.com/nginxsuccess.png" alt=""></p>
+<p><strong>注</strong>：在此处遇到一个坑，nginx配置成功，并且成功启动，但是访问ip就是打不开上图的界面，最后查到是阿里云服务器中有权限对它进行了阻拦，在阿里云安全组，添加安全组规则。</p>
+<p><img src="http://otqjpx0f1.bkt.clouddn.com/aliyun.png" alt=""></p>
+<p>11.安装 FFmpeg</p>
+<p>这里FFmpeg是用于做音视频的编解码的。</p>
+<p>首先需要把解压后的ffmpeg-2.6.9拷贝到下载nginx与rtmp的目录中</p>
+<pre><code>cd ffmpeg-2.6.9
+编译FFmpeg
+./configure --disable-yasm
+make
+make install
+</code></pre><p>输入下面的命令测试是否安装好：</p>
+<pre><code>输出安装信息
+ffmpeg -v
+</code></pre><p>12.配置 nginx-rtmp 服务器</p>
+<p>打开 /usr/local/nginx/conf/nginx.conf（Nginx安装在/usr/local/nginx中）</p>
+<p>在末尾添加如下 配置</p>
+<p>复制代码</p>
+<pre><code>rtmp {
+    server {
+            listen 1935;
+            chunk_size 4096;
+
+            application live {
+                    live on;
+                    record off;
+                    exec ffmpeg -i rtmp://localhost/live/$name -threads 1 -c:v libx264 -profile:v baseline -b:v 350K -s 640x360 -f flv -c:a aac -ac 1 -strict -2 -b:a 56k rtmp://localhost/live360p/$name;
+            }
+            application live360p {
+                    live on;
+                    record off;
+        }
+    }
+}
+</code></pre><p>复制代码</p>
+<p>这段代码主要是配置RTMP协议，Nginx是一种模块化的服务器，可以自由添加功能。这里主要是配置RTMP模块的一些参数，包括端口号，视频的编解码参数、格式等等。</p>
+<p>13.保存上面配置文件，然后重新启动nginx服务</p>
+<pre><code>sudo service nginx restart
+</code></pre><p>14.如果你使用了防火墙，请允许端口 tcp 1935</p>
+
       
     </div>
 
