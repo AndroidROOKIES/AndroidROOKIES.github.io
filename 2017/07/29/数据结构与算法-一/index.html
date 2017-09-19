@@ -87,16 +87,42 @@
 
 
 
-<meta name="description" content="每天一小步，人生一大步">
+<meta name="description" content="物理结构（存储结构）
+1.顺序存储结构(Arraylist)
+优点：查找时效率高
+缺点：插入和删除时元素之间要进行相应的改变，所以效率比较低
+2.链式存储结构（单线连接）(Linkedlist)
+优点：删除和插入的效率高缺点：查询效率低
+线性表的链式存储结构的特点是用一组任意的存储单元存储线性表的数据元素，这组存储单元可以是连续的，也可以是不连续的。
+
+每个节点（p）包含两个部分：数据域(ai)和">
 <meta property="og:type" content="article">
 <meta property="og:title" content="数据结构与算法(一)">
 <meta property="og:url" content="http://yoursite.com/2017/07/29/数据结构与算法-一/index.html">
 <meta property="og:site_name" content="Feng's Notes">
-<meta property="og:description" content="每天一小步，人生一大步">
-<meta property="og:updated_time" content="2017-09-19T06:15:01.527Z">
+<meta property="og:description" content="物理结构（存储结构）
+1.顺序存储结构(Arraylist)
+优点：查找时效率高
+缺点：插入和删除时元素之间要进行相应的改变，所以效率比较低
+2.链式存储结构（单线连接）(Linkedlist)
+优点：删除和插入的效率高缺点：查询效率低
+线性表的链式存储结构的特点是用一组任意的存储单元存储线性表的数据元素，这组存储单元可以是连续的，也可以是不连续的。
+
+每个节点（p）包含两个部分：数据域(ai)和">
+<meta property="og:image" content="http://otqjpx0f1.bkt.clouddn.com/lianshi.png">
+<meta property="og:updated_time" content="2017-09-19T09:17:13.867Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数据结构与算法(一)">
-<meta name="twitter:description" content="每天一小步，人生一大步">
+<meta name="twitter:description" content="物理结构（存储结构）
+1.顺序存储结构(Arraylist)
+优点：查找时效率高
+缺点：插入和删除时元素之间要进行相应的改变，所以效率比较低
+2.链式存储结构（单线连接）(Linkedlist)
+优点：删除和插入的效率高缺点：查询效率低
+线性表的链式存储结构的特点是用一组任意的存储单元存储线性表的数据元素，这组存储单元可以是连续的，也可以是不连续的。
+
+每个节点（p）包含两个部分：数据域(ai)和">
+<meta name="twitter:image" content="http://otqjpx0f1.bkt.clouddn.com/lianshi.png">
 
 
 
@@ -361,7 +387,29 @@
       
 
       
-        
+        <p>物理结构（存储结构）</p>
+<p>1.顺序存储结构(Arraylist)</p>
+<p>优点：查找时效率高</p>
+<p>缺点：插入和删除时元素之间要进行相应的改变，所以效率比较低</p>
+<p>2.链式存储结构（单线连接）(Linkedlist)</p>
+<p>优点：删除和插入的效率高<br>缺点：查询效率低</p>
+<p>线性表的链式存储结构的特点是用一组任意的存储单元存储线性表的数据元素，这组存储单元可以是连续的，也可以是不连续的。</p>
+<p><img src="http://otqjpx0f1.bkt.clouddn.com/lianshi.png" alt=""></p>
+<p>每个节点（p）包含两个部分：数据域(ai)和指针域(空白处)，前面节点中的指针域存放的是后面一个节点的地址。<br>在Java中可以把每个节点看成一个类。而指针就是类的引用</p>
+<p>用Java代码表示每个节点：</p>
+<pre><code>public class P{
+    Object data;
+    //指针，下个元素的引用(下个元素也是P类型的)
+    P next;
+}
+
+P p1 = new P();
+p1.data = &quot;Isen&quot;;
+P p2 = new P();
+p1.next = p2;
+</code></pre><p>两种数据结构：</p>
+<p>线性表（List）</p>
+
       
     </div>
 
