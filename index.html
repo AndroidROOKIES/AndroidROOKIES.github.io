@@ -293,7 +293,7 @@
               
                 
                 <a class="post-title-link" href="/2017/07/29/数据结构与算法-一-线性表/" itemprop="url">
-                  数据结构与算法(一)
+                  数据结构与算法(一)线性表
                 </a>
               
             
@@ -387,10 +387,8 @@ P p1 = new P();
 p1.data = &quot;Isen&quot;;
 P p2 = new P();
 p1.next = p2;
-</code></pre><p>优点：删除和插入的效率高</p>
-<p>缺点：查询效率低<br>如下图：<br><img src="http://otqjpx0f1.bkt.clouddn.com/shanchu.png" alt=""></p>
-<p>两种数据结构：</p>
-<p>线性表（List）</p>
+</code></pre><p>优点：删除和插入的效率高（LinkedList是双向链表，通过与中间位置对比，来判断从前往后查找插入（next）还是从后往前查找插入(preview)）</p>
+<p>缺点：查询效率低(必须通过前一个才可以找到后一个的位置)<br>如下图：<br><img src="http://otqjpx0f1.bkt.clouddn.com/shanchu.png" alt=""></p>
 
           
         

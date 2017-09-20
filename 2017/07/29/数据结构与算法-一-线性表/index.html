@@ -97,7 +97,7 @@
 
 每个节点（p）包含两个部分：数据域(ai)和指针域(空白处)，前面节点中的指针域存放">
 <meta property="og:type" content="article">
-<meta property="og:title" content="数据结构与算法(一)">
+<meta property="og:title" content="数据结构与算法(一)线性表">
 <meta property="og:url" content="http://yoursite.com/2017/07/29/数据结构与算法-一-线性表/index.html">
 <meta property="og:site_name" content="Feng's Notes">
 <meta property="og:description" content="物理结构（存储结构）
@@ -112,9 +112,9 @@
 <meta property="og:image" content="http://otqjpx0f1.bkt.clouddn.com/shunxushanchu.png">
 <meta property="og:image" content="http://otqjpx0f1.bkt.clouddn.com/lianshi.png">
 <meta property="og:image" content="http://otqjpx0f1.bkt.clouddn.com/shanchu.png">
-<meta property="og:updated_time" content="2017-09-19T09:42:38.162Z">
+<meta property="og:updated_time" content="2017-09-20T03:07:23.107Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="数据结构与算法(一)">
+<meta name="twitter:title" content="数据结构与算法(一)线性表">
 <meta name="twitter:description" content="物理结构（存储结构）
 1.顺序存储结构(Arraylist)
 优点：查找时效率高
@@ -158,7 +158,7 @@
 
 
 
-  <title> 数据结构与算法(一) | Feng's Notes </title>
+  <title> 数据结构与算法(一)线性表 | Feng's Notes </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -318,7 +318,7 @@
             
             
               
-                数据结构与算法(一)
+                数据结构与算法(一)线性表
               
             
           </h1>
@@ -409,10 +409,8 @@ P p1 = new P();
 p1.data = &quot;Isen&quot;;
 P p2 = new P();
 p1.next = p2;
-</code></pre><p>优点：删除和插入的效率高</p>
-<p>缺点：查询效率低<br>如下图：<br><img src="http://otqjpx0f1.bkt.clouddn.com/shanchu.png" alt=""></p>
-<p>两种数据结构：</p>
-<p>线性表（List）</p>
+</code></pre><p>优点：删除和插入的效率高（LinkedList是双向链表，通过与中间位置对比，来判断从前往后查找插入（next）还是从后往前查找插入(preview)）</p>
+<p>缺点：查询效率低(必须通过前一个才可以找到后一个的位置)<br>如下图：<br><img src="http://otqjpx0f1.bkt.clouddn.com/shanchu.png" alt=""></p>
 
       
     </div>
