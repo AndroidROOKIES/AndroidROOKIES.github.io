@@ -90,12 +90,12 @@
 <meta name="description" content="框架设计要求
 根据用户需求可以灵活配置，采用建造者模式来实现
 支持高并发，设置图片加载的优先级
-支持可以选择不同的加载策略，对加载策略进行扩展
+支持可以选择不同的加载策略，对加载策略进行扩展（先进入的先加载或者后进入的先加载）
 二级缓存  加载图片时内存中已经加载了，则从内存中加载，不存在去外置卡中加载，外置还不存在则从网络下载。
 对缓存策略可以扩展
 支持在加载过程中显示默认加载图片
 支持加载失败时 显示默认错误图片
-图片自适应显示。从网络加载下来的图片经最佳比例压缩后显示，不能">
+图片自适应显示。从网络加载">
 <meta property="og:type" content="article">
 <meta property="og:title" content="图片加载框架的设计">
 <meta property="og:url" content="http://yoursite.com/2017/12/20/Android图片加载框架的设计/index.html">
@@ -103,24 +103,26 @@
 <meta property="og:description" content="框架设计要求
 根据用户需求可以灵活配置，采用建造者模式来实现
 支持高并发，设置图片加载的优先级
-支持可以选择不同的加载策略，对加载策略进行扩展
+支持可以选择不同的加载策略，对加载策略进行扩展（先进入的先加载或者后进入的先加载）
 二级缓存  加载图片时内存中已经加载了，则从内存中加载，不存在去外置卡中加载，外置还不存在则从网络下载。
 对缓存策略可以扩展
 支持在加载过程中显示默认加载图片
 支持加载失败时 显示默认错误图片
-图片自适应显示。从网络加载下来的图片经最佳比例压缩后显示，不能">
-<meta property="og:updated_time" content="2017-12-20T06:05:12.194Z">
+图片自适应显示。从网络加载">
+<meta property="og:image" content="http://otqjpx0f1.bkt.clouddn.com/%E8%AE%BE%E8%AE%A1%E5%9B%BE.png">
+<meta property="og:updated_time" content="2017-12-20T07:11:32.580Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="图片加载框架的设计">
 <meta name="twitter:description" content="框架设计要求
 根据用户需求可以灵活配置，采用建造者模式来实现
 支持高并发，设置图片加载的优先级
-支持可以选择不同的加载策略，对加载策略进行扩展
+支持可以选择不同的加载策略，对加载策略进行扩展（先进入的先加载或者后进入的先加载）
 二级缓存  加载图片时内存中已经加载了，则从内存中加载，不存在去外置卡中加载，外置还不存在则从网络下载。
 对缓存策略可以扩展
 支持在加载过程中显示默认加载图片
 支持加载失败时 显示默认错误图片
-图片自适应显示。从网络加载下来的图片经最佳比例压缩后显示，不能">
+图片自适应显示。从网络加载">
+<meta name="twitter:image" content="http://otqjpx0f1.bkt.clouddn.com/%E8%AE%BE%E8%AE%A1%E5%9B%BE.png">
 
 
 
@@ -388,7 +390,7 @@
         <h2 id="框架设计要求"><a href="#框架设计要求" class="headerlink" title="框架设计要求"></a>框架设计要求</h2><ol>
 <li>根据用户需求可以灵活配置，采用建造者模式来实现</li>
 <li>支持高并发，设置图片加载的优先级</li>
-<li>支持可以选择不同的加载策略，对加载策略进行扩展</li>
+<li>支持可以选择不同的加载策略，对加载策略进行扩展（先进入的先加载或者后进入的先加载）</li>
 <li>二级缓存  加载图片时内存中已经加载了，则从内存中加载，不存在去外置卡中加载，外置还不存在则从网络下载。</li>
 <li>对缓存策略可以扩展</li>
 <li>支持在加载过程中显示默认加载图片</li>
@@ -401,7 +403,10 @@
 <p>单例模式</p>
 <p>模板方法模式</p>
 <p>策略模式</p>
-
+<h2 id="设计图"><a href="#设计图" class="headerlink" title="设计图"></a>设计图</h2><p><img src="http://otqjpx0f1.bkt.clouddn.com/%E8%AE%BE%E8%AE%A1%E5%9B%BE.png" alt=""></p>
+<p>ImageListener:监听图片什么时候加载完，用户需要传入一个ImageListener监听回调。</p>
+<p>转发器：从请求队列中拿到请求BitmapRequest进行消费，根据url的前缀是http、https、file来进行图片的加载。调用不同的加载策略来进行图片的加载。</p>
+<h2 id="UML图"><a href="#UML图" class="headerlink" title="UML图"></a>UML图</h2>
       
     </div>
 
@@ -576,7 +581,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#框架设计要求"><span class="nav-number">1.</span> <span class="nav-text">框架设计要求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#需要用到的设计模式"><span class="nav-number">2.</span> <span class="nav-text">需要用到的设计模式</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#框架设计要求"><span class="nav-number">1.</span> <span class="nav-text">框架设计要求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#需要用到的设计模式"><span class="nav-number">2.</span> <span class="nav-text">需要用到的设计模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设计图"><span class="nav-number">3.</span> <span class="nav-text">设计图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UML图"><span class="nav-number">4.</span> <span class="nav-text">UML图</span></a></li></ol></div>
             
 
           </div>
