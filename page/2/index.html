@@ -270,6 +270,289 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/18/C++学习系列-六-IO与STL标准模板库/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Feng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Feng's Notes">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/06/18/C++学习系列-六-IO与STL标准模板库/" itemprop="url">
+                  C++学习系列(六)IO与STL标准模板库
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-18T11:50:11+08:00">
+                2017-06-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index">
+                    <span itemprop="name">C++</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="C-的IO操作"><a href="#C-的IO操作" class="headerlink" title="C++的IO操作"></a>C++的IO操作</h2><p>文本文件操作</p>
+<pre><code>void main(){
+    char* fname = &quot;c://dest.txt&quot;;
+    //输出流
+    ofstream fout(fname);
+    //创建失败
+    if (fout.bad()){ //文件打开失败
+        return;
+    }
+
+    fout &lt;&lt; &quot;jack&quot; &lt;&lt; endl;
+    fout &lt;&lt; &quot;rose&quot; &lt;&lt; endl;
+
+    //关闭
+    fout.close();
+
+    //读取
+    ifstream fin(fname);
+    if (fin.bad()){
+        return;
+    }
+    char ch;
+    while (fin.get(ch)){
+        //输出
+        cout &lt;&lt; ch;
+    }
+    fin.close();
+
+    system(&quot;pause&quot;);
+}
+</code></pre><p>二进制文件操作</p>
+<pre><code>void main(){
+    char* src = &quot;c://src.jpg&quot;;
+    char* dest = &quot;c://dest.jpg&quot;;
+
+    //输入流
+    ifstream fin(src, ios::binary);
+    //输出流
+    ofstream fout(dest, ios::binary);
+
+    if (fin.bad() || fout.bad()){
+        return;
+    }
+
+    while (!fin.eof()){
+        //读取
+        char buff[1024] = {0};
+        fin.read(buff,1024);
+
+        //写入
+        fout.write(buff,1024);
+    }
+
+    //关闭
+    fin.close();
+    fout.close();
+
+    system(&quot;pause&quot;);
+}
+</code></pre><p>C++对象的持久化</p>
+<pre><code>class Person
+{
+public:
+    Person()
+    {
+
+    }
+    Person(char * name, int age)
+    {
+        this-&gt;name = name;
+        this-&gt;age = age;
+    }
+    void print()
+    {
+        cout &lt;&lt; name &lt;&lt; &quot;,&quot; &lt;&lt; age &lt;&lt; endl;
+    }
+private:
+    char * name;
+    int age;
+};
+
+
+void main()
+{
+    Person p1(&quot;柳岩&quot;, 22);
+    Person p2(&quot;rose&quot;, 18);
+    //输出流
+    ofstream fout(&quot;c://c_obj.data&quot;, ios::binary);
+    fout.write((char*)(&amp;p1), sizeof(Person)); //指针能够读取到正确的数据，读取内存区的长度
+    fout.write((char*)(&amp;p2), sizeof(Person));
+    fout.close();
+
+    //输入流
+    ifstream fin(&quot;c://c_obj.data&quot;, ios::binary);
+    Person tmp;
+    fin.read((char*)(&amp;tmp), sizeof(Person));
+    tmp.print();
+
+    fin.read((char*)(&amp;tmp), sizeof(Person));
+    tmp.print();
+
+    system(&quot;pause&quot;);
+
+}
+</code></pre><h2 id="C-中STL"><a href="#C-中STL" class="headerlink" title="C++中STL"></a>C++中STL</h2><p>STL:standard template library 标准模板库，类似于Java中的util工具集等。</p>
+<pre><code>#include &lt;string&gt;
+void main()
+{
+    string s1 = &quot;craig david&quot;;
+    string s2(&quot; 7 days&quot;);
+    string s3 = s1 + s2;
+
+    cout &lt;&lt; s3 &lt;&lt; endl;
+
+    //转c字符串
+    const char* c_str = s3.c_str();
+    cout &lt;&lt; c_str &lt;&lt; endl;
+
+    //s1.at(2);
+
+
+    system(&quot;pause&quot;);
+}
+</code></pre><p>这里的是c++中的string，在jni开发时，需要先将c++中的string转为c的string，再转换成Java的string。</p>
+<pre><code>//容器
+#include &lt;vector&gt;
+
+void main()
+{
+    //动态数组
+    //不需要使用动态内存分配，就可以使用动态数组
+    vector&lt;int&gt; v;
+    v.push_back(12);
+    v.push_back(10);
+    v.push_back(5);
+
+    for (int i = 0; i &lt; v.size(); i++)
+    {
+        cout &lt;&lt; v[i] &lt;&lt; endl;
+    }
+
+    system(&quot;pause&quot;);
+}
+</code></pre>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/11/C++学习系列-五-C++中的类型转换/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3799,213 +4082,6 @@ JNIEXPORT void JNICALL Java_com_dongnaoedu_jni_JniTest_deleteGlobalRef(JNIEnv *e
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/12/JNI系列-三-JNI数组处理/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Feng">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/uploads/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Feng's Notes">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/05/12/JNI系列-三-JNI数组处理/" itemprop="url">
-                  JNI系列(三)数组处理
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-12T14:19:24+08:00">
-                2017-05-12
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/JNI/" itemprop="url" rel="index">
-                    <span itemprop="name">JNI</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="数组的处理"><a href="#数组的处理" class="headerlink" title="数组的处理"></a>数组的处理</h1><p>在Java中传入一个数组到c层，在c层给传入的数组进行排序。</p>
-<p>Java代码：</p>
-<pre><code>//数组处理
-public native void giveArray(int array[]);
-
-public static void main(String[] args) {
-
-    JniTest test = new JniTest();
-    int arr[] = { 9, 1, 100, 6, 4, 80 , 46 , 30};
-    //进行排序
-    test.giveArray(arr);
-    System.out.println(Arrays.toString(arr));
-
-}
-</code></pre><p>c代码：</p>
-<pre><code>int compare(int *a,int *b){
-    return (*a) - (*b);
-}
-
-//传入
-JNIEXPORT void JNICALL Java_com_dongnaoedu_jni_JniTest_giveArray
-(JNIEnv *env, jobject jobj, jintArray arr){
-
-    //jintArray -&gt; jint数组的指针 -&gt; c int 数组
-    jint *elems = (*env)-&gt;GetIntArrayElements(env, arr, NULL);
-    //printf(&quot;%#x,%#x\n&quot;, &amp;elems, &amp;arr);
-
-    //数组的长度
-    int len = (*env)-&gt;GetArrayLength(env, arr);
-
-    //排序，其中compare是函数指针，用于比较大小
-    qsort(elems, len, sizeof(jint), compare);    
-
-    //同步：操作完之后需要同步C的数组到Java数组中
-    //mode：函数ReleaseIntArrayElements的最后一个参数，有如下取值
-    //0, Java数组进行更新，并且释放C/C++数组
-    //JNI_ABORT, Java数组不进行更新，但是释放C/C++数组
-    //JNI_COMMIT，Java数组进行更新，不释放C/C++数组（函数执行完，数组还是会释放）
-    (*env)-&gt;ReleaseIntArrayElements(env, arr, elems, 0);
-}
-</code></pre><p>在Java中指定一个数组的长度，传入c中，c返回指定长度的数组</p>
-<p>Java代码:</p>
-<pre><code>public native int[] getArray(int len);
-
-public static void main(String[] args) {
-
-        JniTest test = new JniTest();
-        int[] a = test.getArray(10);
-        System.out.println(Arrays.toString(a));
-
-    }
-</code></pre><p>c代码：</p>
-<pre><code>//返回数组
-JNIEXPORT jintArray JNICALL Java_com_test_JniTest_getArray(JNIEnv *env, jobject jobj, jint len){
-    //创建一个指定大小的数组
-    jintArray jint_arr = (*env)-&gt;NewIntArray(env, len);
-    jint *elems = (*env)-&gt;GetIntArrayElements(env, jint_arr, NULL);
-    int i = 0;
-    for (; i &lt; len; i++){
-        elems[i] = i;
-    }
-
-    //同步
-    (*env)-&gt;ReleaseIntArrayElements(env, jint_arr, elems, 0);
-
-    return jint_arr;
-}
-</code></pre>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -4055,7 +4131,7 @@ JNIEXPORT jintArray JNICALL Java_com_test_JniTest_getArray(JNIEnv *env, jobject 
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-count">32</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -4066,7 +4142,7 @@ JNIEXPORT jintArray JNICALL Java_com_test_JniTest_getArray(JNIEnv *env, jobject 
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-count">8</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -4077,7 +4153,7 @@ JNIEXPORT jintArray JNICALL Java_com_test_JniTest_getArray(JNIEnv *env, jobject 
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-count">9</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

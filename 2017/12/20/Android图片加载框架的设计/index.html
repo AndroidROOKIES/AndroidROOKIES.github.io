@@ -71,7 +71,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Android," />
 
 
 
@@ -87,15 +87,43 @@
 
 
 
-<meta name="description" content="每天一小步，人生一大步">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Feng's Notes">
-<meta property="og:url" content="http://yoursite.com/tags/FFmpeg/index.html">
+<meta name="description" content="##框架设计要求
+
+根据用户需求可以灵活配置，采用建造者模式来实现
+支持高并发，设置图片加载的优先级
+支持可以选择不同的加载策略，对加载策略进行扩展
+二级缓存  加载图片时内存中已经加载了，则从内存中加载，不存在去外置卡中加载，外置还不存在则从网络下载。
+对缓存策略可以扩展
+支持在加载过程中显示默认加载图片
+支持加载失败时 显示默认错误图片
+图片自适应显示。从网络加载下来的图片经最佳比例压缩后显示">
+<meta property="og:type" content="article">
+<meta property="og:title" content="图片加载框架的设计">
+<meta property="og:url" content="http://yoursite.com/2017/12/20/Android图片加载框架的设计/index.html">
 <meta property="og:site_name" content="Feng's Notes">
-<meta property="og:description" content="每天一小步，人生一大步">
+<meta property="og:description" content="##框架设计要求
+
+根据用户需求可以灵活配置，采用建造者模式来实现
+支持高并发，设置图片加载的优先级
+支持可以选择不同的加载策略，对加载策略进行扩展
+二级缓存  加载图片时内存中已经加载了，则从内存中加载，不存在去外置卡中加载，外置还不存在则从网络下载。
+对缓存策略可以扩展
+支持在加载过程中显示默认加载图片
+支持加载失败时 显示默认错误图片
+图片自适应显示。从网络加载下来的图片经最佳比例压缩后显示">
+<meta property="og:updated_time" content="2017-12-20T06:00:38.373Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Feng's Notes">
-<meta name="twitter:description" content="每天一小步，人生一大步">
+<meta name="twitter:title" content="图片加载框架的设计">
+<meta name="twitter:description" content="##框架设计要求
+
+根据用户需求可以灵活配置，采用建造者模式来实现
+支持高并发，设置图片加载的优先级
+支持可以选择不同的加载策略，对加载策略进行扩展
+二级缓存  加载图片时内存中已经加载了，则从内存中加载，不存在去外置卡中加载，外置还不存在则从网络下载。
+对缓存策略可以扩展
+支持在加载过程中显示默认加载图片
+支持加载失败时 显示默认错误图片
+图片自适应显示。从网络加载下来的图片经最佳比例压缩后显示">
 
 
 
@@ -123,13 +151,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/tags/FFmpeg/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/12/20/Android图片加载框架的设计/"/>
 
 
 
 
 
-  <title> 标签: FFmpeg | Feng's Notes </title>
+  <title> 图片加载框架的设计 | Feng's Notes </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -154,7 +182,7 @@
     
   
 
-  <div class="container sidebar-position-left  ">
+  <div class="container sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -258,186 +286,193 @@
           <div id="content" class="content">
             
 
-  <div id="posts" class="posts-collapse">
-    <div class="collection-title">
-      <h2 >
-        FFmpeg
-        <small>标签</small>
-      </h2>
-    </div>
-
+  <div id="posts" class="posts-expand">
     
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2017/07/05/FFmpeg学习系列-六-Linux之POSIX线程原语/" itemprop="url">
-              
-                <span itemprop="name">FFmpeg学习系列(六)Linux之POSIX线程原语</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-07-05T10:16:59+08:00"
-              content="2017-07-05" >
-          07-05
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-    
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2017/07/04/FFmpeg学习系列-五-Makefile与Android-mk/" itemprop="url">
-              
-                <span itemprop="name">FFmpeg学习系列(五)Makefile与Android.mk</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-07-04T15:03:53+08:00"
-              content="2017-07-04" >
-          07-04
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-    
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2017/07/02/FFmpeg学习系列-四-Linux之shell脚本传参及ffmpeg的shell脚本编写/" itemprop="url">
-              
-                <span itemprop="name">FFmpeg学习系列(四)Linux之shell脚本传参及ffmpeg的shell脚本编写</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-07-02T15:55:53+08:00"
-              content="2017-07-02" >
-          07-02
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-    
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2017/07/01/FFmpeg学习系列-三-Linux之shell脚本/" itemprop="url">
-              
-                <span itemprop="name">FFmpeg学习系列(三)Linux之shell脚本</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-07-01T10:00:41+08:00"
-              content="2017-07-01" >
-          07-01
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-    
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2017/06/27/FFmpeg学习系列-二-Linux基本命令/" itemprop="url">
-              
-                <span itemprop="name">FFmpeg学习系列(二)Linux基本命令</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-06-27T13:45:49+08:00"
-              content="2017-06-27" >
-          06-27
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-    
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2017/06/21/FFmpeg学习系列-一-Linux下编译FFmpeg/" itemprop="url">
-              
-                <span itemprop="name">FFmpeg学习系列(一)Linux下编译FFmpeg</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-06-21T14:48:55+08:00"
-              content="2017-06-21" >
-          06-21
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-    
-  </div>
 
   
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/20/Android图片加载框架的设计/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Feng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Feng's Notes">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                图片加载框架的设计
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-20T13:49:56+08:00">
+                2017-12-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>##框架设计要求</p>
+<ol>
+<li>根据用户需求可以灵活配置，采用建造者模式来实现</li>
+<li>支持高并发，设置图片加载的优先级</li>
+<li>支持可以选择不同的加载策略，对加载策略进行扩展</li>
+<li>二级缓存  加载图片时内存中已经加载了，则从内存中加载，不存在去外置卡中加载，外置还不存在则从网络下载。</li>
+<li>对缓存策略可以扩展</li>
+<li>支持在加载过程中显示默认加载图片</li>
+<li>支持加载失败时 显示默认错误图片</li>
+<li>图片自适应显示。从网络加载下来的图片经最佳比例压缩后显示，不能失真变形</li>
+<li>支持请求转发，下载</li>
+</ol>
+<p>##需要用到的设计模式</p>
+<p>生产者 消费者模式</p>
+<p>建造者模式</p>
+<p>单例模式</p>
+<p>模板方法模式</p>
+<p>策略模式</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/29/数据结构与算法-二-栈和队列/" rel="next" title="数据结构与算法(二)栈和队列">
+                <i class="fa fa-chevron-left"></i> 数据结构与算法(二)栈和队列
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -641,6 +676,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
 
   
 

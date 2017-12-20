@@ -87,22 +87,28 @@
 
 
 
-<meta name="description" content="栈（stack）
-栈的经典实用
-波兰表达式：标准四则运算表达式（+、-、*、/）又称中缀表达式">
+<meta name="description" content="栈（stack）栈的经典实用
+波兰表达式：标准四则运算表达式（+、-、*、/）又称中缀表达式
+计算机采用–后缀表达式，通过栈来计算
+因此在用计算机计算的时候需要把中缀表达式转成后缀表达式（也需要用到栈），然后在通过栈来计算后缀表达式。
+队列队列（queue）是一种只允许在表的前端（front）进行删除操作，而在表的后端（rear）进行插入操作的线性表。进行插入操作的端称为队尾，进行删除操作的端称为">
 <meta property="og:type" content="article">
 <meta property="og:title" content="数据结构与算法(二)栈和队列">
 <meta property="og:url" content="http://yoursite.com/2017/07/29/数据结构与算法-二-栈和队列/index.html">
 <meta property="og:site_name" content="Feng's Notes">
-<meta property="og:description" content="栈（stack）
-栈的经典实用
-波兰表达式：标准四则运算表达式（+、-、*、/）又称中缀表达式">
-<meta property="og:updated_time" content="2017-09-21T09:01:07.925Z">
+<meta property="og:description" content="栈（stack）栈的经典实用
+波兰表达式：标准四则运算表达式（+、-、*、/）又称中缀表达式
+计算机采用–后缀表达式，通过栈来计算
+因此在用计算机计算的时候需要把中缀表达式转成后缀表达式（也需要用到栈），然后在通过栈来计算后缀表达式。
+队列队列（queue）是一种只允许在表的前端（front）进行删除操作，而在表的后端（rear）进行插入操作的线性表。进行插入操作的端称为队尾，进行删除操作的端称为">
+<meta property="og:updated_time" content="2017-09-25T06:55:44.433Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数据结构与算法(二)栈和队列">
-<meta name="twitter:description" content="栈（stack）
-栈的经典实用
-波兰表达式：标准四则运算表达式（+、-、*、/）又称中缀表达式">
+<meta name="twitter:description" content="栈（stack）栈的经典实用
+波兰表达式：标准四则运算表达式（+、-、*、/）又称中缀表达式
+计算机采用–后缀表达式，通过栈来计算
+因此在用计算机计算的时候需要把中缀表达式转成后缀表达式（也需要用到栈），然后在通过栈来计算后缀表达式。
+队列队列（queue）是一种只允许在表的前端（front）进行删除操作，而在表的后端（rear）进行插入操作的线性表。进行插入操作的端称为队尾，进行删除操作的端称为">
 
 
 
@@ -367,9 +373,16 @@
       
 
       
-        <p>栈（stack）</p>
-<p>栈的经典实用</p>
+        <h1 id="栈（stack）"><a href="#栈（stack）" class="headerlink" title="栈（stack）"></a>栈（stack）</h1><p>栈的经典实用</p>
 <p>波兰表达式：标准四则运算表达式（+、-、*、/）又称中缀表达式</p>
+<p>计算机采用–后缀表达式，通过栈来计算</p>
+<p>因此在用计算机计算的时候需要把中缀表达式转成后缀表达式（也需要用到栈），然后在通过栈来计算后缀表达式。</p>
+<h1 id="队列"><a href="#队列" class="headerlink" title="队列"></a>队列</h1><p>队列（queue）是一种只允许在表的前端（front）进行删除操作，而在表的后端（rear）进行插入操作的线性表。<br>进行插入操作的端称为队尾，进行删除操作的端称为队头。</p>
+<p>队列最好用链式存储，LinkedList不仅仅是链式线性表还是一种队列结构（offer入队方法，poll出队方法，是一种双向的链表）</p>
+<p>队列特点：先进先出(FIFO)</p>
+<p>##HashMap与LinkedHashMap(LruCache)##</p>
+<p>线性数据结构存储的是每个元素</p>
+<p>HashMap存储的是键值对（key-value）散列链表</p>
 
       
     </div>
@@ -422,6 +435,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2017/12/20/Android图片加载框架的设计/" rel="prev" title="图片加载框架的设计">
+                图片加载框架的设计 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -463,8 +480,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/uploads/avatar.png"
@@ -479,7 +505,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-count">32</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -490,7 +516,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-count">8</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -501,7 +527,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-count">9</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -526,6 +552,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#栈（stack）"><span class="nav-number">1.</span> <span class="nav-text">栈（stack）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#队列"><span class="nav-number">2.</span> <span class="nav-text">队列</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
